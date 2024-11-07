@@ -1,0 +1,48 @@
+# Ignore build directories
+[Dd]ebug/
+[Dd]ebugPublic/
+[Dd]ebug_x64/
+[Dd]ebug_x86/
+[Dd]Release/
+[Dd]ReleasePublic/
+[Dd]Release_x64/
+[Dd]Release_x86/
+
+# Ignore binaries and build output
+*.obj
+*.o
+*.exe
+*.dll
+*.lib
+*.pdb
+*.idb
+*.ipdb
+
+# Ignore Visual Studio files
+.vs/
+.vscode/
+.idea/
+
+# User-specific files
+*.user
+*.userosscache
+*.suo
+*.userprefs
+
+# Ignore generated folders
+Generated/
+
+# Ignore NuGet packages
+*.nupkg
+# Uncomment if you are using nuget to restore packages
+# packages/
+
+# Ignore build artifacts
+*.cache
+*.log
+*.bak
+
+# Ignore .NET Core specific files (if applicable)
+.vs2019/
+.vs2017/
+.vs2015/
