@@ -25,6 +25,7 @@ namespace EUS {
         System::ComponentModel::Container^ components;
         Panel^ sidebarPanel;
         Panel^ contentPanel;
+        Label^ labelEUS;
 
         Button^ btnDashboard;
         Button^ btnScheduler;
@@ -35,6 +36,8 @@ namespace EUS {
 
         void InitializeComponent(void);
         Button^ CreateIconButton(System::String^ iconPath);
+        void MainForm::OnButtonMouseEnter(Object^ sender, EventArgs^ e);
+        void MainForm::OnButtonMouseLeave(Object^ sender, EventArgs^ e);
         void OnSidebarButtonClick(Object^ sender, EventArgs^ e);
         void OnFormClosing(Object^ sender, FormClosingEventArgs^ e);
     };
