@@ -25,8 +25,12 @@ namespace EUS {
         // Sidebar settings
         sidebarPanel = gcnew Panel();
         sidebarPanel->Dock = DockStyle::Left;
-        sidebarPanel->Width = 100;
+        sidebarPanel->Width = 70;
+        sidebarPanel->Height = 1055;
         sidebarPanel->BackColor = Color::FromArgb(60, 80, 60);
+
+        // Apply rounded corners to the sidebar
+        ApplyRightRoundedCorners(sidebarPanel, 15);
 
         // Content panel settings
         contentPanel = gcnew Panel();
@@ -70,6 +74,15 @@ namespace EUS {
         this->OnSidebarButtonClick(btnDashboard, nullptr);
     }
 
+    // Helper function to apply rounded corners using RoundedRectangle class
+    void MainForm::ApplyRoundedRectangleToPanel(Panel^ panel, int radius, RoundedRectangles::RoundedRectangle::RectangleCorners corners)
+    {
+        System::Drawing::Drawing2D::GraphicsPath^ path = RoundedRectangles::RoundedRectangle::Create(
+            0, 0, panel->Width, panel->Height, radius, corners
+        );
+        panel->Region = gcnew System::Drawing::Region(path);
+    }
+
     // Update CreateIconButton to accept size parameters
     Button^ MainForm::CreateIconButton(System::String^ iconPath, int size)
     {
@@ -86,6 +99,14 @@ namespace EUS {
         button->MouseLeave += gcnew EventHandler(this, &MainForm::OnButtonMouseLeave);
 
         return button;
+    }
+
+    void MainForm::ApplyRightRoundedCorners(Panel^ panel, int radius)
+    {
+        GraphicsPath^ path = RoundedRectangles::RoundedRectangle::Create(0, 0, panel->Width, panel->Height, radius,
+            RoundedRectangles::RoundedRectangle::RectangleCorners::TopRight |
+            RoundedRectangles::RoundedRectangle::RectangleCorners::BottomRight);
+        panel->Region = gcnew System::Drawing::Region(path);
     }
 
     void MainForm::OnButtonMouseEnter(Object^ sender, EventArgs^ e)

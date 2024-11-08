@@ -5,6 +5,7 @@
 #include "DevicesUserControl.h"
 #include "AnalyticsUserControl.h"
 #include "SettingsUserControl.h"
+#include "RoundedRectangle.h"
 
 namespace EUS {
 
@@ -36,8 +37,10 @@ namespace EUS {
 
         void InitializeComponent(void);
         Button^ CreateIconButton(System::String^ iconPath, int size);
-        void MainForm::OnButtonMouseEnter(Object^ sender, EventArgs^ e);
-        void MainForm::OnButtonMouseLeave(Object^ sender, EventArgs^ e);
+        void ApplyRoundedRectangleToPanel(Panel^ panel, int radius, RoundedRectangles::RoundedRectangle::RectangleCorners corners);
+        void ApplyRightRoundedCorners(Panel^ panel, int radius);
+        void OnButtonMouseEnter(Object^ sender, EventArgs^ e);
+        void OnButtonMouseLeave(Object^ sender, EventArgs^ e);
         void OnSidebarButtonClick(Object^ sender, EventArgs^ e);
         void OnFormClosing(Object^ sender, FormClosingEventArgs^ e);
     };

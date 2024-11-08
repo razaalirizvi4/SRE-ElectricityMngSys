@@ -130,15 +130,16 @@
     <ResourceCompile Include="app.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AnalyticsUserControl.h"> 
-        <SubType>Form</SubType>
-	</ClInclude>
+    <ClInclude Include="AnalyticsUserControl.h">
+      <SubType>Form</SubType>
+    </ClInclude>
     <ClInclude Include="DashboardUserControl.h" />
     <ClInclude Include="DevicesUserControl.h" />
     <ClInclude Include="LoginForm.h" />
     <ClInclude Include="MainForm.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="RoundedRectangle.h" />
     <ClInclude Include="SchedulerUserControl.h" />
     <ClInclude Include="SettingsUserControl.h" />
   </ItemGroup>
