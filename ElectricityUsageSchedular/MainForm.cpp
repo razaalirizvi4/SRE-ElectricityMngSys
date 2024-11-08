@@ -19,47 +19,43 @@ namespace EUS {
     void MainForm::InitializeComponent(void)
     {
         this->components = gcnew System::ComponentModel::Container();
-        this->Size = System::Drawing::Size(1240, 730);
-        this->Text = L"Electricity Usage Scheduler";
 
-        // Light green accent for sidebar
+        this->WindowState = System::Windows::Forms::FormWindowState::Maximized;
+
+        // Sidebar settings
         sidebarPanel = gcnew Panel();
         sidebarPanel->Dock = DockStyle::Left;
-        sidebarPanel->Width = 80;  // Slightly wider for better readability
-        sidebarPanel->BackColor = Color::FromArgb(60, 80, 60);  // Lightened green
+        sidebarPanel->Width = 100;
+        sidebarPanel->BackColor = Color::FromArgb(60, 80, 60);
 
-        // Content panel setup
+        // Content panel settings
         contentPanel = gcnew Panel();
         contentPanel->Dock = DockStyle::Fill;
         contentPanel->BackColor = Color::FromArgb(235, 245, 235);
 
-        // Add "EUS" label first item on the sidebar
+        // "EUS" label settings
         labelEUS = gcnew Label();
         labelEUS->Text = L"EUS";
-        labelEUS->Size = System::Drawing::Size(50, 50);
-        labelEUS->Font = gcnew System::Drawing::Font(L"Arial", 16, FontStyle::Bold);
+        labelEUS->Size = System::Drawing::Size(150, 60);
+        labelEUS->Font = gcnew System::Drawing::Font(L"Arial", 20, FontStyle::Bold);
         labelEUS->Dock = DockStyle::Top;
         labelEUS->TextAlign = ContentAlignment::MiddleCenter;
-        labelEUS->ForeColor = Color::FromArgb(255, 223, 0);  // Muted yellow for text color
-        labelEUS->BackColor = Color::FromArgb(34, 50, 34); // Darker background for label
+        labelEUS->ForeColor = Color::FromArgb(255, 223, 0);
+        labelEUS->BackColor = Color::FromArgb(34, 50, 34);
 
-        // Create buttons with icons only, docked at the top
-        btnDashboard = CreateIconButton("icon_dashboard.png");
-        btnScheduler = CreateIconButton("icon_scheduler.png");
-        btnDevices = CreateIconButton("icon_devices.png");
-        btnAnalytics = CreateIconButton("icon_analytics.png");
-
-        // Settings button at the bottom
-        btnSettings = CreateIconButton("icon_settings.png");
+        // Update button sizes for full screen
+        btnDashboard = CreateIconButton("icon_dashboard.png", 70);
+        btnScheduler = CreateIconButton("icon_scheduler.png", 70);
+        btnDevices = CreateIconButton("icon_devices.png", 70);
+        btnAnalytics = CreateIconButton("icon_analytics.png", 70);
+        btnSettings = CreateIconButton("icon_settings.png", 70);
         btnSettings->Dock = DockStyle::Bottom;
 
-        // Dock each button to the top
         btnDashboard->Dock = DockStyle::Top;
         btnScheduler->Dock = DockStyle::Top;
         btnDevices->Dock = DockStyle::Top;
         btnAnalytics->Dock = DockStyle::Top;
 
-        // Add buttons to sidebar
         sidebarPanel->Controls->Add(btnSettings);
         sidebarPanel->Controls->Add(btnAnalytics);
         sidebarPanel->Controls->Add(btnDevices);
@@ -67,29 +63,25 @@ namespace EUS {
         sidebarPanel->Controls->Add(btnDashboard);
         sidebarPanel->Controls->Add(labelEUS);
 
-        // Add sidebar and content panel to the main form
         this->Controls->Add(contentPanel);
         this->Controls->Add(sidebarPanel);
 
-        // Register the FormClosing event handler
         this->FormClosing += gcnew FormClosingEventHandler(this, &MainForm::OnFormClosing);
-
-        // Set Dashboard as the default open page
         this->OnSidebarButtonClick(btnDashboard, nullptr);
     }
 
-    Button^ MainForm::CreateIconButton(System::String^ iconPath)
+    // Update CreateIconButton to accept size parameters
+    Button^ MainForm::CreateIconButton(System::String^ iconPath, int size)
     {
         auto button = gcnew System::Windows::Forms::Button();
-        button->Size = System::Drawing::Size(50, 50);
-        button->BackColor = Color::FromArgb(60, 80, 60);  // Lighter green for button background
+        button->Size = System::Drawing::Size(size, size);
+        button->BackColor = Color::FromArgb(60, 80, 60);
         button->FlatStyle = FlatStyle::Flat;
         button->FlatAppearance->BorderSize = 0;
         button->Image = Image::FromFile(iconPath);
         button->ImageAlign = ContentAlignment::MiddleCenter;
         button->Click += gcnew EventHandler(this, &MainForm::OnSidebarButtonClick);
 
-        // Hover effect: Lighten button background when hovered
         button->MouseEnter += gcnew EventHandler(this, &MainForm::OnButtonMouseEnter);
         button->MouseLeave += gcnew EventHandler(this, &MainForm::OnButtonMouseLeave);
 
@@ -101,7 +93,7 @@ namespace EUS {
         Button^ btn = dynamic_cast<Button^>(sender);
         if (btn != nullptr)
         {
-            btn->BackColor = Color::FromArgb(85, 107, 47);  // Lighter green on hover
+            btn->BackColor = Color::FromArgb(85, 107, 47);
         }
     }
 
@@ -110,7 +102,7 @@ namespace EUS {
         Button^ btn = dynamic_cast<Button^>(sender);
         if (btn != nullptr && btn != activeButton)
         {
-            btn->BackColor = Color::FromArgb(60, 80, 60);  // Reset to original color
+            btn->BackColor = Color::FromArgb(60, 80, 60);
         }
     }
 
@@ -121,14 +113,14 @@ namespace EUS {
 
         // Reset previous active button's background
         if (activeButton != nullptr) {
-            activeButton->BackColor = Color::FromArgb(60, 80, 60);  // Lightened green
+            activeButton->BackColor = Color::FromArgb(60, 80, 60);
         }
 
         // Highlight the clicked button
-        clickedButton->BackColor = Color::FromArgb(85, 107, 47);  // Yellow accent for active button
+        clickedButton->BackColor = Color::FromArgb(85, 107, 47);
         activeButton = clickedButton;
 
-        this->contentPanel->Controls->Clear();  // Clear existing content
+        this->contentPanel->Controls->Clear();
 
         UserControl^ newPage = nullptr;
         if (clickedButton == btnDashboard)

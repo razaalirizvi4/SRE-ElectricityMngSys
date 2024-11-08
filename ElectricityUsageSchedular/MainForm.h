@@ -35,7 +35,7 @@ namespace EUS {
         Button^ activeButton;
 
         void InitializeComponent(void);
-        Button^ CreateIconButton(System::String^ iconPath);
+        Button^ CreateIconButton(System::String^ iconPath, int size);
         void MainForm::OnButtonMouseEnter(Object^ sender, EventArgs^ e);
         void MainForm::OnButtonMouseLeave(Object^ sender, EventArgs^ e);
         void OnSidebarButtonClick(Object^ sender, EventArgs^ e);

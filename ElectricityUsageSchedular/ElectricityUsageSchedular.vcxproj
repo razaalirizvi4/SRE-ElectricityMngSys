@@ -130,7 +130,9 @@
     <ResourceCompile Include="app.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AnalyticsUserControl.h" />
+    <ClInclude Include="AnalyticsUserControl.h"> 
+        <SubType>Form</SubType>
+	</ClInclude>
     <ClInclude Include="DashboardUserControl.h" />
     <ClInclude Include="DevicesUserControl.h" />
     <ClInclude Include="LoginForm.h" />
