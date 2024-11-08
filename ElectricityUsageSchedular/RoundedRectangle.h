@@ -1,11 +1,11 @@
-#pragma once;
+#pragma once
 
 using namespace System;
 using namespace System::Drawing;
 using namespace System::Drawing::Drawing2D;
 
-namespace RoundedRectangles
-{
+namespace RoundedRectangles {
+
     public ref class RoundedRectangle
     {
     public:

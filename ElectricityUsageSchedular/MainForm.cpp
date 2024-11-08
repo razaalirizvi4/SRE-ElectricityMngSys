@@ -19,6 +19,7 @@ namespace EUS {
     void MainForm::InitializeComponent(void)
     {
         this->components = gcnew System::ComponentModel::Container();
+        this->BackColor = Color::FromArgb(212, 237, 250);
 
         this->WindowState = System::Windows::Forms::FormWindowState::Maximized;
 
@@ -27,7 +28,7 @@ namespace EUS {
         sidebarPanel->Dock = DockStyle::Left;
         sidebarPanel->Width = 70;
         sidebarPanel->Height = 1055;
-        sidebarPanel->BackColor = Color::FromArgb(60, 80, 60);
+        sidebarPanel->BackColor = Color::FromArgb(69, 160, 227);
 
         // Apply rounded corners to the sidebar
         ApplyRightRoundedCorners(sidebarPanel, 15);
@@ -35,17 +36,17 @@ namespace EUS {
         // Content panel settings
         contentPanel = gcnew Panel();
         contentPanel->Dock = DockStyle::Fill;
-        contentPanel->BackColor = Color::FromArgb(235, 245, 235);
+        contentPanel->BackColor = Color::FromArgb(69, 160, 227);
 
         // "EUS" label settings
         labelEUS = gcnew Label();
         labelEUS->Text = L"EUS";
         labelEUS->Size = System::Drawing::Size(150, 60);
-        labelEUS->Font = gcnew System::Drawing::Font(L"Arial", 20, FontStyle::Bold);
+        labelEUS->Font = gcnew System::Drawing::Font(L"Segoe UI", 16, FontStyle::Bold);
         labelEUS->Dock = DockStyle::Top;
         labelEUS->TextAlign = ContentAlignment::MiddleCenter;
-        labelEUS->ForeColor = Color::FromArgb(255, 223, 0);
-        labelEUS->BackColor = Color::FromArgb(34, 50, 34);
+        labelEUS->ForeColor = Color::FromArgb(225, 240, 250);
+        labelEUS->BackColor = Color::FromArgb(69, 160, 227);
 
         // Update button sizes for full screen
         btnDashboard = CreateIconButton("icon_dashboard.png", 70);
@@ -74,21 +75,12 @@ namespace EUS {
         this->OnSidebarButtonClick(btnDashboard, nullptr);
     }
 
-    // Helper function to apply rounded corners using RoundedRectangle class
-    void MainForm::ApplyRoundedRectangleToPanel(Panel^ panel, int radius, RoundedRectangles::RoundedRectangle::RectangleCorners corners)
-    {
-        System::Drawing::Drawing2D::GraphicsPath^ path = RoundedRectangles::RoundedRectangle::Create(
-            0, 0, panel->Width, panel->Height, radius, corners
-        );
-        panel->Region = gcnew System::Drawing::Region(path);
-    }
-
     // Update CreateIconButton to accept size parameters
     Button^ MainForm::CreateIconButton(System::String^ iconPath, int size)
     {
         auto button = gcnew System::Windows::Forms::Button();
         button->Size = System::Drawing::Size(size, size);
-        button->BackColor = Color::FromArgb(60, 80, 60);
+        button->BackColor = Color::FromArgb(69, 160, 227);
         button->FlatStyle = FlatStyle::Flat;
         button->FlatAppearance->BorderSize = 0;
         button->Image = Image::FromFile(iconPath);
@@ -99,6 +91,14 @@ namespace EUS {
         button->MouseLeave += gcnew EventHandler(this, &MainForm::OnButtonMouseLeave);
 
         return button;
+    }
+
+    void MainForm::ApplyRoundedRectangleToPanel(Panel^ panel, int radius, RoundedRectangles::RoundedRectangle::RectangleCorners corners)
+    {
+        System::Drawing::Drawing2D::GraphicsPath^ path = RoundedRectangles::RoundedRectangle::Create(
+            0, 0, panel->Width, panel->Height, radius, corners
+        );
+        panel->Region = gcnew System::Drawing::Region(path);
     }
 
     void MainForm::ApplyRightRoundedCorners(Panel^ panel, int radius)
@@ -114,7 +114,7 @@ namespace EUS {
         Button^ btn = dynamic_cast<Button^>(sender);
         if (btn != nullptr)
         {
-            btn->BackColor = Color::FromArgb(85, 107, 47);
+            btn->BackColor = Color::FromArgb(115, 178, 243);
         }
     }
 
@@ -123,7 +123,7 @@ namespace EUS {
         Button^ btn = dynamic_cast<Button^>(sender);
         if (btn != nullptr && btn != activeButton)
         {
-            btn->BackColor = Color::FromArgb(60, 80, 60);
+            btn->BackColor = Color::FromArgb(69, 160, 227);
         }
     }
 
@@ -134,11 +134,11 @@ namespace EUS {
 
         // Reset previous active button's background
         if (activeButton != nullptr) {
-            activeButton->BackColor = Color::FromArgb(60, 80, 60);
+            activeButton->BackColor = Color::FromArgb(69, 160, 227);
         }
 
         // Highlight the clicked button
-        clickedButton->BackColor = Color::FromArgb(85, 107, 47);
+        clickedButton->BackColor = Color::FromArgb(115, 178, 243);
         activeButton = clickedButton;
 
         this->contentPanel->Controls->Clear();
@@ -167,4 +167,3 @@ namespace EUS {
         Application::Exit();
     }
 }
-

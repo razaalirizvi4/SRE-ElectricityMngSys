@@ -11,6 +11,7 @@ namespace EUS {
     {
     public:
         DevicesUserControl(void);
+        Panel^ topLeftPanel;
 
     protected:
         ~DevicesUserControl();

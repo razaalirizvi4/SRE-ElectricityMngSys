@@ -1,5 +1,7 @@
 #pragma once
 
+#include "RoundedRectangle.h"
+
 namespace EUS {
 
     using namespace System;
@@ -20,11 +22,8 @@ namespace EUS {
     private:
         System::ComponentModel::Container^ components;
 
-        Panel^ section1Panel;
-        Panel^ section2Panel;
-        Panel^ section3Panel;
-
         void InitializeComponent(void);
+        void ApplyRoundedRectangleToPanel(Panel^ panel, int radius, RoundedRectangles::RoundedRectangle::RectangleCorners corners);
     };
 }
 
