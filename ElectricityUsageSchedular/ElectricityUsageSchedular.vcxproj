@@ -139,6 +139,7 @@
     <ClInclude Include="DevicesUserControl.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="GlobalFunctions.h" />
     <ClInclude Include="LoginForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>

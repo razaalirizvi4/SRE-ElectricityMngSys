@@ -53,6 +53,9 @@
     <ClInclude Include="RegisterForm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GlobalFunctions.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CppCLR_WinFormsProject.cpp">

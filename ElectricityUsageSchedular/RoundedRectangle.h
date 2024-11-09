@@ -90,12 +90,12 @@ namespace RoundedRectangles {
             return path;
         }
 
-        static GraphicsPath^ Create(Rectangle rect, int radius, RectangleCorners corners)
+        static GraphicsPath^ Create(System::Drawing::Rectangle rect, int radius, RectangleCorners corners)
         {
             return Create(rect.X, rect.Y, rect.Width, rect.Height, radius, corners);
         }
 
-        static GraphicsPath^ Create(Rectangle rect, int radius)
+        static GraphicsPath^ Create(System::Drawing::Rectangle rect, int radius)
         {
             return Create(rect.X, rect.Y, rect.Width, rect.Height, radius, RectangleCorners::All);
         }
