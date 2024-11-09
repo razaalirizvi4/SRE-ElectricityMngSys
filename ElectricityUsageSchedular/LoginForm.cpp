@@ -2,6 +2,7 @@
 #include "LoginForm.h"
 #include "MainForm.h"
 #include "RegisterForm.h"
+#include"CustomMessageForm.h"
 
 namespace EUS {
 
@@ -54,6 +55,9 @@ namespace EUS {
         this->Hide();
         MainForm^ mainForm = gcnew MainForm();
         mainForm->Show();
+
+        CustomMessageForm^ msg = gcnew CustomMessageForm("Login success!","Login Status",true);
+        msg->Show();
     }
 
     void LoginForm::MoveToRegister(Object^ sender, EventArgs^ e)

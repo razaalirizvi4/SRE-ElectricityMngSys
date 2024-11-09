@@ -56,6 +56,9 @@
     <ClInclude Include="GlobalFunctions.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="CustomMessageForm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CppCLR_WinFormsProject.cpp">
@@ -89,6 +92,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RegisterForm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomMessageForm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

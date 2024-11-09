@@ -133,6 +133,7 @@
     <ClInclude Include="AnalyticsUserControl.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="CustomMessageForm.h" />
     <ClInclude Include="DashboardUserControl.h">
       <FileType>CppForm</FileType>
     </ClInclude>
@@ -159,6 +160,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnalyticsUserControl.cpp" />
+    <ClCompile Include="CustomMessageForm.cpp" />
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="CppCLR_WinFormsProject.cpp" />
     <ClCompile Include="DashboardUserControl.cpp" />
