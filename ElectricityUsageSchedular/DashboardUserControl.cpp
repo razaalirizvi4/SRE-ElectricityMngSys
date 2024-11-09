@@ -30,11 +30,6 @@ namespace EUS {
         panel->Location = config.Location;
         panel->BackColor = config.BackColor;
 
-        panel->Anchor = System::Windows::Forms::AnchorStyles::Top |
-            System::Windows::Forms::AnchorStyles::Left |
-            System::Windows::Forms::AnchorStyles::Right |
-            System::Windows::Forms::AnchorStyles::Bottom;
-
         if (!String::IsNullOrEmpty(config.Title)) {
             panel->Controls->Add(CreateLabel(config.Title,
                 DashboardStyles::TitleFont,
@@ -74,11 +69,6 @@ namespace EUS {
         config.Title = "Top-left Section";
         config.Content = "Content for top-left box.";
 
-        Panel^ topLeftPanel = CreatePanel(config);
-        topLeftPanel->Anchor = System::Windows::Forms::AnchorStyles::Top |
-            System::Windows::Forms::AnchorStyles::Left |
-            System::Windows::Forms::AnchorStyles::Right;
-
         return CreatePanel(config);
     }
 
@@ -90,11 +80,6 @@ namespace EUS {
         );
         containerPanel->Location = location;
         containerPanel->BackColor = DashboardStyles::MainBackColor;
-
-        containerPanel->Anchor = System::Windows::Forms::AnchorStyles::Top |
-            System::Windows::Forms::AnchorStyles::Left |
-            System::Windows::Forms::AnchorStyles::Right |
-            System::Windows::Forms::AnchorStyles::Bottom;
 
         ApplyRoundedRectangleToPanel(containerPanel, DashboardStyles::DefaultCornerRadius);
 
@@ -134,11 +119,6 @@ namespace EUS {
         containerPanel->Location = location;
         containerPanel->BackColor = DashboardStyles::MainBackColor;
 
-        containerPanel->Anchor = System::Windows::Forms::AnchorStyles::Top |
-            System::Windows::Forms::AnchorStyles::Left |
-            System::Windows::Forms::AnchorStyles::Right |
-            System::Windows::Forms::AnchorStyles::Bottom;
-
         ApplyRoundedRectangleToPanel(containerPanel, DashboardStyles::DefaultCornerRadius);
 
         // Add Box 1
@@ -168,7 +148,15 @@ namespace EUS {
 
     void DashboardUserControl::InitializeComponent(void) {
         this->components = gcnew System::ComponentModel::Container();
-        this->Size = System::Drawing::Size(1140, 900);
+
+        int screenWidth = Screen::PrimaryScreen->Bounds.Width;
+        if (screenWidth == 1920) {
+            this->Size = System::Drawing::Size(1140, 900);
+        }
+        else {
+            this->Size = System::Drawing::Size(940, 700);
+        }
+
         this->BackColor = DashboardStyles::MainBackColor;
 
         // Create and add top-left section
