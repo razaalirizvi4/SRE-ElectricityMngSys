@@ -131,17 +131,29 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnalyticsUserControl.h">
-      <SubType>Form</SubType>
+	    <FileType>CppForm</FileType>
     </ClInclude>
-    <ClInclude Include="DashboardUserControl.h" />
-    <ClInclude Include="DevicesUserControl.h" />
-    <ClInclude Include="LoginForm.h" />
-    <ClInclude Include="MainForm.h" />
+    <ClInclude Include="DashboardUserControl.h">
+	  <FileType>CppForm</FileType>
+	</ClInclude>
+    <ClInclude Include="DevicesUserControl.h">
+	  <FileType>CppForm</FileType>
+	</ClInclude>
+    <ClInclude Include="LoginForm.h">
+	  <FileType>CppForm</FileType>
+	</ClInclude>
+	<ClInclude Include="MainForm.h">
+	  <FileType>CppForm</FileType>
+	</ClInclude>
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="RoundedRectangle.h" />
-    <ClInclude Include="SchedulerUserControl.h" />
-    <ClInclude Include="SettingsUserControl.h" />
+    <ClInclude Include="SchedulerUserControl.h">
+	  <FileType>CppForm</FileType>
+	</ClInclude>
+    <ClInclude Include="SettingsUserControl.h">
+	  <FileType>CppForm</FileType>
+	</ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnalyticsUserControl.cpp" />
