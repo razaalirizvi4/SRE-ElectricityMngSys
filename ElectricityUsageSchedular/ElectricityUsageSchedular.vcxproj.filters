@@ -47,6 +47,12 @@
     <ClInclude Include="SettingsUserControl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RoundedRectangle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RegisterForm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CppCLR_WinFormsProject.cpp">
@@ -77,6 +83,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SettingsUserControl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RegisterForm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

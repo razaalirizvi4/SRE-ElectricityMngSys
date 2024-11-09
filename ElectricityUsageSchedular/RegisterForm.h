@@ -9,21 +9,19 @@ namespace EUS {
     using namespace System::Windows::Forms;
     using namespace System::Drawing;
 
-    public ref class LoginForm : public System::Windows::Forms::Form
+    public ref class RegisterForm : public System::Windows::Forms::Form
     {
     public:
-        LoginForm(void);
+        RegisterForm(void);
 
     protected:
-        ~LoginForm();
+        ~RegisterForm();
 
     private:
         System::ComponentModel::Container^ components;
         Button^ btnLogin;
-        Button^ btnToRegister;
 
         void InitializeComponent(void);
-        void OnLoginClick(Object^ sender, EventArgs^ e);
-        void MoveToRegister(Object^ sender, EventArgs^ e);
+
     };
 }

@@ -131,29 +131,30 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnalyticsUserControl.h">
-	    <FileType>CppForm</FileType>
+      <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="DashboardUserControl.h">
-	  <FileType>CppForm</FileType>
-	</ClInclude>
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="DevicesUserControl.h">
-	  <FileType>CppForm</FileType>
-	</ClInclude>
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="LoginForm.h">
-	  <FileType>CppForm</FileType>
-	</ClInclude>
-	<ClInclude Include="MainForm.h">
-	  <FileType>CppForm</FileType>
-	</ClInclude>
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="MainForm.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="pch.h" />
+    <ClInclude Include="RegisterForm.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="RoundedRectangle.h" />
     <ClInclude Include="SchedulerUserControl.h">
-	  <FileType>CppForm</FileType>
-	</ClInclude>
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="SettingsUserControl.h">
-	  <FileType>CppForm</FileType>
-	</ClInclude>
+      <FileType>CppForm</FileType>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnalyticsUserControl.cpp" />
@@ -169,6 +170,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="RegisterForm.cpp" />
     <ClCompile Include="SchedulerUserControl.cpp" />
     <ClCompile Include="SettingsUserControl.cpp" />
   </ItemGroup>
