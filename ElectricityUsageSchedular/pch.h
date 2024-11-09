@@ -7,6 +7,10 @@
 #ifndef PCH_H
 #define PCH_H
 
+#pragma managed(push, off) // Disable CLR to include Windows headers
+#include <Windows.h>
+#pragma managed(pop)
+
 // add headers that you want to pre-compile here
 
 #endif //PCH_H
