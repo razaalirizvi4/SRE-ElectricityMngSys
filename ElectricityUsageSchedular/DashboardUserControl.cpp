@@ -133,6 +133,12 @@ namespace EUS {
         );
         containerPanel->Location = location;
         containerPanel->BackColor = DashboardStyles::MainBackColor;
+
+        containerPanel->Anchor = System::Windows::Forms::AnchorStyles::Top |
+            System::Windows::Forms::AnchorStyles::Left |
+            System::Windows::Forms::AnchorStyles::Right |
+            System::Windows::Forms::AnchorStyles::Bottom;
+
         ApplyRoundedRectangleToPanel(containerPanel, DashboardStyles::DefaultCornerRadius);
 
         // Add Box 1
