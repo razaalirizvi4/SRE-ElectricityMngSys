@@ -28,7 +28,7 @@ namespace EUS {
         static const int DefaultCornerRadius = 40;
         static const int DefaultMargin = 60;
         static const int DefaultSpacing = 50;
-        static const int DefaultSpacing2 = 13;
+        static const int DefaultSpacing2 = 20;
     };
 
     public ref class DashboardUserControl : public System::Windows::Forms::UserControl {
