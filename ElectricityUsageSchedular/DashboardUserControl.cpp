@@ -30,6 +30,11 @@ namespace EUS {
         panel->Location = config.Location;
         panel->BackColor = config.BackColor;
 
+        panel->Anchor = System::Windows::Forms::AnchorStyles::Top |
+            System::Windows::Forms::AnchorStyles::Left |
+            System::Windows::Forms::AnchorStyles::Right |
+            System::Windows::Forms::AnchorStyles::Bottom;
+
         if (!String::IsNullOrEmpty(config.Title)) {
             panel->Controls->Add(CreateLabel(config.Title,
                 DashboardStyles::TitleFont,
@@ -69,6 +74,11 @@ namespace EUS {
         config.Title = "Top-left Section";
         config.Content = "Content for top-left box.";
 
+        Panel^ topLeftPanel = CreatePanel(config);
+        topLeftPanel->Anchor = System::Windows::Forms::AnchorStyles::Top |
+            System::Windows::Forms::AnchorStyles::Left |
+            System::Windows::Forms::AnchorStyles::Right;
+
         return CreatePanel(config);
     }
 
@@ -80,6 +90,12 @@ namespace EUS {
         );
         containerPanel->Location = location;
         containerPanel->BackColor = DashboardStyles::MainBackColor;
+
+        containerPanel->Anchor = System::Windows::Forms::AnchorStyles::Top |
+            System::Windows::Forms::AnchorStyles::Left |
+            System::Windows::Forms::AnchorStyles::Right |
+            System::Windows::Forms::AnchorStyles::Bottom;
+
         ApplyRoundedRectangleToPanel(containerPanel, DashboardStyles::DefaultCornerRadius);
 
         int boxHeight = (containerPanel->Height - DashboardStyles::DefaultSpacing - 100);
