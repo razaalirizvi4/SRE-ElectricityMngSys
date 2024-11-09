@@ -42,7 +42,7 @@ namespace EUS {
         labelEUS = gcnew Label();
         labelEUS->Text = L"EUS";
         labelEUS->Size = System::Drawing::Size(150, 60);
-        labelEUS->Font = gcnew System::Drawing::Font(L"Segoe UI", 16, FontStyle::Bold);
+        labelEUS->Font = gcnew System::Drawing::Font(L"Calibri", 16, FontStyle::Bold);
         labelEUS->Dock = DockStyle::Top;
         labelEUS->TextAlign = ContentAlignment::MiddleCenter;
         labelEUS->ForeColor = Color::FromArgb(225, 240, 250);

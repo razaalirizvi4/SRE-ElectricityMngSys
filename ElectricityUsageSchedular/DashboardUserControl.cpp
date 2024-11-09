@@ -3,9 +3,17 @@
 
 namespace EUS {
 
-    // Helper function to create a label with common properties
-    Label^ DashboardUserControl::CreateLabel(String^ text, System::Drawing::Font^ font, Color color, int width, int height, Point location)
-    {
+    DashboardUserControl::DashboardUserControl(void) {
+        InitializeComponent();
+    }
+
+    DashboardUserControl::~DashboardUserControl() {
+        if (components) {
+            delete components;
+        }
+    }
+
+    Label^ DashboardUserControl::CreateLabel(String^ text, System::Drawing::Font^ font, Color color, int width, int height, Point location) {
         Label^ label = gcnew Label();
         label->Text = text;
         label->Font = font;
@@ -15,110 +23,148 @@ namespace EUS {
         label->TextAlign = ContentAlignment::MiddleCenter;
         return label;
     }
-    DashboardUserControl::DashboardUserControl(void)
-    {
-        InitializeComponent();
-    }
 
-    DashboardUserControl::~DashboardUserControl()
-    {
-        if (components)
-        {
-            delete components;
+    Panel^ DashboardUserControl::CreatePanel(PanelConfig config) {
+        Panel^ panel = gcnew Panel();
+        panel->Size = System::Drawing::Size(config.Width, config.Height);
+        panel->Location = config.Location;
+        panel->BackColor = config.BackColor;
+
+        if (!String::IsNullOrEmpty(config.Title)) {
+            panel->Controls->Add(CreateLabel(config.Title,
+                DashboardStyles::TitleFont,
+                Color::White,
+                panel->Width,
+                30,
+                Point(0, 0)));
         }
+
+        if (!String::IsNullOrEmpty(config.Content)) {
+            panel->Controls->Add(CreateLabel(config.Content,
+                DashboardStyles::ContentFont,
+                Color::White,
+                panel->Width,
+                50,
+                Point(0, 40)));
+        }
+
+        ApplyRoundedRectangleToPanel(panel, DashboardStyles::DefaultCornerRadius);
+        return panel;
     }
 
-    void DashboardUserControl::InitializeComponent(void)
-    {
-        this->components = gcnew System::ComponentModel::Container();
-        this->Size = System::Drawing::Size(1140, 900);
-        this->BackColor = Color::FromArgb(212, 237, 250);
-
-        int sectionMargin = 60;
-        int sectionMargin2 = 5;
-        int sectionSpacing = 50;
-        int sectionSpacing2 = 13;
-
-        System::Drawing::Font^ boldFont = gcnew System::Drawing::Font("Segoe UI", 16, FontStyle::Bold);
-        System::Drawing::Font^ regularFont = gcnew System::Drawing::Font("Segoe UI", 12);
-
-        // Top-left Section
-        Panel^ topLeftPanel = gcnew Panel();
-        topLeftPanel->Size = System::Drawing::Size(this->Width - sectionMargin, this->Height / 2 - sectionMargin);
-        topLeftPanel->Location = Point(sectionMargin, sectionMargin);
-        topLeftPanel->BackColor = Color::FromArgb(69, 160, 227);
-        ApplyRoundedRectangleToPanel(topLeftPanel, 30, RoundedRectangles::RoundedRectangle::RectangleCorners::All);
-
-        topLeftPanel->Controls->Add(CreateLabel("Top-left Section", boldFont, Color::White, topLeftPanel->Width, 30, Point(0, 0)));
-        topLeftPanel->Controls->Add(CreateLabel("Content for top-left box.", regularFont, Color::White, topLeftPanel->Width, 50, Point(0, 40)));
-
-        this->Controls->Add(topLeftPanel);
-
-        // Bottom-left Section (Two Boxes)
-        Panel^ bottomLeftPanel = gcnew Panel();
-        bottomLeftPanel->Size = System::Drawing::Size(this->Width - sectionMargin, this->Height / 2 - sectionMargin + 110);
-        bottomLeftPanel->Location = Point(sectionMargin, topLeftPanel->Bottom + sectionSpacing);
-        bottomLeftPanel->BackColor = Color::FromArgb(212, 237, 250);
-        ApplyRoundedRectangleToPanel(bottomLeftPanel, 30, RoundedRectangles::RoundedRectangle::RectangleCorners::All);
-
-        int boxHeight = (bottomLeftPanel->Height - sectionSpacing - 100);
-
-        Panel^ bottomLeftBox1 = gcnew Panel();
-        bottomLeftBox1->Size = System::Drawing::Size(bottomLeftPanel->Width / 2 - sectionSpacing + 70, boxHeight - 110);
-        bottomLeftBox1->BackColor = Color::FromArgb(69, 160, 227);
-        ApplyRoundedRectangleToPanel(bottomLeftBox1, 30, RoundedRectangles::RoundedRectangle::RectangleCorners::All);
-
-        bottomLeftBox1->Controls->Add(CreateLabel("Bottom-left Box 1", boldFont, Color::White, bottomLeftBox1->Width, 30, Point(0, 0)));
-        bottomLeftBox1->Controls->Add(CreateLabel("Content for box 1.", regularFont, Color::White, bottomLeftBox1->Width, 50, Point(0, 40)));
-
-        Panel^ bottomLeftBox2 = gcnew Panel();
-        bottomLeftBox2->Size = System::Drawing::Size(bottomLeftPanel->Width / 2 - sectionSpacing + 75, boxHeight - 110);
-        bottomLeftBox2->Location = Point(bottomLeftPanel->Width / 2 - 25, bottomLeftBox1->Bottom + 20);
-        bottomLeftBox2->BackColor = Color::FromArgb(69, 160, 227);
-        ApplyRoundedRectangleToPanel(bottomLeftBox2, 30, RoundedRectangles::RoundedRectangle::RectangleCorners::All);
-
-        bottomLeftBox2->Controls->Add(CreateLabel("Bottom-left Box 2", boldFont, Color::White, bottomLeftBox2->Width, 30, Point(0, 0)));
-        bottomLeftBox2->Controls->Add(CreateLabel("Content for box 2.", regularFont, Color::White, bottomLeftBox2->Width, 50, Point(0, 40)));
-
-        bottomLeftPanel->Controls->Add(bottomLeftBox1);
-        bottomLeftPanel->Controls->Add(bottomLeftBox2);
-        this->Controls->Add(bottomLeftPanel);
-
-        // Right-side Section (Two Large Boxes)
-        Panel^ rightPanel = gcnew Panel();
-        rightPanel->Size = System::Drawing::Size(this->Width - 520 - sectionMargin2, this->Height - sectionMargin + 100);
-        rightPanel->Location = Point(topLeftPanel->Right + sectionSpacing, sectionMargin);
-        rightPanel->BackColor = Color::FromArgb(212, 237, 250);
-        ApplyRoundedRectangleToPanel(rightPanel, 30, RoundedRectangles::RoundedRectangle::RectangleCorners::All);
-
-        Panel^ rightBox1 = gcnew Panel();
-        rightBox1->Size = System::Drawing::Size(rightPanel->Width, rightPanel->Height / 2 - sectionSpacing + 40);
-        rightBox1->BackColor = Color::FromArgb(69, 160, 227);
-        ApplyRoundedRectangleToPanel(rightBox1, 30, RoundedRectangles::RoundedRectangle::RectangleCorners::All);
-
-        rightBox1->Controls->Add(CreateLabel("Right-side Box 1", boldFont, Color::White, rightBox1->Width, 30, Point(0, 0)));
-        rightBox1->Controls->Add(CreateLabel("Content for right-side box 1.", regularFont, Color::White, rightBox1->Width, 50, Point(0, 40)));
-
-        Panel^ rightBox2 = gcnew Panel();
-        rightBox2->Size = System::Drawing::Size(rightPanel->Width, rightPanel->Height / 2 - sectionSpacing + 45);
-        rightBox2->Location = Point(0, rightBox1->Bottom + sectionSpacing2);
-        rightBox2->BackColor = Color::FromArgb(69, 160, 227);
-        ApplyRoundedRectangleToPanel(rightBox2, 30, RoundedRectangles::RoundedRectangle::RectangleCorners::All);
-
-        rightBox2->Controls->Add(CreateLabel("Right-side Box 2", boldFont, Color::White, rightBox2->Width, 30, Point(0, 0)));
-        rightBox2->Controls->Add(CreateLabel("Content for right-side box 2.", regularFont, Color::White, rightBox2->Width, 50, Point(0, 40)));
-
-        rightPanel->Controls->Add(rightBox1);
-        rightPanel->Controls->Add(rightBox2);
-        this->Controls->Add(rightPanel);
-    }
-
-    void DashboardUserControl::ApplyRoundedRectangleToPanel(Panel^ panel, int radius, RoundedRectangles::RoundedRectangle::RectangleCorners corners)
-    {
+    void DashboardUserControl::ApplyRoundedRectangleToPanel(Panel^ panel, int radius) {
         System::Drawing::Drawing2D::GraphicsPath^ path = RoundedRectangles::RoundedRectangle::Create(
-            0, 0, panel->Width, panel->Height, radius, corners
+            0, 0, panel->Width, panel->Height, radius,
+            RoundedRectangles::RoundedRectangle::RectangleCorners::All
         );
         panel->Region = gcnew System::Drawing::Region(path);
     }
-}
 
+    Panel^ DashboardUserControl::CreateTopLeftSection() {
+        PanelConfig config;
+        config.Width = this->Width - DashboardStyles::DefaultMargin;
+        config.Height = this->Height / 2 - DashboardStyles::DefaultMargin;
+        config.Location = Point(DashboardStyles::DefaultMargin, DashboardStyles::DefaultMargin);
+        config.BackColor = DashboardStyles::PanelBackColor;
+        config.Title = "Top-left Section";
+        config.Content = "Content for top-left box.";
+
+        return CreatePanel(config);
+    }
+
+    Panel^ DashboardUserControl::CreateBottomLeftSection(Point location) {
+        Panel^ containerPanel = gcnew Panel();
+        containerPanel->Size = System::Drawing::Size(
+            this->Width - DashboardStyles::DefaultMargin,
+            this->Height / 2 - DashboardStyles::DefaultMargin + 110
+        );
+        containerPanel->Location = location;
+        containerPanel->BackColor = DashboardStyles::MainBackColor;
+        ApplyRoundedRectangleToPanel(containerPanel, DashboardStyles::DefaultCornerRadius);
+
+        int boxHeight = (containerPanel->Height - DashboardStyles::DefaultSpacing - 100);
+
+        // Add Box 1
+        PanelConfig box1Config;
+        box1Config.Width = containerPanel->Width / 2 - DashboardStyles::DefaultSpacing + 70;
+        box1Config.Height = boxHeight - 110;
+        box1Config.Location = Point(0, 0);
+        box1Config.BackColor = DashboardStyles::PanelBackColor;
+        box1Config.Title = "Bottom-left Box 1";
+        box1Config.Content = "Content for box 1.";
+
+        containerPanel->Controls->Add(CreatePanel(box1Config));
+
+        // Add Box 2
+        PanelConfig box2Config;
+        box2Config.Width = containerPanel->Width / 2 - DashboardStyles::DefaultSpacing + 75;
+        box2Config.Height = boxHeight - 110;
+        box2Config.Location = Point(containerPanel->Width / 2 - 25, boxHeight - 90);
+        box2Config.BackColor = DashboardStyles::PanelBackColor;
+        box2Config.Title = "Bottom-left Box 2";
+        box2Config.Content = "Content for box 2.";
+
+        containerPanel->Controls->Add(CreatePanel(box2Config));
+
+        return containerPanel;
+    }
+
+    Panel^ DashboardUserControl::CreateRightSection(Point location) {
+        Panel^ containerPanel = gcnew Panel();
+        containerPanel->Size = System::Drawing::Size(
+            this->Width - 520 - 5,
+            this->Height - DashboardStyles::DefaultMargin + 100
+        );
+        containerPanel->Location = location;
+        containerPanel->BackColor = DashboardStyles::MainBackColor;
+        ApplyRoundedRectangleToPanel(containerPanel, DashboardStyles::DefaultCornerRadius);
+
+        // Add Box 1
+        PanelConfig box1Config;
+        box1Config.Width = containerPanel->Width;
+        box1Config.Height = containerPanel->Height / 2 - DashboardStyles::DefaultSpacing + 40;
+        box1Config.Location = Point(0, 0);
+        box1Config.BackColor = DashboardStyles::PanelBackColor;
+        box1Config.Title = "Right-side Box 1";
+        box1Config.Content = "Content for right-side box 1.";
+
+        containerPanel->Controls->Add(CreatePanel(box1Config));
+
+        // Add Box 2
+        PanelConfig box2Config;
+        box2Config.Width = containerPanel->Width;
+        box2Config.Height = containerPanel->Height / 2 - DashboardStyles::DefaultSpacing + 45;
+        box2Config.Location = Point(0, box1Config.Height + DashboardStyles::DefaultSpacing2);
+        box2Config.BackColor = DashboardStyles::PanelBackColor;
+        box2Config.Title = "Right-side Box 2";
+        box2Config.Content = "Content for right-side box 2.";
+
+        containerPanel->Controls->Add(CreatePanel(box2Config));
+
+        return containerPanel;
+    }
+
+    void DashboardUserControl::InitializeComponent(void) {
+        this->components = gcnew System::ComponentModel::Container();
+        this->Size = System::Drawing::Size(1140, 900);
+        this->BackColor = DashboardStyles::MainBackColor;
+
+        // Create and add top-left section
+        Panel^ topLeftPanel = CreateTopLeftSection();
+        this->Controls->Add(topLeftPanel);
+
+        // Create and add bottom-left section
+        Panel^ bottomLeftPanel = CreateBottomLeftSection(
+            Point(DashboardStyles::DefaultMargin,
+                topLeftPanel->Bottom + DashboardStyles::DefaultSpacing)
+        );
+        this->Controls->Add(bottomLeftPanel);
+
+        // Create and add right section
+        Panel^ rightPanel = CreateRightSection(
+            Point(topLeftPanel->Right + DashboardStyles::DefaultSpacing,
+                DashboardStyles::DefaultMargin)
+        );
+        this->Controls->Add(rightPanel);
+    }
+}

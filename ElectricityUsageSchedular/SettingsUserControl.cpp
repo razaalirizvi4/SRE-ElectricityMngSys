@@ -20,41 +20,50 @@ namespace EUS {
     {
         this->components = gcnew System::ComponentModel::Container();
         this->Size = System::Drawing::Size(1200, 720);
-        this->BackColor = Color::FromArgb(235, 245, 235);
+        this->BackColor = Color::FromArgb(212, 237, 250);
 
-        // Label width and alignment settings
-        int labelWidth = 150;
-        int inputOffsetX = 200;
+        // Use similar color, font, and alignment for labels
+        int labelWidth = 200;
+        int inputOffsetX = 250;
         int initialY = 30;
         int spacingY = 50;
+        System::Drawing::Font^ boldFont = gcnew System::Drawing::Font("Calibri", 16, FontStyle::Bold);
+        System::Drawing::Font^ regularFont = gcnew System::Drawing::Font("Calibri", 12);
 
-        // Title Label for Settings Page
+        // Title Label
         Label^ lblTitle = gcnew Label();
         lblTitle->Text = L"Settings";
-        lblTitle->Font = gcnew System::Drawing::Font("Arial", 18, FontStyle::Bold);
-        lblTitle->ForeColor = Color::FromArgb(85, 107, 47);
+        lblTitle->Font = boldFont;
+        lblTitle->ForeColor = Color::FromArgb(69, 160, 227);
         lblTitle->Size = System::Drawing::Size(200, 40);
         lblTitle->Location = Point((this->Width - lblTitle->Width) / 2, initialY);
+        lblTitle->TextAlign = ContentAlignment::MiddleCenter;
         this->Controls->Add(lblTitle);
 
         initialY += spacingY + 20;
 
-        // Notification Preferences
+        // Notification Preferences Section
         initialY += spacingY;
         Label^ lblNotifications = gcnew Label();
         lblNotifications->Text = L"Notifications:";
+        lblNotifications->Font = regularFont;
+        lblNotifications->ForeColor = Color::FromArgb(69, 160, 227);
         lblNotifications->Location = Point(30, initialY);
         lblNotifications->Size = System::Drawing::Size(labelWidth, 20);
         this->Controls->Add(lblNotifications);
 
         chkHighUsageNotif = gcnew CheckBox();
         chkHighUsageNotif->Text = L"High Usage Alerts";
+        chkHighUsageNotif->Font = regularFont;
+        chkHighUsageNotif->ForeColor = Color::FromArgb(69, 160, 227);
         chkHighUsageNotif->Location = Point(inputOffsetX, initialY);
         chkHighUsageNotif->Checked = true;
         this->Controls->Add(chkHighUsageNotif);
 
         chkDeviceActivationNotif = gcnew CheckBox();
         chkDeviceActivationNotif->Text = L"Device Activation Alerts";
+        chkDeviceActivationNotif->Font = regularFont;
+        chkDeviceActivationNotif->ForeColor = Color::FromArgb(69, 160, 227);
         chkDeviceActivationNotif->Location = Point(inputOffsetX, initialY + 30);
         chkDeviceActivationNotif->Checked = true;
         this->Controls->Add(chkDeviceActivationNotif);
@@ -63,6 +72,8 @@ namespace EUS {
         initialY += spacingY + 30;
         Label^ lblEnergyRate = gcnew Label();
         lblEnergyRate->Text = L"Energy Rate (per kWh):";
+        lblEnergyRate->Font = regularFont;
+        lblEnergyRate->ForeColor = Color::FromArgb(69, 160, 227);
         lblEnergyRate->Location = Point(30, initialY);
         lblEnergyRate->Size = System::Drawing::Size(labelWidth, 20);
         this->Controls->Add(lblEnergyRate);
@@ -75,25 +86,6 @@ namespace EUS {
         numEnergyRate->Maximum = Decimal(10.00);
         numEnergyRate->Value = Decimal(0.12);
         this->Controls->Add(numEnergyRate);
-
-        // Theme Selector
-        initialY += spacingY;
-        Label^ lblTheme = gcnew Label();
-        lblTheme->Text = L"App Theme:";
-        lblTheme->Location = Point(30, initialY);
-        lblTheme->Size = System::Drawing::Size(labelWidth, 20);
-        this->Controls->Add(lblTheme);
-
-        rbLightTheme = gcnew RadioButton();
-        rbLightTheme->Text = L"Light";
-        rbLightTheme->Location = Point(inputOffsetX, initialY);
-        rbLightTheme->Checked = true;
-        this->Controls->Add(rbLightTheme);
-
-        rbDarkTheme = gcnew RadioButton();
-        rbDarkTheme->Text = L"Dark";
-        rbDarkTheme->Location = Point(inputOffsetX + 80, initialY);
-        this->Controls->Add(rbDarkTheme);
     }
 };
 
