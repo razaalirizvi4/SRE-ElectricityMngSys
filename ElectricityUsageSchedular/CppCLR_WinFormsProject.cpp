@@ -31,8 +31,8 @@ int main()
   Application::SetCompatibleTextRenderingDefault(false);
 
   EUS::LoginForm form;
+  ShowNotification(L"Boner Alert", L"Sekaiiiiiiii DEEEEEEEE");
   Application::Run(% form);
-
   Application::Exit();
 
   return 0;
