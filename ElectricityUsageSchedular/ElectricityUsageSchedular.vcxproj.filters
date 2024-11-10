@@ -59,6 +59,9 @@
     <ClInclude Include="CustomMessageForm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="helperStructs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CppCLR_WinFormsProject.cpp">

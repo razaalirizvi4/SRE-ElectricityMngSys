@@ -19,5 +19,6 @@ namespace EUS {
         System::ComponentModel::Container^ components;
 
         void InitializeComponent(void);
+        void initializeTable();
     };
 }
