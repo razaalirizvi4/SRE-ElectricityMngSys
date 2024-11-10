@@ -39,7 +39,15 @@ namespace EUS {
     void MainForm::ConfigureSidebarPanel() {
         sidebarPanel->Dock = DockStyle::Left;
         sidebarPanel->Width = MainPageStyles::SidebarWidth;
-        sidebarPanel->Height = MainPageStyles::SidebarHeight;
+
+        int screenWidth = Screen::PrimaryScreen->Bounds.Width;
+        if (screenWidth == 1920) {
+            sidebarPanel->Height = MainPageStyles::SidebarHeight;
+        }
+        else {
+            sidebarPanel->Height = 840;
+        }
+
         sidebarPanel->BackColor = MainPageStyles::SidebarColor;
         ApplyRightRoundedCorners(sidebarPanel, MainPageStyles::CornerRadius);
     }

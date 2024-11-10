@@ -29,6 +29,7 @@ namespace EUS {
         static const int DefaultMargin = 60;
         static const int DefaultSpacing = 50;
         static const int DefaultSpacing2 = 20;
+        static int MiniBoxHeight = 110;
     };
 
     public ref class DashboardUserControl : public System::Windows::Forms::UserControl {

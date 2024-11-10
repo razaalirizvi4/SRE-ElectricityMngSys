@@ -76,7 +76,7 @@ namespace EUS {
         Panel^ containerPanel = gcnew Panel();
         containerPanel->Size = System::Drawing::Size(
             this->Width - DashboardStyles::DefaultMargin,
-            this->Height / 2 - DashboardStyles::DefaultMargin + 110
+            this->Height / 2 - DashboardStyles::DefaultMargin + DashboardStyles::MiniBoxHeight
         );
         containerPanel->Location = location;
         containerPanel->BackColor = DashboardStyles::MainBackColor;
@@ -154,7 +154,8 @@ namespace EUS {
             this->Size = System::Drawing::Size(1140, 900);
         }
         else {
-            this->Size = System::Drawing::Size(940, 700);
+            this->Size = System::Drawing::Size(940, 685);
+            DashboardStyles::MiniBoxHeight = 165;
         }
 
         this->BackColor = DashboardStyles::MainBackColor;
