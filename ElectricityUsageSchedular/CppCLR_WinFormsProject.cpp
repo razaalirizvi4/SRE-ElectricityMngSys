@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "LoginForm.h"
 
+
 //---------------------------Functions Definition-------------------------------------
 #include "GlobalFunctions.h"
 #include <Shellapi.h>
@@ -20,6 +21,24 @@ void ShowNotification(const wchar_t* title, const wchar_t* message)
     Shell_NotifyIcon(NIM_DELETE, &nid); // Remove it
 }
 
+void sortit(vector<schedule_appliance::Appliance> appliances, int priorityLevel) {
+    // Priority is handled where higher priority levels come first.
+    // Sort primarily by priority, then by kwh in ascending order.
+    std::sort(appliances.begin(), appliances.end(), [=](const schedule_appliance::Appliance& a, const schedule_appliance::Appliance& b) {
+        if (a.priority != b.priority) {
+            return a.priority > b.priority;
+        }
+        return a.kwh < b.kwh;
+        });
+
+    // Optional: Filter appliances to only show the specified priority level
+    appliances.erase(std::remove_if(appliances.begin(), appliances.end(),
+        [priorityLevel](const schedule_appliance::Appliance& appliance) {
+            return appliance.priority != priorityLevel;
+        }),
+        appliances.end());
+}
+
 //--------------------------------Main stuff--------------------------------------------
 using namespace System;
 using namespace System::Windows::Forms;
@@ -27,13 +46,13 @@ using namespace System::Windows::Forms;
 [STAThread]
 int main()
 {
-  Application::EnableVisualStyles();
-  Application::SetCompatibleTextRenderingDefault(false);
+    Application::EnableVisualStyles();
+    Application::SetCompatibleTextRenderingDefault(false);
 
-  EUS::LoginForm form;
-  ShowNotification(L"Boner Alert", L"Sekaiiiiiiii DEEEEEEEE");
-  Application::Run(% form);
-  Application::Exit();
+    EUS::LoginForm form;
+    ShowNotification(L"Boner Alert", L"Sekaiiiiiiii DEEEEEEEE");
+    Application::Run(% form);
+    Application::Exit();
 
-  return 0;
+    return 0;
 }

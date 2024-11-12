@@ -1,4 +1,5 @@
-#pragma once
+
+#include "GlobalFunctions.h"
 
 namespace EUS {
 
@@ -17,8 +18,9 @@ namespace EUS {
 
     private:
         System::ComponentModel::Container^ components;
-
+        DataGridView^ table;
         void InitializeComponent(void);
         void initializeTable();
+        void setValues(vector<schedule_appliance::Appliance> arr, int rowInd);
     };
 }

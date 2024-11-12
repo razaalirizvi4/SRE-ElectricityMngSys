@@ -9,6 +9,17 @@ namespace EUS {
     {
         InitializeComponent();
         initializeTable();
+        vector<schedule_appliance::Appliance> arr;
+        for (int i = 1; i <= 15; ++i) {
+            string name = "name" + to_string(i);
+            float kwh = 1.8f;
+            int priority = (i % 3) + 1;  // Cycle through 1, 2, 3 for priority
+
+            // Create and push the appliance object into the vector
+            arr.push_back(schedule_appliance::Appliance(name, kwh, priority));
+        }
+        sortit(arr, 0);
+        setValues(arr, 1);
     }
 
     SchedulerUserControl::~SchedulerUserControl()
@@ -35,10 +46,10 @@ namespace EUS {
     }
 
     void SchedulerUserControl::initializeTable() {
-        DataGridView^ table = gcnew DataGridView();
+        table = gcnew DataGridView();
         table->Location = System::Drawing::Point(00, 310);
-        table->Size = System::Drawing::Size(1450, 200);
-        
+        table->Size = System::Drawing::Size(1450, 500);
+
         table->AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode::Fill;
         table->ColumnHeadersVisible = true;
         table->RowHeadersVisible = false;
@@ -52,16 +63,54 @@ namespace EUS {
     "2000-2100", "2100-2200", "2200-2300", "2300-2400"
         };
 
+        vector<schedule_appliance::Appliance> arrr;
+        for (int i = 1; i <= 15; ++i) {
+            string name = "name" + to_string(i);
+            float kwh = 1.8f;
+            int priority = (i % 3) + 1;  // Cycle through 1, 2, 3 for priority
 
-        for (int i = 0; i < 24; i++) {
+            // Create and push the appliance object into the vector
+            arrr.push_back(schedule_appliance::Appliance(name, kwh, priority));
+        }
+        sortit(arrr, 0);
+
+
+        table->Columns->Add("Name", "Name");
+        for (int i = 0; i < 23; i++) {
             table->Columns->Add(gcnew System::String(arr[i].c_str()), gcnew System::String(arr[i].c_str()));
         }
 
 
         // Add rows(num of items = num of rows)
        
+        table->Rows->Add(15);
+        
+        for (int i = 0; i < table->Rows->Count; i++) {
+            table->Rows[i]->Cells[0]->Value = gcnew System::String(arrr[i].name.c_str());
+        }
+        
         // Add the DataGridView to the form
         this->Controls->Add(table);
     }
+    void SchedulerUserControl::setValues(vector<schedule_appliance::Appliance> arr, int rowInd) {
+        if (rowInd >= arr.size()) {
+            return;
+        }
+        if (arr[rowInd].priority == 3) {
+            for (int i = 1; i < 24; i++)
+            table->Rows[rowInd]->Cells[i]->Value = "+";
+        }
+        else if (arr[rowInd].priority == 2) {
+            for (int i = 1; i < 24; i*= 2)
+                table->Rows[rowInd]->Cells[i]->Value = "+";
+        }
+        else {
+            for (int i = 1; i < 24; i *= 4)
+                table->Rows[rowInd]->Cells[i]->Value = "+";
+        }
+        setValues(arr, rowInd + 1);
+    }
+
+
 };
 
