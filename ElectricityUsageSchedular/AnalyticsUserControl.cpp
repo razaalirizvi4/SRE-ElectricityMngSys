@@ -24,22 +24,49 @@ namespace EUS {
             this->Size = System::Drawing::Size(600, 400);
             this->BackColor = Color::FromArgb(212, 237, 250);
 
+            //top text
             Label^ label = gcnew Label();
             label->Text = L"Analytics Page";
             label->Font = gcnew System::Drawing::Font("Arial", 24, FontStyle::Bold);
             label->ForeColor = Color::FromArgb(69, 160, 227);
             label->Dock = DockStyle::Top;  // Changed from Fill to Top
-            label->Height = 50;            // Give it a specific height
+            label->Height = 50;            // Give it a specific height (fix bottom sharp cutoff)
             label->TextAlign = ContentAlignment::MiddleCenter;
             this->Controls->Add(label);
+
+            //text under pie chart
+            Label^ PieLabel = gcnew Label();
+            PieLabel->Text = L"Each Appliance's energy Consumption";
+            PieLabel->Font = gcnew System::Drawing::Font("Arial", 18, FontStyle::Bold);
+            PieLabel->ForeColor = Color::FromArgb(69, 160, 227);
+            PieLabel->AutoSize = true;
+            PieLabel->Location = Point(50, 450);
+            PieLabel->TextAlign = ContentAlignment::MiddleCenter;
+            this->Controls->Add(PieLabel);
         }
 
         void AnalyticsUserControl::MakePieChart(Object^ sender, PaintEventArgs^ e)
         {
             // Sample data for the pie chart
-            array<float>^ values = { 20.0f, 20.0f, 15.0f, 45.0f };
-            array<String^>^ labels = { "Fridge", "Oven", "Television", "Sega Genesis" };
-            array<Color>^ colors = {Color::Red, Color::Blue, Color::Green, Color::Yellow};
+            array<float>^ values = { 1.0f,1.0f,1.0f, 20.0f, 1.0f,1.0f,1.0f,1.0f,20.0f, 15.0f, 35.0f,1.0f,1.0f,1.0f };
+            array<String^>^ labels = { "Fridge", "Oven", "Television", "Sega Genesis","a","b","c","d","e","f","g","h","i","j"};
+            
+            //alternating theme-matching colours
+            int startR = 0, startG = 91, startB = 156;
+            int endR = 99, endG = 190, endB = 255;
+
+            int numSlices = values->Length;
+            array<Color>^ colors = gcnew array<Color>(numSlices);
+
+            for (int i = 0; i < numSlices; i++)
+            {
+                // Calculate intermediate color values
+                int r = startR + ((endR - startR) * i / (numSlices - 1));
+                int g = startG + ((endG - startG) * i / (numSlices - 1));
+                int b = startB + ((endB - startB) * i / (numSlices - 1));
+
+                colors[i] = Color::FromArgb(r, g, b);
+            }            
 
             // Calculate total for percentages
             float total = 0;
@@ -61,7 +88,8 @@ namespace EUS {
 
             // Draw pie slices
             float startAngle = 0.0f;
-            for (int i = 0; i < values->Length; i++) {
+            for (int i = 0; i < values->Length; i++)
+            {
                 float sweepAngle = (values[i] / total) * 360.0f;
 
                 // Draw slice
