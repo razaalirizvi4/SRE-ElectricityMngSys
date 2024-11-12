@@ -21,7 +21,7 @@ namespace EUS {
         label->ForeColor = color;
         label->Size = System::Drawing::Size(width, height);
         label->Location = location;
-        label->TextAlign = ContentAlignment::MiddleLeft;
+        label->TextAlign = ContentAlignment::MiddleCenter; // Center-align text
         label->Padding = System::Windows::Forms::Padding(10, 0, 0, 0);
         return label;
     }
@@ -52,8 +52,9 @@ namespace EUS {
                 Color::White,
                 panel->Width - 20,
                 panel->Height - 50,
-                Point(10, 50)); // Offset for content
+                Point(10, 45)); // Offset for content
             contentLabel->AutoSize = false;
+            contentLabel->Padding = System::Windows::Forms::Padding(0, 5, 0, 5);
             panel->Controls->Add(contentLabel);
         }
 

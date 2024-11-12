@@ -23,8 +23,8 @@ namespace EUS {
     public:
         static initonly Color MainBackColor = Color::FromArgb(212, 237, 250);
         static initonly Color PanelBackColor = Color::FromArgb(69, 160, 227);
-        static initonly System::Drawing::Font^ TitleFont = gcnew System::Drawing::Font("Calibri", 16, FontStyle::Bold);
-        static initonly System::Drawing::Font^ ContentFont = gcnew System::Drawing::Font("Calibri", 12);
+        static initonly System::Drawing::Font^ TitleFont = gcnew System::Drawing::Font("Calibri", 18, FontStyle::Bold);
+        static initonly System::Drawing::Font^ ContentFont = gcnew System::Drawing::Font("Calibri", 14);
         static const int DefaultCornerRadius = 40;
         static const int DefaultMargin = 60;
         static const int DefaultSpacing = 50;
