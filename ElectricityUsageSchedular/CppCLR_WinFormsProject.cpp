@@ -49,17 +49,10 @@ int main()
     Application::EnableVisualStyles();
     Application::SetCompatibleTextRenderingDefault(false);
 
-<<<<<<< Updated upstream
     EUS::LoginForm form;
-    ShowNotification(L"Boner Alert", L"Sekaiiiiiiii DEEEEEEEE");
+    ShowNotification(L"I am Hatsune Miku", L"I'm thinking miku miku moo ee oo");
     Application::Run(% form);
     Application::Exit();
-=======
-  EUS::LoginForm form;
-  ShowNotification(L"I am Hatsune Miku", L"I'm thinking miku miku moo ee oo");
-  Application::Run(% form);
-  Application::Exit();
->>>>>>> Stashed changes
 
     return 0;
 }
