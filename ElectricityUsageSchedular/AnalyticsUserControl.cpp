@@ -7,6 +7,7 @@ namespace EUS {
         {
             InitializeComponent();
             this->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &AnalyticsUserControl::MakePieChart);
+            this->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &AnalyticsUserControl::MakeBarChart);
             this->DoubleBuffered = true;  // Add this line for smoother rendering
         }
 
@@ -33,22 +34,12 @@ namespace EUS {
             label->Height = 50;            // Give it a specific height (fix bottom sharp cutoff)
             label->TextAlign = ContentAlignment::MiddleCenter;
             this->Controls->Add(label);
-
-            //text under pie chart
-            Label^ PieLabel = gcnew Label();
-            PieLabel->Text = L"Each Appliance's energy Consumption";
-            PieLabel->Font = gcnew System::Drawing::Font("Arial", 18, FontStyle::Bold);
-            PieLabel->ForeColor = Color::FromArgb(69, 160, 227);
-            PieLabel->AutoSize = true;
-            PieLabel->Location = Point(50, 450);
-            PieLabel->TextAlign = ContentAlignment::MiddleCenter;
-            this->Controls->Add(PieLabel);
         }
 
         void AnalyticsUserControl::MakePieChart(Object^ sender, PaintEventArgs^ e)
         {
             // Sample data for the pie chart
-            array<float>^ values = { 1.0f,1.0f,1.0f, 20.0f, 1.0f,1.0f,1.0f,1.0f,20.0f, 15.0f, 35.0f,1.0f,1.0f,1.0f };
+            array<float>^ values = { 1.0f,7.0f,12.0f, 20.0f, 1.0f,3.0f,25.0f,32.0f,20.0f, 15.0f, 35.0f,17.0f,21.0f,11.0f };
             array<String^>^ labels = { "Fridge", "Oven", "Television", "Sega Genesis","a","b","c","d","e","f","g","h","i","j"};
             
             //alternating theme-matching colours
@@ -82,8 +73,8 @@ namespace EUS {
             // Define chart area
             int x = 100;
             int y = 125;
-            int width = 300;
-            int height = 300;
+            int width = 250;
+            int height = 250;
             Drawing::Rectangle rect = Drawing::Rectangle(x, y, width, height);
 
             // Draw pie slices
@@ -99,27 +90,142 @@ namespace EUS {
                 g->DrawPie(Pens::Black, rect, startAngle, sweepAngle);
 
                 // Calculate legend position
-                int legendX = x + width + 50;
-                int legendY = y + (i * 30);
+                int legendX = x + width + 30;                                   //side rectangles spacing
+                int legendY = y + (i * 20);
 
                 // Draw legend box
-                g->FillRectangle(gcnew SolidBrush(colors[i]),
-                    legendX, legendY, 20, 20);
+                g->FillRectangle(gcnew SolidBrush(colors[i]),                   //side rectangle width and height
+                    legendX, legendY, 10, 10);
                 g->DrawRectangle(Pens::Black,
-                    legendX, legendY, 20, 20);
+                    legendX, legendY, 10, 10);
 
                 // Draw legend text
-                g->DrawString(
+                g->DrawString(                                                  //side rectangle text size and spacing
                     String::Format("{0}: {1:F1}%",
                     labels[i],
                     (values[i] / total) * 100),
                     gcnew System::Drawing::Font("Arial", 10),
                     Brushes::Black,
-                    legendX + 30,
-                    legendY
+                    legendX + 15,
+                    legendY-3
                 );
 
                 startAngle += sweepAngle;
             }
+
+            //text under pie chart
+            Label^ PieLabel = gcnew Label();
+            PieLabel->Text = L"Each Appliance's energy\n\tConsumption";
+            PieLabel->Font = gcnew System::Drawing::Font("Arial", 18, FontStyle::Bold);
+            PieLabel->ForeColor = Color::FromArgb(69, 160, 227);
+            PieLabel->AutoSize = true;
+            PieLabel->Location = Point(x-15, y+280);
+            PieLabel->TextAlign = ContentAlignment::MiddleCenter;
+            this->Controls->Add(PieLabel);
+        }
+
+        void AnalyticsUserControl::MakeBarChart(Object^ sender, PaintEventArgs^ e)
+        {
+            // Sample data for the bar chart
+            array<float>^ values = { 10.0f, 20.0f, 4.0f, 32.0f,56.0f,12.0f,69.0f,21.0f,32.5f, 10.0f, 20.0f, 4.0f, 32.0f,56.0f,12.0f,69.0f,21.0f,32.5f, 56.0f,45.6f,52.01f,34.56f,12.0f };
+            array<String^>^ labels = { "00-01", "01-02", "02-03", "03-04", "04-05", "05-06", "06-07", "07-08", "08-09", "09-10", "10-11", "11-12", "12-13", "13-14", "14-15", "15-16", "16-17", "17-18", "18-19", "19-20", "20-21", "21-22", "22-23", "23-00" };
+
+            // Calculate colors for each bar
+            int numBars = values->Length;
+            array<Color>^ colors = gcnew array<Color>(numBars);
+
+            for (int i = 0; i < numBars; i++)
+            {
+                if (i % 2 == 0)
+                {
+                    colors[i] = Color::FromArgb(46, 138, 205);
+                }
+                else
+                {
+                    colors[i] = Color::FromArgb(96, 188, 255);
+                }
+            }
+
+            Graphics^ g = e->Graphics;
+            g->SmoothingMode = Drawing2D::SmoothingMode::AntiAlias;
+
+            // Define chart area with more space for rotated labels         //overall graph size
+            int marginLeft = 850;
+            int marginRight = 125;  // Space for legend
+            int marginTop = 110;
+            int marginBottom = 380;  // More space for rotated labels
+            int x = marginLeft;
+            int y = marginTop;
+            int width = this->Width - (marginLeft + marginRight);
+            int height = this->Height - (marginTop + marginBottom);
+
+            // Calculate the maximum value for scaling
+            float maxValue = 0;
+            for each (float value in values)
+            {
+                if (value > maxValue) maxValue = value;
+            }
+
+            // Calculate bar properties with thinner bars
+            int barWidth = (width) / (numBars * 1);                       //width
+            int barSpacing = barWidth / 8;  // Less spacing
+            float scaleY = (height - 50) / maxValue;
+
+            // Draw bars and labels
+            System::Drawing::Font^ labelFont = gcnew System::Drawing::Font("Arial", 8);  // Smaller font
+            System::Drawing::Font^ valueFont = gcnew System::Drawing::Font("Arial", 8);  // Smaller font
+
+            for (int i = 0; i < numBars; i++)
+            {
+                // Calculate bar dimensions
+                int barX = x + (i * (barWidth + barSpacing));
+                int barHeight = (int)(values[i] * scaleY);                //height
+                int barY = y + height - barHeight - 40;
+
+                // Draw bar
+                Drawing::Rectangle barRect = Drawing::Rectangle(barX, barY, barWidth, barHeight);
+                g->FillRectangle(gcnew SolidBrush(colors[i]), barRect);
+                g->DrawRectangle(Pens::Black, barRect);
+
+                // Draw value on top of bar
+                String^ valueText = values[i].ToString("F1");
+                SizeF valueSize = g->MeasureString(valueText, valueFont);
+                g->DrawString(valueText,
+                    valueFont,
+                    Brushes::Black,
+                    barX + (barWidth - valueSize.Width) / 2,
+                    barY - valueSize.Height - 2);
+
+                if (i % 1 == 0)  // Adjust this number to show more or fewer labels
+                {
+                    SizeF labelSize = g->MeasureString(labels[i], labelFont);
+                    g->TranslateTransform(
+                        barX + (barWidth) / 2,
+                        y + height - 25
+                    );
+                    g->RotateTransform(-35);  // 45-degree angle
+                    g->DrawString(labels[i],
+                        labelFont,
+                        Brushes::Black,
+                        -labelSize.Width / 2,  // Center the text
+                        0);
+                    g->ResetTransform();
+                }
+            }
+
+            // Draw axes
+            Pen^ axisPen = gcnew Pen(Color::Black, 2);
+            g->DrawLine(axisPen, x, y + height - 40, x, y);
+            g->DrawLine(axisPen, x, y + height - 40, x + width+50, y + height - 40);
+
+            //text under pie chart
+            Label^ BarLabel = gcnew Label();
+            BarLabel->Text = L"Energy Consumed each\n\tHour";
+            BarLabel->Font = gcnew System::Drawing::Font("Arial", 18, FontStyle::Bold);
+            BarLabel->ForeColor = Color::FromArgb(69, 160, 227);
+            BarLabel->AutoSize = true;
+            BarLabel->Location = Point(x + 130, y + height + 10);
+            BarLabel->TextAlign = ContentAlignment::MiddleCenter;
+            this->Controls->Add(BarLabel);
         }
     };
