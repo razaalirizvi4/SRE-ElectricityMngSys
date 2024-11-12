@@ -37,8 +37,8 @@ namespace EUS {
         void AnalyticsUserControl::MakePieChart(Object^ sender, PaintEventArgs^ e)
         {
             // Sample data for the pie chart
-            array<float>^ values = { 30.0f, 20.0f, 15.0f, 35.0f };
-            array<String^>^ labels = { "Q1", "Q2", "Q3", "Q4" };
+            array<float>^ values = { 20.0f, 20.0f, 15.0f, 45.0f };
+            array<String^>^ labels = { "Fridge", "Oven", "Television", "Sega Genesis" };
             array<Color>^ colors = {Color::Red, Color::Blue, Color::Green, Color::Yellow};
 
             // Calculate total for percentages
@@ -53,8 +53,8 @@ namespace EUS {
             g->SmoothingMode = Drawing2D::SmoothingMode::AntiAlias;
 
             // Define chart area
-            int x = 50;
-            int y = 50;
+            int x = 100;
+            int y = 125;
             int width = 300;
             int height = 300;
             Drawing::Rectangle rect = Drawing::Rectangle(x, y, width, height);
