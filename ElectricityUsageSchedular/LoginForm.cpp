@@ -21,6 +21,9 @@ namespace EUS {
 
     void LoginForm::InitializeComponent(void)
     {
+        //Initialize variables
+        insideTextBox = false;
+
         //Initialize containter
         this->components = gcnew System::ComponentModel::Container();
         this->Size = System::Drawing::Size(1200, 720);
@@ -47,17 +50,32 @@ namespace EUS {
         btnToRegister->Click += gcnew EventHandler(this, &LoginForm::MoveToRegister);
 
         this->Controls->Add(btnToRegister);
+
+        // Create the label
+        passText = gcnew Label();
+        passText->Text = "Passcode";
+        passText->AutoSize = true;
+        passText->Location = System::Drawing::Point(530,200);
+        passText->Font = gcnew System::Drawing::Font("Courier New", 18, System::Drawing::FontStyle::Bold);
+
+        this->Controls->Add(passText);
+
+        //Create the textbox
+        passBox = gcnew TextBox();
+        passBox->Size = System::Drawing::Size(150, 50);
+        passBox->Location = System::Drawing::Point(520, 250);
+        passBox->GotFocus += gcnew EventHandler(this, &LoginForm::InsideTextBox);
+        passBox->LostFocus += gcnew EventHandler(this, &LoginForm::OutsideTextBox);
+        passBox->KeyDown += gcnew KeyEventHandler(this, &LoginForm::OnEnterPressed);
+
+        this->Controls->Add(passBox);
+
+
     }
 
     void LoginForm::OnLoginClick(Object^ sender, EventArgs^ e)
     {
-        // Hide login screen and show the main app with sidebar
-        this->Hide();
-        MainForm^ mainForm = gcnew MainForm();
-        mainForm->Show();
-
-        CustomMessageForm^ msg = gcnew CustomMessageForm("Login success!","Login Status",true);
-        msg->Show();
+        LoginSuccess();
     }
 
     void LoginForm::MoveToRegister(Object^ sender, EventArgs^ e)
@@ -68,4 +86,45 @@ namespace EUS {
         regForm->Show();
 
     }
+
+    void LoginForm::LoginSuccess()
+    {
+        this->Hide();
+        MainForm^ mainForm = gcnew MainForm();
+        mainForm->Show();
+
+        //CustomMessageForm^ msg = gcnew CustomMessageForm("Login success!", "Login Status", true);
+        // msg->Show();
+    }
+
+    void LoginForm::LoginFailure()
+    {
+        CustomMessageForm^ msg = gcnew CustomMessageForm("Please try again!", "Login Status", true);
+        msg->Show();
+    }
+
+    bool LoginForm::LoginCheck()
+    {
+        return true;
+    }
+
+    void LoginForm::OnEnterPressed(Object^ sender, KeyEventArgs^ e)
+    {
+        if (e->KeyCode == Keys::Enter && insideTextBox)
+        {
+            LoginSuccess();
+        }
+    }
+
+    void LoginForm::InsideTextBox(Object^ sender, EventArgs^ e)
+    {
+        insideTextBox = true;
+    }
+
+    void LoginForm::OutsideTextBox(Object^ sender, EventArgs^ e)
+    {
+        insideTextBox = false;
+    }
+
+
 }

@@ -21,9 +21,19 @@ namespace EUS {
         System::ComponentModel::Container^ components;
         Button^ btnLogin;
         Button^ btnToRegister;
+        Label^ passText;
+        TextBox^ passBox;
+        bool insideTextBox;
 
         void InitializeComponent(void);
         void OnLoginClick(Object^ sender, EventArgs^ e);
         void MoveToRegister(Object^ sender, EventArgs^ e);
+        void LoginSuccess();
+        void LoginFailure();
+        bool LoginCheck();
+
+        void OnEnterPressed(Object^ sender,KeyEventArgs^e);
+        void InsideTextBox(Object^ sender, EventArgs^ e);
+        void OutsideTextBox(Object^ sender, EventArgs^ e);
     };
 }
