@@ -22,16 +22,13 @@ namespace EUS {
         label->Size = System::Drawing::Size(width, height);
         label->Location = location;
         label->TextAlign = ContentAlignment::MiddleCenter; // Center-align text
-        label->Padding = System::Windows::Forms::Padding(10, 0, 0, 0);
         return label;
     }
 
     Panel^ DashboardUserControl::CreatePanel(PanelConfig config) {
-        // Adjusting size and location to simulate padding
-        int padding = 15;
         Panel^ panel = gcnew Panel();
-        panel->Size = System::Drawing::Size(config.Width - 2 * padding, config.Height - 2 * padding);
-        panel->Location = Point(config.Location.X + padding, config.Location.Y + padding);
+        panel->Size = System::Drawing::Size(config.Width, config.Height);
+        panel->Location = config.Location;
         panel->BackColor = config.BackColor;
 
         // Title
@@ -47,15 +44,20 @@ namespace EUS {
 
         // Content
         if (!String::IsNullOrEmpty(config.Content)) {
-            Label^ contentLabel = CreateLabel(config.Content,
-                DashboardStyles::ContentFont,
-                Color::White,
-                panel->Width - 20,
-                panel->Height - 50,
-                Point(10, 45)); // Offset for content
-            contentLabel->AutoSize = false;
-            contentLabel->Padding = System::Windows::Forms::Padding(0, 5, 0, 5);
-            panel->Controls->Add(contentLabel);
+            array<String^>^ contentLines = config.Content->Split('\n');
+            int yOffset = config.ContentYOffset;
+
+            for each (String ^ line in contentLines) {
+                Label^ lineLabel = CreateLabel(line,
+                    DashboardStyles::ContentFont,
+                    Color::White,
+                    panel->Width - 20,
+                    25, // Set the height of each line label
+                    Point(10, yOffset));
+                lineLabel->AutoSize = false;
+                panel->Controls->Add(lineLabel);
+                yOffset += 25 + config.LineSpacing;
+            }
         }
 
         ApplyRoundedRectangleToPanel(panel, DashboardStyles::DefaultCornerRadius);
@@ -71,17 +73,17 @@ namespace EUS {
     }
 
     Panel^ DashboardUserControl::CreateTopLeftSection() {
-        int padding = DashboardStyles::DefaultMargin / 2; // Add extra padding to top-left
         PanelConfig config;
         config.Width = this->Width - DashboardStyles::DefaultMargin;
         config.Height = this->Height / 2 - DashboardStyles::DefaultMargin;
-        config.Location = Point(DashboardStyles::DefaultMargin + padding, DashboardStyles::DefaultMargin + padding);
+        config.Location = Point(DashboardStyles::DefaultMargin, DashboardStyles::DefaultMargin);
         config.BackColor = DashboardStyles::PanelBackColor;
+        config.LineSpacing = 70;
+        config.ContentYOffset = 90;
         config.Title = "Energy Consumption Overview";
-        config.Content = "Daily Usage: 28.5 kWh\n"
-            "Current Power: 2.4 kW\n"
-            "Peak Today: 3.8 kW at 18:30\n"
-            "Week-over-Week Change: -5.2%";
+        config.Content =
+            "Daily Usage: 28.5 kWh                                Current Power: 2.4 kW\n"
+            "Peak Today: 3.8 kW at 18:30                          Week-over-Week Change: -5.2%\n";
 
         return CreatePanel(config);
     }
@@ -105,6 +107,8 @@ namespace EUS {
         box1Config.Height = boxHeight - 110;
         box1Config.Location = Point(0, 0);
         box1Config.BackColor = DashboardStyles::PanelBackColor;
+        box1Config.LineSpacing = 3;
+        box1Config.ContentYOffset = 60;
         box1Config.Title = "Current Rate Info";
         box1Config.Content = "Current Rate: $0.14/kWh\n"
             "Peak Hours: 14:00 - 19:00\n"
@@ -119,6 +123,8 @@ namespace EUS {
         box2Config.Height = boxHeight - 110;
         box2Config.Location = Point(containerPanel->Width / 2 - 25, boxHeight - 90);
         box2Config.BackColor = DashboardStyles::PanelBackColor; 
+        box2Config.LineSpacing = 3;
+        box2Config.ContentYOffset = 60;
         box2Config.Title = "Energy Saving Tips";
         box2Config.Content = "• Schedule laundry for off-peak hours\n"
             "• HVAC efficiency decreasing (check filter)\n"
@@ -147,9 +153,10 @@ namespace EUS {
         box1Config.Height = containerPanel->Height / 2 - DashboardStyles::DefaultSpacing + 40;
         box1Config.Location = Point(0, 0);
         box1Config.BackColor = DashboardStyles::PanelBackColor;
+        box1Config.LineSpacing = 15;
+        box1Config.ContentYOffset = 110;
         box1Config.Title = "Device Management";
-        box1Config.Content = "Active Devices:\n"
-            "• HVAC System: ON (2.1 kW)\n"
+        box1Config.Content = "• HVAC System: ON (2.1 kW)\n"
             "• Water Heater: Standby (0.1 kW)\n"
             "• Washing Machine: OFF\n"
             "• Dishwasher: Scheduled (21:00)";
@@ -162,6 +169,8 @@ namespace EUS {
         box2Config.Height = containerPanel->Height / 2 - DashboardStyles::DefaultSpacing + 45;
         box2Config.Location = Point(0, box1Config.Height + DashboardStyles::DefaultSpacing2);
         box2Config.BackColor = DashboardStyles::PanelBackColor;
+        box2Config.LineSpacing = 15;
+        box2Config.ContentYOffset = 110;
         box2Config.Title = "Performance Metrics";
         box2Config.Content = "Energy Efficiency Score: 85/100\n"
             "Weekly Goal Progress: 68%\n"
@@ -176,7 +185,6 @@ namespace EUS {
     void DashboardUserControl::InitializeComponent(void) {
         this->components = gcnew System::ComponentModel::Container();
 
-        int screenWidth = Screen::PrimaryScreen->Bounds.Width;
         if (screenWidth == 1920) {
             this->Size = System::Drawing::Size(1140, 900);
         }

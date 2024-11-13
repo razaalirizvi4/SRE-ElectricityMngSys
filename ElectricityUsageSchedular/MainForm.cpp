@@ -55,7 +55,7 @@ namespace EUS {
     void MainForm::InitializeSidebarLabel() {
         labelEUS = gcnew Label();
         labelEUS->Text = L"EUS";
-        labelEUS->Size = Drawing::Size(150, 60);
+        labelEUS->Size = Drawing::Size(150, 65);
         labelEUS->Font = MainPageStyles::TitleFont;
         labelEUS->Dock = DockStyle::Top;
         labelEUS->TextAlign = ContentAlignment::MiddleCenter;
@@ -98,7 +98,7 @@ namespace EUS {
 
     Button^ MainForm::CreateIconButton(String^ iconPath, int size) {
         auto button = gcnew Button();
-        button->Size = Drawing::Size(size, size);
+        button->Size = Drawing::Size(size, size + 5);
         button->BackColor = MainPageStyles::SidebarColor;
         button->FlatStyle = FlatStyle::Flat;
         button->FlatAppearance->BorderSize = 0;

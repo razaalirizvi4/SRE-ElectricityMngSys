@@ -16,6 +16,8 @@ namespace EUS {
         Color BackColor;
         String^ Title;
         String^ Content;
+        int LineSpacing;
+        int ContentYOffset;
     };
 
     // Constants for visual styling
@@ -23,8 +25,8 @@ namespace EUS {
     public:
         static initonly Color MainBackColor = Color::FromArgb(212, 237, 250);
         static initonly Color PanelBackColor = Color::FromArgb(69, 160, 227);
-        static initonly System::Drawing::Font^ TitleFont = gcnew System::Drawing::Font("Calibri", 18, FontStyle::Bold);
-        static initonly System::Drawing::Font^ ContentFont = gcnew System::Drawing::Font("Calibri", 14);
+        static initonly System::Drawing::Font^ TitleFont = gcnew System::Drawing::Font("Calibri", 20, FontStyle::Bold);
+        static initonly System::Drawing::Font^ ContentFont = gcnew System::Drawing::Font("Calibri", 16);
         static const int DefaultCornerRadius = 40;
         static const int DefaultMargin = 60;
         static const int DefaultSpacing = 50;
@@ -41,6 +43,7 @@ namespace EUS {
 
     private:
         System::ComponentModel::Container^ components;
+        int screenWidth = Screen::PrimaryScreen->Bounds.Width;
 
         // Helper methods for creating UI elements
         Label^ CreateLabel(String^ text, System::Drawing::Font^ font, Color color, int width, int height, Point location);
