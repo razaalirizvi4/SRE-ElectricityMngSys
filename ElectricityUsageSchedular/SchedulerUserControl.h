@@ -39,5 +39,8 @@ namespace EUS {
         int calculateDynamicSlots(
             const schedule_appliance::Appliance& appliance,
             float remainingBudget);
+        bool SchedulerUserControl::assignInitialSlot(int rowIndex, float& currentBill, float kwh);
+        void makeTable(vector<schedule_appliance::Appliance> arr, int rowIndex, float& currentBill, float targetBill);
+        void traverseSlots(int& mover, int rowIndex);
     };
 }

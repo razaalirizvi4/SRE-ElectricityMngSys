@@ -10,10 +10,11 @@ namespace EUS {
         InitializeComponent();
         initializeTable();
         vector<schedule_appliance::Appliance> arr;
-        for (int i = 1; i <= 15; ++i) {
+        for (int i = 0; i <= 15; ++i) {
             string name = "name" + to_string(i);
-            float kwh = 1.8f;
-            int priority = (i % 3) + 1;
+            float kwh = 0.8f;
+            int priority = (i % 2) + 1;
+            if (i == 14) priority = 3;
 
             // Create and push the appliance object into the vector
             arr.push_back(schedule_appliance::Appliance(name, kwh, priority));
@@ -21,14 +22,12 @@ namespace EUS {
         sortit(arr, 0);
 
         float dailyBill = 0.0f;
-        const float monthlyThreshold = 50000.0f;
+        const float monthlyThreshold = 60000.0f;
+
         const float dailyThreshold = monthlyThreshold / 30.0f; // Calculate daily threshold
 
-        fillScheduleWithBacktracking(arr, 0, dailyBill, dailyThreshold);
-
-        // Project the monthly bill based on the daily calculation
-        float estimatedMonthlyBill = dailyBill * 30;
-        updateBillLabel(estimatedMonthlyBill);
+        makeTable(arr, 0, dailyBill, dailyThreshold);
+        updateBillLabel(dailyBill * 30.0f);
     }
 
 
@@ -115,7 +114,7 @@ namespace EUS {
         this->Controls->Add(table);
     }
     void SchedulerUserControl::setValues(vector<schedule_appliance::Appliance> arr, int rowInd) {
-        if (rowInd >= arr.size()) {
+        /*if (rowInd >= arr.size()) {
             return;
         }
         if (arr[rowInd].priority == 3) {
@@ -130,7 +129,7 @@ namespace EUS {
             for (int i = 1; i < 24; i *= 4)
                 table->Rows[rowInd]->Cells[i]->Value = "+";
         }
-        setValues(arr, rowInd + 1);
+        setValues(arr, rowInd + 1);*/
     }
 
     
@@ -143,38 +142,64 @@ namespace EUS {
         float& currentBill,
         const float billThreshold)
     {
-        if (rowInd >= appliances.size()) return;
+        //if (rowInd >= appliances.size()) return;
 
-        float remainingBudget = billThreshold - currentBill;
-        int slotsToAssign = calculateDynamicSlots(appliances[rowInd], remainingBudget);
+        //// **Step 1: Ensure at least one slot for each appliance**
+        //if (assignInitialSlot(rowInd, currentBill, appliances[rowInd].kwh)) {
+        //    std::cout << "Assigned initial slot to appliance at row " << rowInd << ", Current Bill: " << currentBill << "\n";
+        //}
 
-        int slotsFilled = assignSlots(rowInd, slotsToAssign, currentBill, appliances[rowInd].kwh);
+        //// Calculate remaining slots to assign based on dynamic slot allocation
+        //float remainingBudget = billThreshold - currentBill;
+        //int additionalSlots = calculateDynamicSlots(appliances[rowInd], remainingBudget);
 
-        std::cout << "After assigning slots to row " << rowInd << ", Current Bill: " << currentBill << "\n";
+        //// Assign additional slots based on remaining budget and priority
+        //int slotsFilled = assignSlots(rowInd, additionalSlots, currentBill, appliances[rowInd].kwh);
 
-        if (currentBill > billThreshold) {
-            std::cout << "Exceeded bill threshold. Adjusting slots...\n";
-            backtrackAndAdjust(appliances, rowInd, currentBill, billThreshold);
-        }
+        //std::cout << "After assigning slots to row " << rowInd << ", Current Bill: " << currentBill << "\n";
 
-        fillScheduleWithBacktracking(appliances, rowInd + 1, currentBill, billThreshold);
+        //// If the current bill exceeds the threshold, backtrack and adjust
+        //if (currentBill > billThreshold) {
+        //    std::cout << "Exceeded bill threshold. Adjusting slots...\n";
+        //    backtrackAndAdjust(appliances, rowInd, currentBill, billThreshold);
+        //}
+
+        //fillScheduleWithBacktracking(appliances, rowInd + 1, currentBill, billThreshold);
     }
+
+    // New function to ensure each appliance has at least one slot
+    bool SchedulerUserControl::assignInitialSlot(int rowIndex, float& currentBill, float kwh) {
+        //const float costPerSlot = 41.6f * kwh;
+
+        //// Attempt to assign the first available slot
+        //for (int i = 1; i < 24; ++i) {
+        //    if (table->Rows[rowIndex]->Cells[i]->Value == nullptr) {
+        //        table->Rows[rowIndex]->Cells[i]->Value = "+";
+        //        currentBill += costPerSlot;
+        //        return true;
+        //    }
+        //}
+        //return false;
+        return false;
+    }
+
 
     int SchedulerUserControl::calculateDynamicSlots(
         const schedule_appliance::Appliance& appliance,
         float remainingBudget)
     {
-        float costPerSlot = 12.5f * appliance.kwh;
+        /*float costPerSlot = 12.5f * appliance.kwh;
 
         int maxPossibleSlots = static_cast<int>(remainingBudget / costPerSlot);
         int priorityMultiplier = (appliance.priority == 3) ? 1 : (appliance.priority == 2) ? 2 : 4;
 
         int dynamicSlots = maxPossibleSlots / priorityMultiplier;
-        return max(0, dynamicSlots);
+        return max(0, dynamicSlots);*/
+        return 0;
     }
 
     int SchedulerUserControl::assignSlots(int rowIndex, int numSlots, float& currentBill, float kwh) {
-        int slotsFilled = 0;
+       /* int slotsFilled = 0;
         const float costPerSlot = 41.6f * kwh;
 
         for (int i = 1; i < 24 && slotsFilled < numSlots; ++i) {
@@ -186,8 +211,9 @@ namespace EUS {
         }
 
         std::cout << "Assigned " << slotsFilled << " slots to row " << rowIndex << ", New Bill: " << currentBill << "\n";
-
-        return slotsFilled;
+    
+        return slotsFilled;*/
+        return 0;
     }
 
     void SchedulerUserControl::backtrackAndAdjust(
@@ -196,7 +222,7 @@ namespace EUS {
         float& currentBill,
         const float billThreshold)
     {
-        for (int i = appliances.size() - 1; i >= 0; --i) {
+        /*for (int i = appliances.size() - 1; i >= 0; --i) {
             int reductionSlots = calculateReductionSlots(appliances[i]);
 
             for (int j = 1; j < 24 && reductionSlots > 0; ++j) {
@@ -210,12 +236,118 @@ namespace EUS {
                     if (currentBill <= billThreshold) return;
                 }
             }
-        }
+        }*/
     }
 
     int SchedulerUserControl::calculateReductionSlots(const schedule_appliance::Appliance& appliance)
     {
         return (appliance.priority == 3) ? 2 : (appliance.priority == 2) ? 4 : 6;
     }
+
+    void SchedulerUserControl::traverseSlots(int& mover, int rowIndex) {
+        // Ensure rowIndex and mover are within valid bounds before accessing table
+        if (rowIndex - 1 < 0 || rowIndex - 1 >= table->Rows->Count || mover >= 23 || mover < 0) {
+            return;
+        }
+
+        // Check if the current cell is within bounds and is empty
+        if (table->Rows[rowIndex - 1]->Cells->Count > mover && table->Rows[rowIndex - 1]->Cells[mover] &&
+            table->Rows[rowIndex - 1]->Cells[mover]->Value == nullptr) {
+            // Stop here as we found an empty cell
+            return;
+        }
+
+        // Move to the next cell and continue searching
+        ++mover;
+        traverseSlots(mover, rowIndex);
+    }
+
+
+    void SchedulerUserControl::makeTable(vector<schedule_appliance::Appliance> arr, int rowIndex, float& currentBill, float targetBill) {
+        // Initial pass to assign slots to each appliance based on priority
+        for (int i = 0; i < arr.size(); ++i) {
+            if (currentBill >= targetBill) {
+                return;
+            }
+
+            if (arr[i].priority == 3) {
+                // Priority 3: Assign all available slots (1 per hour)
+                for (int j = 1; j < 24; ++j) {
+                    if (i < table->Rows->Count && j < table->Rows[i]->Cells->Count) {
+                        table->Rows[i]->Cells[j]->Value = "+";
+                        currentBill += arr[i].kwh * 41.6;
+                        if (currentBill >= targetBill) {
+                            return;
+                        }
+                    }
+                }
+            }
+            else if (arr[i].priority == 2) {
+                // Priority 2: Assign 2 slots with a 1-cell gap between them
+                int col = 1;
+                traverseSlots(col, i);
+                if (i < table->Rows->Count && col < table->Rows[i]->Cells->Count) {
+                    table->Rows[i]->Cells[col]->Value = "+";
+                    if (col + 2 < table->Rows[i]->Cells->Count) {
+                        table->Rows[i]->Cells[col + 2]->Value = "+";
+                    }
+                    currentBill += arr[i].kwh * 41.6;
+                }
+            }
+            else if (arr[i].priority == 1) {
+                // Priority 1: Assign only 1 slot
+                int col = 1;
+                traverseSlots(col, i);
+                if (i < table->Rows->Count && col < table->Rows[i]->Cells->Count) {
+                    table->Rows[i]->Cells[col]->Value = "+";
+                    currentBill += arr[i].kwh * 41.6;
+                }
+            }
+        }
+
+        // Secondary pass to revisit priority 2 and 1 appliances and assign additional slots
+        bool slotsAssigned = false; // Track if any slots were assigned during this pass
+        for (int i = 0; i < arr.size(); ++i) {
+            if (currentBill >= targetBill) {
+                return;
+            }
+
+            if (arr[i].priority == 2) {
+                int col = 1;
+                while (currentBill < targetBill) {
+                    traverseSlots(col, i);
+                    if (i < table->Rows->Count && col < table->Rows[i]->Cells->Count) {
+                        table->Rows[i]->Cells[col]->Value = "+";
+                        if (col + 2 < table->Rows[i]->Cells->Count) {
+                            table->Rows[i]->Cells[col + 2]->Value = "+";
+                        }
+                        currentBill += arr[i].kwh * 41.6;
+                        slotsAssigned = true;
+                    }
+                    col += 4;
+                    if (col >= 24) break;
+                }
+            }
+            else if (arr[i].priority == 1) {
+                int col = 1;
+                while (currentBill < targetBill) {
+                    traverseSlots(col, i);
+                    if (i < table->Rows->Count && col < table->Rows[i]->Cells->Count) {
+                        table->Rows[i]->Cells[col]->Value = "+";
+                        currentBill += arr[i].kwh * 41.6;
+                        slotsAssigned = true;
+                    }
+                    col += 2;
+                    if (col >= 24) break;
+                }
+            }
+        }
+
+        // If we assigned any slots during this pass and haven't reached the target bill, make another call
+        if (slotsAssigned && currentBill < targetBill) {
+            makeTable(arr, rowIndex, currentBill, targetBill);
+        }
+    }
+
 };
 
