@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MainForm.h"
+#include<string.h>
 
 namespace EUS {
 
@@ -21,8 +22,20 @@ namespace EUS {
         System::ComponentModel::Container^ components;
         Button^ btnLogin;
         Button^ btnToRegister;
+
         Label^ passText;
         TextBox^ passBox;
+
+        Label^ emailText;
+        TextBox^ emailBox;
+
+        String^ getEmail;
+        String^ getPassword;
+        String^ getUsername;
+        int getID;
+
+
+
         bool insideTextBox;
 
         void InitializeComponent(void);

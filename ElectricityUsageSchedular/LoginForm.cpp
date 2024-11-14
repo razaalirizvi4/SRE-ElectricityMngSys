@@ -3,6 +3,8 @@
 #include "MainForm.h"
 #include "RegisterForm.h"
 #include"CustomMessageForm.h"
+#include<sqlite3.h>
+#include <msclr/marshal_cppstd.h>
 
 namespace EUS {
 
@@ -33,7 +35,7 @@ namespace EUS {
         btnLogin = gcnew Button();
         btnLogin->Text = L"Login";
         btnLogin->Size = System::Drawing::Size(100, 50);
-        btnLogin->Location = System::Drawing::Point(500, 310);
+        btnLogin->Location = System::Drawing::Point(500, 270);
         btnLogin->BackColor = Color::FromArgb(0, 122, 204);
         btnLogin->ForeColor = Color::White;
         btnLogin->Click += gcnew EventHandler(this, &LoginForm::OnLoginClick);
@@ -44,30 +46,44 @@ namespace EUS {
         btnToRegister = gcnew Button();
         btnToRegister->Text = L"Register";
         btnToRegister->Size = System::Drawing::Size(100, 50);
-        btnToRegister->Location = System::Drawing::Point(600, 310);
+        btnToRegister->Location = System::Drawing::Point(620, 270);
         btnToRegister->BackColor = Color::FromArgb(0, 204, 122);
         btnToRegister->ForeColor = Color::White;
         btnToRegister->Click += gcnew EventHandler(this, &LoginForm::MoveToRegister);
 
         this->Controls->Add(btnToRegister);
 
-        // Create the label
+        //Email label and textbox
+        emailText = gcnew Label();
+        emailText->Text = "Email";
+        emailText->AutoSize = true;
+        emailText->Location = System::Drawing::Point(500, 100);
+        emailText->Font = gcnew System::Drawing::Font("Courier New", 18, System::Drawing::FontStyle::Bold);
+        this->Controls->Add(emailText);
+
+        emailBox = gcnew TextBox();
+        emailBox->Size = System::Drawing::Size(200, 30);
+        emailBox->Location = System::Drawing::Point(500, 130);
+        emailBox->GotFocus += gcnew EventHandler(this, &LoginForm::InsideTextBox);
+        emailBox->LostFocus += gcnew EventHandler(this, &LoginForm::OutsideTextBox);
+        emailBox->KeyDown += gcnew KeyEventHandler(this, &LoginForm::OnEnterPressed);
+        this->Controls->Add(emailBox);
+
+        // Password label and textbox
         passText = gcnew Label();
         passText->Text = "Passcode";
         passText->AutoSize = true;
-        passText->Location = System::Drawing::Point(530,200);
+        passText->Location = System::Drawing::Point(500, 180);
         passText->Font = gcnew System::Drawing::Font("Courier New", 18, System::Drawing::FontStyle::Bold);
-
         this->Controls->Add(passText);
 
-        //Create the textbox
         passBox = gcnew TextBox();
-        passBox->Size = System::Drawing::Size(150, 50);
-        passBox->Location = System::Drawing::Point(520, 250);
+        passBox->Size = System::Drawing::Size(200, 30);
+        passBox->Location = System::Drawing::Point(500, 210);
         passBox->GotFocus += gcnew EventHandler(this, &LoginForm::InsideTextBox);
         passBox->LostFocus += gcnew EventHandler(this, &LoginForm::OutsideTextBox);
         passBox->KeyDown += gcnew KeyEventHandler(this, &LoginForm::OnEnterPressed);
-
+        passBox->PasswordChar = '*';
         this->Controls->Add(passBox);
 
 
@@ -75,7 +91,12 @@ namespace EUS {
 
     void LoginForm::OnLoginClick(Object^ sender, EventArgs^ e)
     {
-        LoginSuccess();
+        if (LoginCheck())
+        {
+            LoginSuccess();
+        }
+
+        LoginFailure();
     }
 
     void LoginForm::MoveToRegister(Object^ sender, EventArgs^ e)
@@ -99,20 +120,85 @@ namespace EUS {
 
     void LoginForm::LoginFailure()
     {
-        CustomMessageForm^ msg = gcnew CustomMessageForm("Please try again!", "Login Status", true);
-        msg->Show();
+        //CustomMessageForm^ msg = gcnew CustomMessageForm("Please try again!", "Login Status", true);
+        //msg->Show();
     }
 
     bool LoginForm::LoginCheck()
     {
-        return true;
+        // Retrieve email and password from textboxes
+        String^ enteredEmail = emailBox->Text;
+        String^ enteredPassword = passBox->Text;
+
+        // Convert managed String^ to std::string for SQLite
+        msclr::interop::marshal_context context;
+        std::string email = context.marshal_as<std::string>(enteredEmail);
+        std::string password = context.marshal_as<std::string>(enteredPassword);
+
+        // SQLite database connection and query
+        sqlite3* db;
+        sqlite3_stmt* stmt;
+        int rc = sqlite3_open("../user_management.db", &db);  // Use relative path
+
+        if (rc != SQLITE_OK) 
+        {
+            // If opening the database failed, display an error and return false
+            MessageBox::Show("Failed to open database!", "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+            return false;
+        }
+
+        // Prepare the SQL query to check for a matching email and password
+        std::string sql = "SELECT COUNT(*) FROM Users WHERE User_Email = ? AND User_Password = ?";
+        rc = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr);
+
+        if (rc != SQLITE_OK) 
+        {
+            // Display the error message returned by SQLite
+            MessageBox::Show("Failed to prepare SQL query! Error: " + gcnew String(sqlite3_errmsg(db)), "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+            sqlite3_close(db);
+            return false;
+        }
+
+        // Debugging: Output the email and password to check if they are correct
+        MessageBox::Show("Email: " + gcnew String(email.c_str()) + "\nPassword: " + gcnew String(password.c_str()));
+
+        // Bind email and password to the prepared statement
+        sqlite3_bind_text(stmt, 1, email.c_str(), -1, SQLITE_STATIC);
+        sqlite3_bind_text(stmt, 2, password.c_str(), -1, SQLITE_STATIC);
+
+        // Execute the query and check if we have a match
+        bool loginSuccessful = false;
+        if (sqlite3_step(stmt) == SQLITE_ROW) 
+        {
+            int count = sqlite3_column_int(stmt, 0);
+            if (count > 0) {
+                loginSuccessful = true; // Match found
+            }
+        }
+        else 
+        {
+            // Debugging: Output if sqlite3_step fails
+            MessageBox::Show("SQLite Step failed! Error: " + gcnew String(sqlite3_errmsg(db)));
+        }
+
+        // Clean up
+        sqlite3_finalize(stmt);
+        sqlite3_close(db);
+
+        return loginSuccessful;
     }
+
 
     void LoginForm::OnEnterPressed(Object^ sender, KeyEventArgs^ e)
     {
         if (e->KeyCode == Keys::Enter && insideTextBox)
         {
-            LoginSuccess();
+            if (LoginCheck())
+            {
+                LoginSuccess();
+            }
+
+            LoginFailure();
         }
     }
 
