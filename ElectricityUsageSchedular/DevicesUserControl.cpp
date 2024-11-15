@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "DevicesUserControl.h"
+#include "sqlite3.h"
 #include <iostream>
 namespace EUS {
     sqlite3* db;
