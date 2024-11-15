@@ -9,7 +9,7 @@ namespace EUS {
     {
         InitializeComponent();
         initializeTable();
-        vector<schedule_appliance::Appliance> arr;
+        vector<schedule_appliance::Appliance> arrr;
         for (int i = 0; i <= 15; ++i) {
             string name = "name" + to_string(i);
             float kwh = 0.8f;
@@ -17,9 +17,9 @@ namespace EUS {
             if (i == 14) priority = 3;
 
             // Create and push the appliance object into the vector
-            arr.push_back(schedule_appliance::Appliance(name, kwh, priority));
+            arrr.push_back(schedule_appliance::Appliance(name, kwh, priority));
         }
-        sortit(arr, 0);
+        vector<schedule_appliance::Appliance> arr = sortit(arrr, 0);
 
         float dailyBill = 0.0f;
         const float monthlyThreshold = 60000.0f;
@@ -64,6 +64,26 @@ namespace EUS {
         lable->Dock = DockStyle::Top;
         lable->TextAlign = ContentAlignment::MiddleCenter;
         this->Controls->Add(lable);
+
+        comboBox = gcnew ComboBox();
+        comboBox->Location = System::Drawing::Point(50, 50); // Set position
+        comboBox->Size = System::Drawing::Size(150, 30);    // Set size
+
+        // Add items to the ComboBox
+        comboBox->Items->Add("Day");
+        comboBox->Items->Add("Night");
+        //comboBox->Items->Add("Option 3");
+
+        // Set default selected item
+        comboBox->SelectedIndex = 0;
+
+        // Add an event handler for selected item changes
+        comboBox->SelectedIndexChanged += gcnew System::EventHandler(this, &EUS::SchedulerUserControl::OnColumnDropdownChanged);
+
+
+        // Add the ComboBox to the form
+        this->Controls->Add(comboBox);
+        
     }
 
     void SchedulerUserControl::initializeTable() {
@@ -106,6 +126,7 @@ namespace EUS {
        
         table->Rows->Add(15);
         
+        
         for (int i = 0; i < table->Rows->Count; i++) {
             table->Rows[i]->Cells[0]->Value = gcnew System::String(arrr[i].name.c_str());
         }
@@ -113,136 +134,7 @@ namespace EUS {
         // Add the DataGridView to the form
         this->Controls->Add(table);
     }
-    void SchedulerUserControl::setValues(vector<schedule_appliance::Appliance> arr, int rowInd) {
-        /*if (rowInd >= arr.size()) {
-            return;
-        }
-        if (arr[rowInd].priority == 3) {
-            for (int i = 1; i < 24; i++)
-            table->Rows[rowInd]->Cells[i]->Value = "+";
-        }
-        else if (arr[rowInd].priority == 2) {
-            for (int i = 1; i < 24; i*= 2)
-                table->Rows[rowInd]->Cells[i]->Value = "+";
-        }
-        else {
-            for (int i = 1; i < 24; i *= 4)
-                table->Rows[rowInd]->Cells[i]->Value = "+";
-        }
-        setValues(arr, rowInd + 1);*/
-    }
-
     
-
-    
-
-    void SchedulerUserControl::fillScheduleWithBacktracking(
-        vector<schedule_appliance::Appliance>& appliances,
-        int rowInd,
-        float& currentBill,
-        const float billThreshold)
-    {
-        //if (rowInd >= appliances.size()) return;
-
-        //// **Step 1: Ensure at least one slot for each appliance**
-        //if (assignInitialSlot(rowInd, currentBill, appliances[rowInd].kwh)) {
-        //    std::cout << "Assigned initial slot to appliance at row " << rowInd << ", Current Bill: " << currentBill << "\n";
-        //}
-
-        //// Calculate remaining slots to assign based on dynamic slot allocation
-        //float remainingBudget = billThreshold - currentBill;
-        //int additionalSlots = calculateDynamicSlots(appliances[rowInd], remainingBudget);
-
-        //// Assign additional slots based on remaining budget and priority
-        //int slotsFilled = assignSlots(rowInd, additionalSlots, currentBill, appliances[rowInd].kwh);
-
-        //std::cout << "After assigning slots to row " << rowInd << ", Current Bill: " << currentBill << "\n";
-
-        //// If the current bill exceeds the threshold, backtrack and adjust
-        //if (currentBill > billThreshold) {
-        //    std::cout << "Exceeded bill threshold. Adjusting slots...\n";
-        //    backtrackAndAdjust(appliances, rowInd, currentBill, billThreshold);
-        //}
-
-        //fillScheduleWithBacktracking(appliances, rowInd + 1, currentBill, billThreshold);
-    }
-
-    // New function to ensure each appliance has at least one slot
-    bool SchedulerUserControl::assignInitialSlot(int rowIndex, float& currentBill, float kwh) {
-        //const float costPerSlot = 41.6f * kwh;
-
-        //// Attempt to assign the first available slot
-        //for (int i = 1; i < 24; ++i) {
-        //    if (table->Rows[rowIndex]->Cells[i]->Value == nullptr) {
-        //        table->Rows[rowIndex]->Cells[i]->Value = "+";
-        //        currentBill += costPerSlot;
-        //        return true;
-        //    }
-        //}
-        //return false;
-        return false;
-    }
-
-
-    int SchedulerUserControl::calculateDynamicSlots(
-        const schedule_appliance::Appliance& appliance,
-        float remainingBudget)
-    {
-        /*float costPerSlot = 12.5f * appliance.kwh;
-
-        int maxPossibleSlots = static_cast<int>(remainingBudget / costPerSlot);
-        int priorityMultiplier = (appliance.priority == 3) ? 1 : (appliance.priority == 2) ? 2 : 4;
-
-        int dynamicSlots = maxPossibleSlots / priorityMultiplier;
-        return max(0, dynamicSlots);*/
-        return 0;
-    }
-
-    int SchedulerUserControl::assignSlots(int rowIndex, int numSlots, float& currentBill, float kwh) {
-       /* int slotsFilled = 0;
-        const float costPerSlot = 41.6f * kwh;
-
-        for (int i = 1; i < 24 && slotsFilled < numSlots; ++i) {
-            if (table->Rows[rowIndex]->Cells[i]->Value == nullptr) {
-                table->Rows[rowIndex]->Cells[i]->Value = "+";
-                slotsFilled++;
-                currentBill += costPerSlot;
-            }
-        }
-
-        std::cout << "Assigned " << slotsFilled << " slots to row " << rowIndex << ", New Bill: " << currentBill << "\n";
-    
-        return slotsFilled;*/
-        return 0;
-    }
-
-    void SchedulerUserControl::backtrackAndAdjust(
-        vector<schedule_appliance::Appliance>& appliances,
-        int rowInd,
-        float& currentBill,
-        const float billThreshold)
-    {
-        /*for (int i = appliances.size() - 1; i >= 0; --i) {
-            int reductionSlots = calculateReductionSlots(appliances[i]);
-
-            for (int j = 1; j < 24 && reductionSlots > 0; ++j) {
-                if (table->Rows[i]->Cells[j]->Value != nullptr) {
-                    table->Rows[i]->Cells[j]->Value = nullptr;
-                    currentBill -= appliances[i].kwh * 12.5f;
-                    reductionSlots--;
-
-                    std::cout << "Backtracking: Reduced slot in row " << i << ", Current Bill: " << currentBill << "\n";
-
-                    if (currentBill <= billThreshold) return;
-                }
-            }
-        }*/
-    }
-
-    int SchedulerUserControl::calculateReductionSlots(const schedule_appliance::Appliance& appliance)
-    {
-        return (appliance.priority == 3) ? 2 : (appliance.priority == 2) ? 4 : 6;
-    }
 
     void SchedulerUserControl::traverseSlots(int& mover, int rowIndex) {
         // Ensure rowIndex and mover are within valid bounds before accessing table
@@ -346,6 +238,25 @@ namespace EUS {
         // If we assigned any slots during this pass and haven't reached the target bill, make another call
         if (slotsAssigned && currentBill < targetBill) {
             makeTable(arr, rowIndex, currentBill, targetBill);
+        }
+    }
+
+    void SchedulerUserControl::OnColumnDropdownChanged(System::Object^ sender, System::EventArgs^ e) {
+        if (comboBox->SelectedIndex == 0) {
+            for (int i = 1; i < 12; i++) {
+                table->Columns[i]->Visible = true;
+            }
+            for (int i = 12; i < 24; i++) {
+                table->Columns[i]->Visible = false;
+            }
+        }
+        else if (comboBox->SelectedIndex == 1) {
+            for (int i = 12; i < 24; i++) {
+                table->Columns[i]->Visible = true;
+            }
+            for (int i = 1; i < 12; i++) {
+                table->Columns[i]->Visible = false;
+            }
         }
     }
 

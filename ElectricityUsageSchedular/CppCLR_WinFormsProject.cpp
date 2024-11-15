@@ -21,22 +21,26 @@ void ShowNotification(const wchar_t* title, const wchar_t* message)
     Shell_NotifyIcon(NIM_DELETE, &nid); // Remove it
 }
 
-void sortit(vector<schedule_appliance::Appliance> appliances, int priorityLevel) {
-    // Priority is handled where higher priority levels come first.
-    // Sort primarily by priority, then by kwh in ascending order.
-    std::sort(appliances.begin(), appliances.end(), [=](const schedule_appliance::Appliance& a, const schedule_appliance::Appliance& b) {
-        if (a.priority != b.priority) {
-            return a.priority > b.priority;
+vector<schedule_appliance::Appliance> sortit(vector<schedule_appliance::Appliance> appliances, int priorityLevel) {
+    vector<schedule_appliance::Appliance> sorted;
+    
+    int j = 0;
+    for (int i = 0; i < appliances.size(); i++) {
+        if (appliances[i].priority == 3) {
+            sorted.push_back(appliances[i]);
         }
-        return a.kwh < b.kwh;
-        });
-
-    // Optional: Filter appliances to only show the specified priority level
-    appliances.erase(std::remove_if(appliances.begin(), appliances.end(),
-        [priorityLevel](const schedule_appliance::Appliance& appliance) {
-            return appliance.priority != priorityLevel;
-        }),
-        appliances.end());
+    }
+    for (int i = 0; i < appliances.size(); i++) {
+        if (appliances[i].priority == 2) {
+            sorted.push_back(appliances[i]);
+        }
+    }
+    for (int i = 0; i < appliances.size(); i++) {
+        if (appliances[i].priority == 1) {
+            sorted.push_back(appliances[i]);
+        }
+    }
+    return sorted;
 }
 
 //--------------------------------Main stuff--------------------------------------------
