@@ -138,7 +138,7 @@ namespace EUS {
         // SQLite database connection and query
         sqlite3* db;
         sqlite3_stmt* stmt;
-        int rc = sqlite3_open("../user_management.db", &db);  // Use relative path
+        int rc = sqlite3_open("user_management.db", &db);  // Use filename only
 
         if (rc != SQLITE_OK) 
         {
