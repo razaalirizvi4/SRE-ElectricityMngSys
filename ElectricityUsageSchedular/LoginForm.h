@@ -34,8 +34,6 @@ namespace EUS {
         String^ getUsername;
         int getID;
 
-
-
         bool insideTextBox;
 
         void InitializeComponent(void);

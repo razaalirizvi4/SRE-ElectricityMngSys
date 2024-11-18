@@ -216,6 +216,7 @@ namespace EUS {
             if (LoginCheck())
             {
                 LoginSuccess();
+                return;
             }
 
             LoginFailure();
