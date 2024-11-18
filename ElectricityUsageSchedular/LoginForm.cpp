@@ -114,6 +114,26 @@ namespace EUS {
         MainForm^ mainForm = gcnew MainForm();
         mainForm->Show();
 
+        //initialize table here so that evth can be called
+        initializeTable();
+        vector<schedule_appliance::Appliance> arrr;
+        for (int i = 0; i <= 15; ++i) {
+            string name = "name" + to_string(i);
+            float kwh = 0.8f;
+            int priority = (i % 2) + 1;
+            if (i == 15) priority = 3;
+
+            // Create and push the appliance object into the vector
+            arrr.push_back(schedule_appliance::Appliance(name, kwh, priority));
+        }
+        vector<schedule_appliance::Appliance> arr = sortit(arrr, 0);
+
+        float dailyBill = 0.0f;
+        const float monthlyThreshold = 50000.0f;
+
+        const float dailyThreshold = monthlyThreshold / 30.0f; // Calculate daily threshold
+
+        makeTable(arr, 0, dailyBill, dailyThreshold);
         //CustomMessageForm^ msg = gcnew CustomMessageForm("Login success!", "Login Status", true);
         // msg->Show();
     }
