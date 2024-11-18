@@ -1,5 +1,6 @@
 #pragma once
 #include<vector>
+#include"GlobalObjects.h"
 
 namespace EUS
 {
@@ -10,12 +11,12 @@ namespace EUS
     using namespace System::Data;
     using namespace System::Drawing;
 
+
     public ref class AnalyticsUserControl : public System::Windows::Forms::UserControl
     {
 
         public:
             AnalyticsUserControl(void);
-
         protected:
             ~AnalyticsUserControl();
 

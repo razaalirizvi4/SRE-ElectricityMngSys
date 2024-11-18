@@ -1,6 +1,9 @@
 #include "pch.h"
 #include "LoginForm.h"
-
+#include"GlobalObjects.h"
+#include <thread>
+#include <chrono>
+#include <ctime>
 
 //---------------------------Functions Definition-------------------------------------
 #include "GlobalFunctions.h"
@@ -43,6 +46,28 @@ vector<schedule_appliance::Appliance> sortit(vector<schedule_appliance::Applianc
     return sorted;
 }
 
+void CheckConditionInBackground()
+{
+    while (true)
+    {
+        // Get current time
+        time_t now = time(nullptr);
+        struct tm localTime;
+        localtime_s(&localTime, &now);
+
+        // Check if the time is 3:37 AM
+        if (localTime.tm_hour == 6 && localTime.tm_min == 52)
+        {
+            ShowNotification(L"Alert !", L"Peak Hour Reached");
+            // Wait a minute to avoid multiple notifications at the same time
+            this_thread::sleep_for(chrono::minutes(1));
+        }
+
+        // Sleep for 30 seconds to check the condition periodically
+        this_thread::sleep_for(chrono::seconds(30));
+    }
+}
+
 //--------------------------------Main stuff--------------------------------------------
 using namespace System;
 using namespace System::Windows::Forms;
@@ -53,8 +78,10 @@ int main()
     Application::EnableVisualStyles();
     Application::SetCompatibleTextRenderingDefault(false);
 
+    thread backgroundThread(CheckConditionInBackground);
+    backgroundThread.detach();
+
     EUS::LoginForm form;
-    ShowNotification(L"I am Hatsune Miku", L"I'm thinking miku miku moo ee oo");
     Application::Run(% form);
     Application::Exit();
 

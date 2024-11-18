@@ -28,6 +28,13 @@ namespace EUS {
 
         makeTable(arr, 0, dailyBill, dailyThreshold);
         updateBillLabel(dailyBill * 30.0f);
+        //make the table accesible globally
+        setGlobalTable();
+    }
+
+    void SchedulerUserControl::setGlobalTable()
+    {
+        GlobalObjects::Globals::Gtable = table;
     }
 
 

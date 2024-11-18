@@ -141,6 +141,7 @@
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="GlobalFunctions.h" />
+    <ClInclude Include="GlobalObjects.h" />
     <ClInclude Include="helperStructs.h" />
     <ClInclude Include="LoginForm.h">
       <FileType>CppForm</FileType>

@@ -38,9 +38,49 @@ namespace EUS {
 
         void AnalyticsUserControl::MakePieChart(Object^ sender, PaintEventArgs^ e)
         {
-            // Sample data for the pie chart
-            array<float>^ values = { 1.0f,7.0f,12.0f, 20.0f, 1.0f,3.0f,25.0f,32.0f,20.0f, 15.0f, 35.0f,17.0f,21.0f,11.0f };
-            array<String^>^ labels = { "Fridge", "Oven", "Television", "Sega Genesis","a","b","c","d","e","f","g","h","i","j"};
+
+            int totalAppliances = GlobalObjects::Globals::Gtable->Rows->Count;
+            int* hoursForEachAppliance = new int[totalAppliances-1];
+
+            //get all hours in an array, each index represenitng appliance number and value representing hours run
+            for (int i = 0; i < totalAppliances; i++)   //for each appliance
+            {
+                int count = 0;
+                for (int j = 1; j < 24; j++)            //for each hour
+                {
+                    if (GlobalObjects::Globals::Gtable->Rows[i]->Cells[j]->Value == "+")
+                    {
+                        count++;
+                    }
+                }
+                hoursForEachAppliance[i] = count;
+            }
+
+            int topFourAppliancesIndexes[4] = { 0 };
+            int topFourAppliancesHours[4] = { 0 };
+
+            for (int i = 0; i < 4; i++)                         //get top 4 appliances and their hours
+            {
+                int count = 0;
+                int Bcount = 0;
+                int index = 0;
+                for (int j = 0; j < totalAppliances; j++)
+                {
+                    count = hoursForEachAppliance[j];
+                    if (count > Bcount)
+                    {
+                        Bcount = count;                         //get max hours
+                        index = j;                              //get index of appliance with max hours
+                    }
+                }
+                topFourAppliancesIndexes[i] = index;
+                topFourAppliancesHours[i] = Bcount;
+                hoursForEachAppliance[index] = -1;              //so it wont be counted again
+            }
+
+            // Data for the pie chart
+            array<float>^ values = { topFourAppliancesHours[0],topFourAppliancesHours[1],topFourAppliancesHours[2],topFourAppliancesHours[3] };
+            array<String^>^ labels = { GlobalObjects::Globals::Gtable->Rows[topFourAppliancesIndexes[0]]->Cells[0]->Value->ToString(), GlobalObjects::Globals::Gtable->Rows[topFourAppliancesIndexes[1]]->Cells[0]->Value->ToString(), GlobalObjects::Globals::Gtable->Rows[topFourAppliancesIndexes[2]]->Cells[0]->Value->ToString(), GlobalObjects::Globals::Gtable->Rows[topFourAppliancesIndexes[3]]->Cells[0]->Value->ToString() };
             
             //alternating theme-matching colours
             int startR = 0, startG = 91, startB = 156;
@@ -101,9 +141,9 @@ namespace EUS {
 
                 // Draw legend text
                 g->DrawString(                                                  //side rectangle text size and spacing
-                    String::Format("{0}: {1:F1}%",
+                    String::Format("{0}: {1} Hours",
                     labels[i],
-                    (values[i] / total) * 100),
+                    (values[i])),
                     gcnew System::Drawing::Font("Arial", 10),
                     Brushes::Black,
                     legendX + 15,
@@ -126,7 +166,8 @@ namespace EUS {
 
         void AnalyticsUserControl::MakeBarChart(Object^ sender, PaintEventArgs^ e)
         {
-            // Sample data for the bar chart
+
+            // Data for the bar chart
             array<float>^ values = { 10.0f, 20.0f, 4.0f, 32.0f,56.0f,12.0f,69.0f,21.0f,32.5f, 10.0f, 20.0f, 4.0f, 32.0f,56.0f,12.0f,69.0f,21.0f,32.5f, 56.0f,45.6f,52.01f,34.56f,12.0f };
             array<String^>^ labels = { "00-01", "01-02", "02-03", "03-04", "04-05", "05-06", "06-07", "07-08", "08-09", "09-10", "10-11", "11-12", "12-13", "13-14", "14-15", "15-16", "16-17", "17-18", "18-19", "19-20", "20-21", "21-22", "22-23", "23-00" };
 

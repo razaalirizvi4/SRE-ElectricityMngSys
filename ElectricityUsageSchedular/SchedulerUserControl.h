@@ -1,5 +1,6 @@
 
 #include "GlobalFunctions.h"
+#include"GlobalObjects.h"
 
 namespace EUS {
 
@@ -12,13 +13,13 @@ namespace EUS {
     {
     public:
         SchedulerUserControl(void);
+        DataGridView^ table;
 
     protected:
         ~SchedulerUserControl();
 
     private:
         System::ComponentModel::Container^ components;
-        DataGridView^ table;
         ComboBox^ comboBox;
         Label^ lable;
         void InitializeComponent(void);
@@ -28,5 +29,6 @@ namespace EUS {
         void OnColumnDropdownChanged(System::Object^ sender, System::EventArgs^ e);
         void makeTable(vector<schedule_appliance::Appliance> arr, int rowIndex, float& currentBill, float targetBill);
         void traverseSlots(int& mover, int rowIndex);
+        void setGlobalTable();
     };
 }
