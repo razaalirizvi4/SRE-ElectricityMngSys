@@ -1,5 +1,6 @@
 #pragma once
 #include "sqlite3.h"
+
 namespace EUS {
 
     using namespace System;
@@ -12,7 +13,7 @@ namespace EUS {
     public:
         DevicesUserControl(void);
         Panel^ topLeftPanel;
-
+        ComboBox^ comboBox = gcnew ComboBox();
     protected:
         ~DevicesUserControl();
 
@@ -38,7 +39,7 @@ namespace EUS {
         void addbuttonclick(Object^ sender, EventArgs^ e);
         void Add_deletebutton(int xpos, int ypos);
         void delbuttonclick(Object^ sender, EventArgs^ e);
-        void AddComboBox();
+        void UpdateComboBox();
         void comboBox_SelectedIndexChanged(Object^ sender, EventArgs^ e);
     };
 }

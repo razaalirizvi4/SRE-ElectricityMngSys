@@ -1,7 +1,16 @@
 #include "pch.h"
 #include "DevicesUserControl.h"
 #include "sqlite3.h"
+#include <vector>
+#include<cstring>
+#include<string>
 #include <iostream>
+#include <msclr/marshal_cppstd.h>
+using namespace std;
+string brand;
+char* errmsg = nullptr;
+vector <string> appliances;
+string selectappliance;
 namespace EUS {
     sqlite3* db;
     int exit;
@@ -9,6 +18,19 @@ namespace EUS {
     DevicesUserControl::DevicesUserControl(void)
     {
         InitializeComponent();
+
+        // Set ComboBox properties
+        comboBox->Location = System::Drawing::Point(50, 350);
+        comboBox->Size = System::Drawing::Size(1000, 30);
+
+        // Add items to the ComboBox
+        comboBox->Items->Add("Press on the brand of your appliance,then select your appliance to add or delete,click other to add a different appliance.");
+        // Set a default selected item
+        comboBox->SelectedIndex = 0;
+        // Add event handler for selection change
+        comboBox->SelectedIndexChanged += gcnew EventHandler(this, &DevicesUserControl::comboBox_SelectedIndexChanged);
+        // Add the ComboBox to the form
+        this->Controls->Add(comboBox);
     }
 
     DevicesUserControl::~DevicesUserControl()
@@ -40,14 +62,33 @@ namespace EUS {
         AddButton6(990, 150);
         AddButton7(500, 250);
         Add_addbutton(1090, 350);
-        AddComboBox();
         Add_deletebutton(1190, 350);
         open_dbconnection();
     }
+    int callback(void* data, int argc, char** argv, char** azColName) {
+        // Extract the value of the first column (assuming one column is selected)
+        if (argv[0]) {
+            appliances.push_back(argv[0]); // Add the value to the global vector
+        }
+        else {
+            appliances.push_back("NULL"); // Handle NULL values
+        }
+
+        return 0; // Returning 0 tells SQLite to continue processing
+    }
+    int brandcallback(void* data, int argc, char** argv, char** azColName) {
+        // Extract the first value (assuming the query returns only one column)
+        if (argc > 0 && argv[0]) {
+            std::string* result = static_cast<std::string*>(data);
+            *result = argv[0];  // Store the value in the passed string
+        }
+        return 0;  // Return 0 to indicate success
+    }
+
     void DevicesUserControl::open_dbconnection()
     {
-        exit = sqlite3_open("bill management.db", &db);
-        if (exit) {
+        exit = sqlite3_open("billmanagement.db", &db);
+        if (exit != SQLITE_OK) {
             MessageBox::Show("Connection Failed");
         }
         else {
@@ -73,7 +114,11 @@ namespace EUS {
     }
     void DevicesUserControl::OnButtonClick1(Object^ sender, EventArgs^ e)
     {
-        MessageBox::Show("Button clicked!");
+        brand = "PEL";
+        String^ brandptr = gcnew String(brand.c_str());
+        MessageBox::Show(brandptr);
+        UpdateComboBox();
+        
     }
     void DevicesUserControl::AddButton2(int xpos, int ypos)
     {
@@ -94,7 +139,10 @@ namespace EUS {
     }
     void DevicesUserControl::OnButtonClick2(Object^ sender, EventArgs^ e)
     {
-        MessageBox::Show("Button clicked!");
+        brand = "Dawlance";
+        String^ brandptr = gcnew String(brand.c_str());
+        MessageBox::Show(brandptr);
+        UpdateComboBox();
     }
     void DevicesUserControl::AddButton3(int xpos, int ypos)
     {
@@ -115,7 +163,10 @@ namespace EUS {
     }
     void DevicesUserControl::OnButtonClick3(Object^ sender, EventArgs^ e)
     {
-        MessageBox::Show("Button clicked!");
+        brand = "Haier";
+        String^ brandptr = gcnew String(brand.c_str());
+        MessageBox::Show(brandptr);
+        UpdateComboBox();
     }
     void DevicesUserControl::AddButton4(int xpos, int ypos)
     {
@@ -136,7 +187,10 @@ namespace EUS {
     }
     void DevicesUserControl::OnButtonClick4(Object^ sender, EventArgs^ e)
     {
-        MessageBox::Show("Button clicked!");
+        brand = "Lg";
+        String^ brandptr = gcnew String(brand.c_str());
+        MessageBox::Show(brandptr);
+        UpdateComboBox();
     }
     void DevicesUserControl::AddButton5(int xpos, int ypos)
     {
@@ -157,7 +211,10 @@ namespace EUS {
     }
     void DevicesUserControl::OnButtonClick5(Object^ sender, EventArgs^ e)
     {
-        MessageBox::Show("Button clicked!");
+        brand = "Samsung";
+        String^ brandptr = gcnew String(brand.c_str());
+        MessageBox::Show(brandptr);
+        UpdateComboBox();
     }
     void DevicesUserControl::AddButton6(int xpos, int ypos)
     {
@@ -178,7 +235,10 @@ namespace EUS {
     }
     void DevicesUserControl::OnButtonClick6(Object^ sender, EventArgs^ e)
     {
-        MessageBox::Show("Button clicked!");
+        brand = "Orient";
+        String^ brandptr = gcnew String(brand.c_str());
+        MessageBox::Show(brandptr);
+        UpdateComboBox();
     }
     void DevicesUserControl::AddButton7(int xpos, int ypos)
     {
@@ -199,7 +259,10 @@ namespace EUS {
     }
     void DevicesUserControl::OnButtonClick7(Object^ sender, EventArgs^ e)
     {
-        MessageBox::Show("Button clicked!");
+        brand = "Other";
+        String^ brandptr = gcnew String(brand.c_str());
+        MessageBox::Show(brandptr);
+        UpdateComboBox();
     }
     void DevicesUserControl::Add_addbutton(int xpos, int ypos)
     {
@@ -219,6 +282,29 @@ namespace EUS {
     }
     void DevicesUserControl::addbuttonclick(Object^ sender, EventArgs^ e)
     {
+        string sqlquery = "INSERT INTO USERS_APPLIANCE (userid, productname) VALUES (" + to_string(1) + ", '" + selectappliance + "');";
+        const char* q = sqlquery.c_str();
+        MessageBox::Show(gcnew String(q));
+        string result;
+        // Execute the query and pass the result variable to the callback
+        if (sqlite3_exec(db, q, nullptr, nullptr, &errmsg) != SQLITE_OK) {
+            String^ errorMsg = gcnew String(sqlite3_errmsg(db));
+            String^ detailedMsg = gcnew String(errmsg ? errmsg : "No detailed error message");
+
+            // Show error in a message box
+            MessageBox::Show("Error executing query: " + errorMsg + "\nDetails: " + detailedMsg,
+                "Query Execution Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+
+            // Free error message if allocated
+            if (errmsg) {
+                sqlite3_free(errmsg);
+            }
+        }
+        else
+        {
+            //MessageBox::Show("Query Ran Successfully" + gcnew String(result.c_str()));
+        }
+
         MessageBox::Show("Appliance Added !");
     }
     void DevicesUserControl::Add_deletebutton(int xpos, int ypos)
@@ -241,28 +327,67 @@ namespace EUS {
     {
         MessageBox::Show("Appliance deleted !");
     }
-    void DevicesUserControl::AddComboBox()
+    string getbrandid()
     {
-        ComboBox^ comboBox = gcnew ComboBox();
+        string sqlquery = "SELECT brand_id FROM Brands WHERE brand_name = ' " + brand + " ' ;";
+        const char* q = sqlquery.c_str();
+       
+        string result;
+        // Execute the query and pass the result variable to the callback
+        if (sqlite3_exec(db, q, brandcallback, &result, &errmsg) != SQLITE_OK) {
+            String^ errorMsg = gcnew String(sqlite3_errmsg(db));
+            String^ detailedMsg = gcnew String(errmsg ? errmsg : "No detailed error message");
 
-        // Set ComboBox properties
-        comboBox->Location = System::Drawing::Point(50, 350);
-        comboBox->Size = System::Drawing::Size(1000, 30);
+            // Show error in a message box
+            MessageBox::Show("Error executing query: " + errorMsg + "\nDetails: " + detailedMsg,
+                "Query Execution Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
 
-        // Add items to the ComboBox
-        comboBox->Items->Add("Press on the brand of your appliance,then select your appliance to add or delete,click other to add a different appliance.");
-        comboBox->Items->Add("Option 1");
-        comboBox->Items->Add("Option 2");
-        comboBox->Items->Add("Option 3");
+            // Free error message if allocated
+            if (errmsg) {
+                sqlite3_free(errmsg);
+            }
+        }
+        else
+        {
+           // MessageBox::Show("Query Ran Successfully" + gcnew String(result.c_str()));
+        }
+        return result;
 
-        // Set a default selected item
-        comboBox->SelectedIndex = 0;
+    }
+    void extractappliances()
+    {
+        string temp = getbrandid();
+        string sqlquery = "SELECT product_name FROM Electrical_Appliances";
+        const char* q = sqlquery.c_str();
+        
+        if (sqlite3_exec(db, q, callback, nullptr, &errmsg) != SQLITE_OK) {
+            String^ errorMsg = gcnew String(sqlite3_errmsg(db));
+            String^ detailedMsg = gcnew String(errmsg ? errmsg : "No detailed error message");
 
-        // Add event handler for selection change
-        comboBox->SelectedIndexChanged += gcnew EventHandler(this, &DevicesUserControl::comboBox_SelectedIndexChanged);
+            // Show error in a message box
+            MessageBox::Show("Error executing query: " + errorMsg + "\nDetails: " + detailedMsg,
+                "Query Execution Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
 
-        // Add the ComboBox to the form
-        this->Controls->Add(comboBox);
+            // Free error message if allocated
+            if (errmsg) {
+                sqlite3_free(errmsg);
+            }
+        }
+        else
+        {
+            MessageBox::Show("Query Ran Successfully");
+        }
+    }
+    void DevicesUserControl::UpdateComboBox()
+    {
+        extractappliances();
+        comboBox->Items->Clear();
+        for (auto it = appliances.begin(); it != appliances.end(); ++it) {
+            /*String^ t = gcnew String(it->c_str());
+            MessageBox::Show(t);*/
+            comboBox->Items->Add(gcnew System::String(it->c_str()));
+        }
+        MessageBox::Show("Combo Box Options set");
     }
     
     void DevicesUserControl :: comboBox_SelectedIndexChanged(Object^ sender, EventArgs^ e) 
@@ -270,10 +395,12 @@ namespace EUS {
         ComboBox^ comboBox = dynamic_cast<ComboBox^>(sender);
         if (comboBox->SelectedIndex != 0)
         {
+            selectappliance = msclr::interop::marshal_as<std::string>(comboBox->SelectedItem->ToString());
             String^ selectedItem = comboBox->SelectedItem->ToString();
             MessageBox::Show("Selected Item: " + selectedItem);
         }
     }
+
 };
 
 
