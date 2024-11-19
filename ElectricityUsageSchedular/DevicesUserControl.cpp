@@ -284,7 +284,6 @@ namespace EUS {
     {
         string sqlquery = "INSERT INTO USERS_APPLIANCE (userid, productname) VALUES (" + to_string(1) + ", '" + selectappliance + "');";
         const char* q = sqlquery.c_str();
-        MessageBox::Show(gcnew String(q));
         string result;
         // Execute the query and pass the result variable to the callback
         if (sqlite3_exec(db, q, nullptr, nullptr, &errmsg) != SQLITE_OK) {
