@@ -35,6 +35,8 @@ namespace EUS {
         this->Size = System::Drawing::Size(1200, 720);
         this->Text = L"Login";
 
+        this->BackColor = Color::FromArgb(240, 248, 255);
+
         // Create the login button and make it smaller
         btnLogin = gcnew Button();
         btnLogin->Text = L"Login";

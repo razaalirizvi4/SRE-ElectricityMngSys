@@ -24,18 +24,22 @@ namespace EUS {
 
     void RegisterForm::InitializeComponent(void)
     {
-        //Initialize containter
+        //Initialize container
         this->components = gcnew System::ComponentModel::Container();
         this->Size = System::Drawing::Size(1200, 720);
         this->Text = L"Register";
+
+        // Set the form's background color to a light blue
+        this->BackColor = Color::FromArgb(240, 248, 255); // Light blue background
 
         // Create the login button 
         btntoLogin = gcnew Button();
         btntoLogin->Text = L"Login";
         btntoLogin->Size = System::Drawing::Size(100, 50);
-        btntoLogin->Location = System::Drawing::Point(620, 300);
+        btntoLogin->Location = System::Drawing::Point(620, 510);
         btntoLogin->BackColor = Color::FromArgb(0, 122, 204);
         btntoLogin->ForeColor = Color::White;
+        btntoLogin->Font = gcnew System::Drawing::Font(L"Arial", 12);
         btntoLogin->Click += gcnew EventHandler(this, &RegisterForm::MoveToLogin);
 
         this->Controls->Add(btntoLogin);
@@ -44,67 +48,94 @@ namespace EUS {
         btnRegister = gcnew Button();
         btnRegister->Text = L"Register";
         btnRegister->Size = System::Drawing::Size(100, 50);
-        btnRegister->Location = System::Drawing::Point(500, 300);
+        btnRegister->Location = System::Drawing::Point(500, 510);
         btnRegister->BackColor = Color::FromArgb(0, 204, 122);
         btnRegister->ForeColor = Color::White;
+        btnRegister->Font = gcnew System::Drawing::Font(L"Arial", 12);
         btnRegister->Click += gcnew EventHandler(this, &RegisterForm::OnRegisterClick);
 
         this->Controls->Add(btnRegister);
 
-        // Create Labels for User Details
+        // Create Labels for User Details with adjusted font and position
         userName = gcnew Label();
         userName->Text = L"Username:";
-        userName->Location = System::Drawing::Point(400, 120);
+        userName->Location = System::Drawing::Point(500, 100);
+        userName->Font = gcnew System::Drawing::Font("Courier New", 18, System::Drawing::FontStyle::Bold);
+        userName->AutoSize = true;
         this->Controls->Add(userName);
 
         userEmail = gcnew Label();
         userEmail->Text = L"Email:";
-        userEmail->Location = System::Drawing::Point(400, 170);
+        userEmail->Location = System::Drawing::Point(500, 180);
+        userEmail->Font = gcnew System::Drawing::Font("Courier New", 18, System::Drawing::FontStyle::Bold);
+        userEmail->AutoSize = true;
         this->Controls->Add(userEmail);
 
         userPassword = gcnew Label();
         userPassword->Text = L"Password:";
-        userPassword->Location = System::Drawing::Point(400, 220);
+        userPassword->Location = System::Drawing::Point(500, 260);
+        userPassword->Font = gcnew System::Drawing::Font("Courier New", 18, System::Drawing::FontStyle::Bold);
+        userPassword->AutoSize = true;
         this->Controls->Add(userPassword);
 
         userProvince = gcnew Label();
         userProvince->Text = L"Province:";
-        userProvince->Location = System::Drawing::Point(400, 270);
+        userProvince->Location = System::Drawing::Point(500, 340);
+        userProvince->Font = gcnew System::Drawing::Font("Courier New", 18, System::Drawing::FontStyle::Bold);
+        userProvince->AutoSize = true;
         this->Controls->Add(userProvince);
 
-        // Create Textboxes for User Inputs
+        userCity = gcnew Label();
+        userCity->Text = L"City / Area:";
+        userCity->Location = System::Drawing::Point(500, 420);
+        userCity->Font = gcnew System::Drawing::Font("Courier New", 18, System::Drawing::FontStyle::Bold);
+        userCity->AutoSize = true;
+        this->Controls->Add(userCity);
+
+        // Create Textboxes for User Inputs with improved layout
         nameBox = gcnew TextBox();
-        nameBox->Location = System::Drawing::Point(500, 120);
-        nameBox->Size = System::Drawing::Size(200, 30);
+        nameBox->Location = System::Drawing::Point(500, 130);
+        nameBox->Size = System::Drawing::Size(250, 30);
+        nameBox->Font = gcnew System::Drawing::Font(L"Arial", 10);
         this->Controls->Add(nameBox);
 
         emailBox = gcnew TextBox();
-        emailBox->Location = System::Drawing::Point(500, 170);
-        emailBox->Size = System::Drawing::Size(200, 30);
+        emailBox->Location = System::Drawing::Point(500, 210);
+        emailBox->Size = System::Drawing::Size(250, 30);
+        emailBox->Font = gcnew System::Drawing::Font(L"Arial", 10);
         this->Controls->Add(emailBox);
 
         passwordBox = gcnew TextBox();
-        passwordBox->Location = System::Drawing::Point(500, 220);
-        passwordBox->Size = System::Drawing::Size(200, 30);
+        passwordBox->Location = System::Drawing::Point(500, 290);
+        passwordBox->Size = System::Drawing::Size(250, 30);
         passwordBox->PasswordChar = '*';  // Mask the password
+        passwordBox->Font = gcnew System::Drawing::Font(L"Arial", 10);
         this->Controls->Add(passwordBox);
 
-        // Create province selection box
+        // Create province and city selection boxes
         provinceBox = gcnew ComboBox();
-        provinceBox->Location = System::Drawing::Point(500, 270);
-        provinceBox->Size = System::Drawing::Size(200, 30);
+        provinceBox->Location = System::Drawing::Point(500, 370);
+        provinceBox->Size = System::Drawing::Size(250, 30);
+        provinceBox->Font = gcnew System::Drawing::Font(L"Arial", 10);
+
+        cityBox = gcnew ComboBox();
+        cityBox->Location = System::Drawing::Point(500, 450);
+        cityBox->Size = System::Drawing::Size(250, 30);
+        cityBox->Font = gcnew System::Drawing::Font(L"Arial", 10);
+        this->Controls->Add(cityBox);
 
         // Add the list of provinces
-        std::vector<std::string> provinces = { "Sindh","Punjab","Khyber Pakhtunkhwa","Balochistan" };
-        for (int i = 0; i < 4; ++i)
+        std::vector<std::string> provinces = { "Sindh","Punjab","Khyber Pakhtunkhwa","Balochistan","Other" };
+        for (int i = 0; i < 5; ++i)
         {
             // Convert std::string to managed System::String^ and add to ComboBox
             provinceBox->Items->Add(gcnew String(provinces[i].c_str()));
         }
 
         this->Controls->Add(provinceBox);
+        provinceBox->SelectedIndexChanged += gcnew EventHandler(this, &RegisterForm::OnProvinceSelected);
 
-        //Form closure
+        // Form closure event
         this->FormClosed += gcnew FormClosedEventHandler(this, &RegisterForm::OnFormClosed);
     }
 
@@ -177,14 +208,26 @@ namespace EUS {
         return true;
     }
 
+    bool RegisterForm::ValidCity(String^ city)
+    {
+        // Check if the province is empty or not selected
+        if (city == nullptr || city->Length == 0)
+        {
+            MessageBox::Show(L"Please select a city.", L"Invalid City", MessageBoxButtons::OK, MessageBoxIcon::Error);
+            return false;
+        }
+        return true;
+    }
+
     bool RegisterForm::RegisterCheck()
     {
         String^ password = passwordBox->Text;
         String^ name = nameBox->Text;
         String^ email = emailBox->Text;
         String^ province = provinceBox->Text;
+        String^ city = cityBox->Text;
 
-        if (ValidPassword(password) && ValidName(name) && ValidEmail(email) && ValidProvince(province))
+        if (ValidPassword(password) && ValidName(name) && ValidEmail(email) && ValidProvince(province) && ValidCity(city))
         {
             return true;
         }
@@ -224,6 +267,7 @@ namespace EUS {
         String^ enteredEmail = emailBox->Text;
         String^ enteredPassword = passwordBox->Text;
         String^ enteredProvince = provinceBox->Text; 
+        String^ enteredCity = cityBox->Text;
         String^ enteredName = nameBox->Text;  
 
         // Convert managed String^ to std::string for SQLite
@@ -231,6 +275,7 @@ namespace EUS {
         std::string email = context.marshal_as<std::string>(enteredEmail);
         std::string password = context.marshal_as<std::string>(enteredPassword);
         std::string province = context.marshal_as<std::string>(enteredProvince);
+        std::string city = context.marshal_as<std::string>(enteredCity);
         std::string name = context.marshal_as<std::string>(enteredName);
 
         sqlite3* db;
@@ -276,7 +321,7 @@ namespace EUS {
         }
 
         // Step 2: If email doesn't exist, insert new user into the database
-        std::string insertQuery = "INSERT INTO Users (User_Email, User_Name, User_Password, User_Province) VALUES (?, ?, ?, ?)";
+        std::string insertQuery = "INSERT INTO Users (User_Email, User_Name, User_Password, User_Province, User_City) VALUES (?, ?, ?, ?, ?)";
         rc = sqlite3_prepare_v2(db, insertQuery.c_str(), -1, &stmt, nullptr);
 
         if (rc != SQLITE_OK)
@@ -291,6 +336,7 @@ namespace EUS {
         sqlite3_bind_text(stmt, 2, name.c_str(), -1, SQLITE_STATIC);
         sqlite3_bind_text(stmt, 3, password.c_str(), -1, SQLITE_STATIC);
         sqlite3_bind_text(stmt, 4, province.c_str(), -1, SQLITE_STATIC);
+        sqlite3_bind_text(stmt, 5, city.c_str(), -1, SQLITE_STATIC);
 
         // Execute the insert statement
         rc = sqlite3_step(stmt);
@@ -309,4 +355,58 @@ namespace EUS {
         return true;  // Registration successful
     }
 
+
+        void RegisterForm::LoadCitiesForProvince(String^ province)
+        {
+        cityBox->Items->Clear(); // Clear existing cities
+
+        // Convert the province to std::string for SQLite query
+        msclr::interop::marshal_context context;
+        std::string provinceStr = context.marshal_as<std::string>(province);
+
+        sqlite3* db;
+        sqlite3_stmt* stmt;
+        int rc = sqlite3_open("user_management.db", &db);  // Open the database
+
+        if (rc != SQLITE_OK)
+        {
+            MessageBox::Show("Failed to open database!", "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+            return;
+        }
+
+        // Query to get cities for the selected province
+        std::string query = "SELECT City FROM Peak_Hours WHERE Province = ?";
+        rc = sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, nullptr);
+
+        if (rc != SQLITE_OK)
+        {
+            MessageBox::Show("Failed to prepare query! Error: " + gcnew String(sqlite3_errmsg(db)), "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+            sqlite3_close(db);
+            return;
+        }
+
+        // Bind the province to the query
+        sqlite3_bind_text(stmt, 1, provinceStr.c_str(), -1, SQLITE_STATIC);
+
+        // Step through the result set and add cities to the cityBox
+        while (sqlite3_step(stmt) == SQLITE_ROW)
+        {
+            const char* city = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0));
+            cityBox->Items->Add(gcnew String(city));
+        }
+
+        sqlite3_finalize(stmt);
+        sqlite3_close(db);
+
+        }
+
+
+
+        void RegisterForm::OnProvinceSelected(Object^ sender, EventArgs^ e)
+        {
+            String^ selectedProvince = provinceBox->SelectedItem->ToString();
+            LoadCitiesForProvince(selectedProvince); // Load cities for the selected province
+        }
+
 }
+

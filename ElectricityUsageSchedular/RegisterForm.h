@@ -26,11 +26,13 @@ namespace EUS {
         Label^ userEmail;
         Label^ userPassword;
         Label^ userProvince;
+        Label^ userCity;
 
         TextBox^ nameBox;
         TextBox^ emailBox;
         TextBox^ passwordBox;
         ComboBox^ provinceBox;
+        ComboBox^ cityBox;
   
 
         void InitializeComponent(void);
@@ -45,6 +47,10 @@ namespace EUS {
         bool ValidEmail(String^e);
         bool ValidName(String^n);
         bool ValidProvince(String^p);
+        bool ValidCity(String^ c);
+        void LoadCitiesForProvince(String^ province);
+        void OnProvinceSelected(Object^ sender, EventArgs^ e);
+
 
     };
 }
