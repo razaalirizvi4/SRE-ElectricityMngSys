@@ -5,8 +5,12 @@
 #include"CustomMessageForm.h"
 #include<sqlite3.h>
 #include <msclr/marshal_cppstd.h>
+#include "globals2.h"
+
+
 
 namespace EUS {
+
 
     LoginForm::LoginForm(void)
     {
@@ -110,30 +114,31 @@ namespace EUS {
 
     void LoginForm::LoginSuccess()
     {
+        
         this->Hide();
         MainForm^ mainForm = gcnew MainForm();
         mainForm->Show();
 
         //initialize table here so that evth can be called
-        initializeTable();
-        vector<schedule_appliance::Appliance> arrr;
-        for (int i = 0; i <= 15; ++i) {
-            string name = "name" + to_string(i);
-            float kwh = 0.8f;
-            int priority = (i % 2) + 1;
-            if (i == 15) priority = 3;
-
-            // Create and push the appliance object into the vector
-            arrr.push_back(schedule_appliance::Appliance(name, kwh, priority));
+        retrive_appliance_names();
+        get_appliances();
+        
+        for (int i = 0; i < GlobalObjectsRaza::Globals::unmanagedGlobals->apl.size(); i++) {
+            int p = (i % 2) + 1;
+            if (i == 7)
+                p = 3;
+            GlobalObjectsRaza::Globals::unmanagedGlobals->apl[i].priority = p;
         }
-        vector<schedule_appliance::Appliance> arr = sortit(arrr, 0);
+        vector<schedule_appliance::Appliance> arr = sortit(GlobalObjectsRaza::Globals::unmanagedGlobals->apl, 0);
 
         float dailyBill = 0.0f;
         const float monthlyThreshold = 50000.0f;
 
         const float dailyThreshold = monthlyThreshold / 30.0f; // Calculate daily threshold
-
-        makeTable(arr, 0, dailyBill, dailyThreshold);
+        initializeTable();
+        makeTable(dailyBill, dailyThreshold, arr);
+        GlobalObjectsRaza::Globals::unmanagedGlobals->bill = dailyBill;
+        sqlite3_close(GlobalObjectsRaza::Globals::unmanagedGlobals->dbr);
         //CustomMessageForm^ msg = gcnew CustomMessageForm("Login success!", "Login Status", true);
         // msg->Show();
     }

@@ -142,6 +142,7 @@
     </ClInclude>
     <ClInclude Include="GlobalFunctions.h" />
     <ClInclude Include="GlobalObjects.h" />
+    <ClInclude Include="globals2.h" />
     <ClInclude Include="helperStructs.h" />
     <ClInclude Include="LoginForm.h">
       <FileType>CppForm</FileType>
@@ -159,6 +160,7 @@
     <ClInclude Include="SettingsUserControl.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="unmanaged.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnalyticsUserControl.cpp" />

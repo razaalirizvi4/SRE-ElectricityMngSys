@@ -65,6 +65,12 @@
     <ClInclude Include="GlobalObjects.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="unmanaged.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="globals2.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CppCLR_WinFormsProject.cpp">

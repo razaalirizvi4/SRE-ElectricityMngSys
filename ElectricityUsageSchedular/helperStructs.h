@@ -3,8 +3,10 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <random>
 
 using namespace std;
+
 namespace schedule_appliance {
     struct Appliance {
         string name;
@@ -15,5 +17,6 @@ namespace schedule_appliance {
             : name(name), kwh(kwh), priority(priority) {
         }
 
+    
     };
 };
