@@ -7,8 +7,6 @@
 #include <msclr/marshal_cppstd.h>
 #include "globals2.h"
 
-
-
 namespace EUS {
 
 
@@ -155,6 +153,7 @@ namespace EUS {
     {
         // Retrieve email and password from textboxes
         String^ enteredEmail = emailBox->Text;
+        //big_boi = msclr::interop::marshal_as<string>(enteredEmail);
         String^ enteredPassword = passBox->Text;
 
         // Convert managed String^ to std::string for SQLite

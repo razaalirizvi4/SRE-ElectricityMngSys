@@ -229,7 +229,8 @@ void retrive_appliance_names()
     }
     else
     {
-        MessageBox::Show("Query Ran Successfully");
+        //this asshole was annoying
+        //MessageBox::Show("Query Ran Successfully");
     }
 }
 
