@@ -96,12 +96,12 @@ namespace EUS {
     {
         this->components = gcnew System::ComponentModel::Container();
         this->Size = System::Drawing::Size(600, 400);
-        this->BackColor = Color::FromArgb(235, 245, 235); // Light greenish-white for easy readability
+        this->BackColor = Color::FromArgb(212, 237, 250); // Light greenish-white for easy readability
 
         Label^ label = gcnew Label();
         label->Text = L"Scheduler Page";
         label->Font = gcnew System::Drawing::Font("Arial", 18, FontStyle::Bold);
-        label->ForeColor = Color::FromArgb(218, 165, 32); // Gold color for highlights
+        label->ForeColor = Color::FromArgb(69, 160, 227); // Gold color for highlights
         label->Dock = DockStyle::Top;
         label->TextAlign = ContentAlignment::MiddleCenter;
         this->Controls->Add(label);
@@ -109,14 +109,23 @@ namespace EUS {
         lable = gcnew Label();
         lable->Text = L"Bill";
         lable->Font = gcnew System::Drawing::Font("Arial", 18, FontStyle::Bold);
-        lable->ForeColor = Color::FromArgb(218, 165, 32); // Gold color for highlights
+        lable->ForeColor = Color::FromArgb(69, 160, 227); // Gold color for highlights
         lable->Dock = DockStyle::Top;
         lable->TextAlign = ContentAlignment::MiddleCenter;
         this->Controls->Add(lable);
 
         comboBox = gcnew ComboBox();
-        comboBox->Location = System::Drawing::Point(50, 50); // Set position
+        comboBox->Location = System::Drawing::Point(50, 100); // Set position
         comboBox->Size = System::Drawing::Size(150, 30);    // Set size
+
+        Label^ l = gcnew Label();
+        l = gcnew Label();
+        l->Text = L"Day of the week";
+        l->Font = gcnew System::Drawing::Font("Arial", 15, FontStyle::Bold);
+        l->ForeColor = Color::FromArgb(69, 160, 227); // Gold color for highlights
+        l->Location = System::Drawing::Point(47, 60); // Set position
+        l->AutoSize = true;
+        this->Controls->Add(l);
 
         // Add items to the ComboBox
         comboBox->Items->Add("1");
