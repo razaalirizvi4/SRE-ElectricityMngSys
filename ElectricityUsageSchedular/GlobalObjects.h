@@ -12,5 +12,6 @@ namespace GlobalObjects
         static DataGridView^ Gtable5 = gcnew DataGridView();
         static DataGridView^ Gtable6 = gcnew DataGridView();
         static DataGridView^ Gtable7 = gcnew DataGridView();
+        static DataGridView^ GTable8 = gcnew DataGridView();
     };
 }

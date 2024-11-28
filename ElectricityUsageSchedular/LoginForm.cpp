@@ -139,6 +139,7 @@ namespace EUS {
         makeTable(dailyBill, dailyThreshold, arr);
         GlobalObjectsRaza::Globals::unmanagedGlobals->bill = dailyBill;
         sqlite3_close(GlobalObjectsRaza::Globals::unmanagedGlobals->dbr);
+        
         //CustomMessageForm^ msg = gcnew CustomMessageForm("Login success!", "Login Status", true);
         // msg->Show();
     }

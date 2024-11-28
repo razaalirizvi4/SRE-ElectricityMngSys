@@ -176,6 +176,7 @@ void actuallyMake(vector<schedule_appliance::Appliance> arr, int rowIndex, float
     const float dailyThreshold = monthlyThreshold / 30.0f; // Calculate daily threshold
 
     makeTable(dailyBill, dailyThreshold, arr);
+   // RandomizeTable(GlobalObjects::Globals::Gtable);
 }
 
 int aplcallback(void* data, int argc, char** argv, char** colNames) {

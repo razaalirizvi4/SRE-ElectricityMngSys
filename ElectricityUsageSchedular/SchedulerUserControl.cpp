@@ -50,6 +50,7 @@ namespace EUS {
     {
         GlobalObjects::Globals::Gtable->Location = System::Drawing::Point(00, 310);
         GlobalObjects::Globals::Gtable->Size = System::Drawing::Size(1450, 500);
+        
         this->Controls->Add(GlobalObjects::Globals::Gtable);
         InitializeComponent();
         //retrive_appliance_names();
@@ -81,7 +82,7 @@ namespace EUS {
 
 
     void SchedulerUserControl::updateBillLabel(float finalBill) {
-        lable->Text = "Final Bill: " + System::Convert::ToString(finalBill);
+        lable->Text = "Final Monthly Bill: " + System::Convert::ToString(finalBill);
     }
 
     SchedulerUserControl::~SchedulerUserControl()
@@ -99,7 +100,7 @@ namespace EUS {
         this->BackColor = Color::FromArgb(212, 237, 250); // Light greenish-white for easy readability
 
         Label^ label = gcnew Label();
-        label->Text = L"Scheduler Page";
+        label->Text = L"Weekly Schedule";
         label->Font = gcnew System::Drawing::Font("Arial", 18, FontStyle::Bold);
         label->ForeColor = Color::FromArgb(69, 160, 227); // Gold color for highlights
         label->Dock = DockStyle::Top;
@@ -148,6 +149,7 @@ namespace EUS {
         this->Controls->Add(comboBox);
         GlobalObjects::Globals::Gtable->Location = System::Drawing::Point(00, 310);
         GlobalObjects::Globals::Gtable->Size = System::Drawing::Size(1450, 500);
+        RandomizeTable(GlobalObjects::Globals::Gtable);
         this->Controls->Add(GlobalObjects::Globals::Gtable);
         
         InitializeTable1(GlobalObjects::Globals::Gtable2);
@@ -162,6 +164,8 @@ namespace EUS {
         RandomizeTable(GlobalObjects::Globals::Gtable6);
         InitializeTable1(GlobalObjects::Globals::Gtable7);
         RandomizeTable(GlobalObjects::Globals::Gtable7);
+        InitializeTable1(GlobalObjects::Globals::GTable8);
+        RandomizeTable(GlobalObjects::Globals::GTable8);
     }
 
     
@@ -185,7 +189,7 @@ namespace EUS {
         // Determine which table to show and add it to the Controls
         DataGridView^ selectedTable = nullptr;
 
-        if (selectedValue == "1") selectedTable = GlobalObjects::Globals::Gtable;
+        if (selectedValue == "1") selectedTable = GlobalObjects::Globals::GTable8;
         else if (selectedValue == "2") selectedTable = GlobalObjects::Globals::Gtable2;
         else if (selectedValue == "3") selectedTable = GlobalObjects::Globals::Gtable3;
         else if (selectedValue == "4") selectedTable = GlobalObjects::Globals::Gtable4;
