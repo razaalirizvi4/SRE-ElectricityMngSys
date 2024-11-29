@@ -6,40 +6,40 @@
 
 
 
-void InitializeTable1(System::Windows::Forms::DataGridView^ targetTable) {
-    // Clear the target table
-    targetTable->Rows->Clear();
-    targetTable->Columns->Clear();
-
-    targetTable->AutoSizeColumnsMode = System::Windows::Forms::DataGridViewAutoSizeColumnsMode::Fill;
-    targetTable ->ColumnHeadersVisible = true;
-    targetTable->RowHeadersVisible = false;
-    targetTable->AllowUserToAddRows = false;
-
-    // Copy column structure from Gtable
-    for (int i = 0; i < GlobalObjects::Globals::Gtable->ColumnCount; ++i) {
-        auto newColumn = gcnew System::Windows::Forms::DataGridViewTextBoxColumn();
-        newColumn->HeaderText = GlobalObjects::Globals::Gtable->Columns[i]->HeaderText;
-        newColumn->Width = GlobalObjects::Globals::Gtable->Columns[i]->Width;
-        targetTable->Columns->Add(newColumn);
-    }
-
-    // Copy row data from Gtable
-    for (int i = 0; i < GlobalObjects::Globals::Gtable->RowCount; ++i) {
-        // Create a new row for the target table
-        System::Windows::Forms::DataGridViewRow^ newRow = gcnew System::Windows::Forms::DataGridViewRow();
-
-        // Copy each cell's value from Gtable to the new row
-        for (int j = 0; j < GlobalObjects::Globals::Gtable->ColumnCount; ++j) {
-            System::Windows::Forms::DataGridViewCell^ newCell = gcnew System::Windows::Forms::DataGridViewTextBoxCell();
-            newCell->Value = GlobalObjects::Globals::Gtable->Rows[i]->Cells[j]->Value;
-            newRow->Cells->Add(newCell);
-        }
-
-        // Add the newly created row to the target table
-        targetTable->Rows->Add(newRow);
-    }
-}
+//void InitializeTable1(System::Windows::Forms::DataGridView^ targetTable) {
+//    // Clear the target table
+//    targetTable->Rows->Clear();
+//    targetTable->Columns->Clear();
+//
+//    targetTable->AutoSizeColumnsMode = System::Windows::Forms::DataGridViewAutoSizeColumnsMode::Fill;
+//    targetTable ->ColumnHeadersVisible = true;
+//    targetTable->RowHeadersVisible = false;
+//    targetTable->AllowUserToAddRows = false;
+//
+//    // Copy column structure from Gtable
+//    for (int i = 0; i < GlobalObjects::Globals::Gtable->ColumnCount; ++i) {
+//        auto newColumn = gcnew System::Windows::Forms::DataGridViewTextBoxColumn();
+//        newColumn->HeaderText = GlobalObjects::Globals::Gtable->Columns[i]->HeaderText;
+//        newColumn->Width = GlobalObjects::Globals::Gtable->Columns[i]->Width;
+//        targetTable->Columns->Add(newColumn);
+//    }
+//
+//    // Copy row data from Gtable
+//    for (int i = 0; i < GlobalObjects::Globals::Gtable->RowCount; ++i) {
+//        // Create a new row for the target table
+//        System::Windows::Forms::DataGridViewRow^ newRow = gcnew System::Windows::Forms::DataGridViewRow();
+//
+//        // Copy each cell's value from Gtable to the new row
+//        for (int j = 0; j < GlobalObjects::Globals::Gtable->ColumnCount; ++j) {
+//            System::Windows::Forms::DataGridViewCell^ newCell = gcnew System::Windows::Forms::DataGridViewTextBoxCell();
+//            newCell->Value = GlobalObjects::Globals::Gtable->Rows[i]->Cells[j]->Value;
+//            newRow->Cells->Add(newCell);
+//        }
+//
+//        // Add the newly created row to the target table
+//        targetTable->Rows->Add(newRow);
+//    }
+//}
 
 
 
@@ -48,6 +48,7 @@ namespace EUS {
 
     SchedulerUserControl::SchedulerUserControl(void)
     {
+        selectedweek = 0;
         GlobalObjects::Globals::Gtable->Location = System::Drawing::Point(00, 310);
         GlobalObjects::Globals::Gtable->Size = System::Drawing::Size(1450, 500);
         
@@ -65,7 +66,7 @@ namespace EUS {
         vector<schedule_appliance::Appliance> arr = sortit(GlobalObjectsRaza::Globals::unmanagedGlobals->apl, 0);
 
         float dailyBill = 0.0f;
-        const float monthlyThreshold = 50000.0f;
+        const float monthlyThreshold = 60000.0f;
 
         const float dailyThreshold = monthlyThreshold / 30.0f; // Calculate daily threshold
         initializeTable();
@@ -119,6 +120,10 @@ namespace EUS {
         comboBox->Location = System::Drawing::Point(50, 100); // Set position
         comboBox->Size = System::Drawing::Size(150, 30);    // Set size
 
+        comboBoxWeek = gcnew ComboBox();
+        comboBoxWeek->Location = System::Drawing::Point(50, 150); // Set position
+        comboBoxWeek->Size = System::Drawing::Size(150, 30);
+
         Label^ l = gcnew Label();
         l = gcnew Label();
         l->Text = L"Day of the week";
@@ -138,34 +143,29 @@ namespace EUS {
         comboBox->Items->Add("7");
         //comboBox->Items->Add("Option 3");
 
+        comboBoxWeek->Items->Add("1");
+        comboBoxWeek->Items->Add("2");
+        comboBoxWeek->Items->Add("3");
+        comboBoxWeek->Items->Add("4");
+
         // Set default selected item
         comboBox->SelectedIndex = 0;
+        comboBoxWeek->SelectedIndex = 0;
 
         // Add an event handler for selected item changes
         comboBox->SelectedIndexChanged += gcnew System::EventHandler(this, &EUS::SchedulerUserControl::OnColumnDropdownChanged);
+        comboBoxWeek->SelectedIndexChanged += gcnew System::EventHandler(this, &EUS::SchedulerUserControl::OnWeekDropdownChanged);
 
 
         // Add the ComboBox to the form
         this->Controls->Add(comboBox);
+        this->Controls->Add(comboBoxWeek);
         GlobalObjects::Globals::Gtable->Location = System::Drawing::Point(00, 310);
         GlobalObjects::Globals::Gtable->Size = System::Drawing::Size(1450, 500);
         RandomizeTable(GlobalObjects::Globals::Gtable);
         this->Controls->Add(GlobalObjects::Globals::Gtable);
         
-        InitializeTable1(GlobalObjects::Globals::Gtable2);
-        RandomizeTable(GlobalObjects::Globals::Gtable2);
-        InitializeTable1(GlobalObjects::Globals::Gtable3);
-        RandomizeTable(GlobalObjects::Globals::Gtable3);
-        InitializeTable1(GlobalObjects::Globals::Gtable4);
-        RandomizeTable(GlobalObjects::Globals::Gtable4);
-        InitializeTable1(GlobalObjects::Globals::Gtable5);
-        RandomizeTable(GlobalObjects::Globals::Gtable5);
-        InitializeTable1(GlobalObjects::Globals::Gtable6);
-        RandomizeTable(GlobalObjects::Globals::Gtable6);
-        InitializeTable1(GlobalObjects::Globals::Gtable7);
-        RandomizeTable(GlobalObjects::Globals::Gtable7);
-        InitializeTable1(GlobalObjects::Globals::GTable8);
-        RandomizeTable(GlobalObjects::Globals::GTable8);
+        
     }
 
     
@@ -189,13 +189,13 @@ namespace EUS {
         // Determine which table to show and add it to the Controls
         DataGridView^ selectedTable = nullptr;
 
-        if (selectedValue == "1") selectedTable = GlobalObjects::Globals::GTable8;
-        else if (selectedValue == "2") selectedTable = GlobalObjects::Globals::Gtable2;
-        else if (selectedValue == "3") selectedTable = GlobalObjects::Globals::Gtable3;
-        else if (selectedValue == "4") selectedTable = GlobalObjects::Globals::Gtable4;
-        else if (selectedValue == "5") selectedTable = GlobalObjects::Globals::Gtable5;
-        else if (selectedValue == "6") selectedTable = GlobalObjects::Globals::Gtable6;
-        else if (selectedValue == "7") selectedTable = GlobalObjects::Globals::Gtable7;
+        if (selectedValue == "1") selectedTable = GlobalObjects::Globals::monthlyTables[selectedweek]->Gtable1;
+        else if (selectedValue == "2") selectedTable = GlobalObjects::Globals::monthlyTables[selectedweek]->Gtable2;
+        else if (selectedValue == "3") selectedTable = GlobalObjects::Globals::monthlyTables[selectedweek]->Gtable3;
+        else if (selectedValue == "4") selectedTable = GlobalObjects::Globals::monthlyTables[selectedweek]->Gtable4;
+        else if (selectedValue == "5") selectedTable = GlobalObjects::Globals::monthlyTables[selectedweek]->Gtable5;
+        else if (selectedValue == "6") selectedTable = GlobalObjects::Globals::monthlyTables[selectedweek]->Gtable6;
+        else if (selectedValue == "7") selectedTable = GlobalObjects::Globals::monthlyTables[selectedweek]->GTable7;
 
         if (selectedTable != nullptr) {
             // Set table position and size
@@ -209,6 +209,20 @@ namespace EUS {
         // Ensure layout is refreshed
         this->Refresh();
     }
+
+    void SchedulerUserControl::OnWeekDropdownChanged(System::Object^ sender, System::EventArgs^ e) {
+        if (comboBoxWeek->SelectedIndex != -1) { // Ensure an item is selected
+            // Set the global variable based on the selected index
+            selectedweek = comboBoxWeek->SelectedIndex;
+
+            // Update the comboBox value to "1"
+            comboBox->SelectedIndex = 0; // 0 corresponds to "1" in the comboBox
+
+            // Manually trigger the OnColumnDropdownChanged handler to refresh the table
+            OnColumnDropdownChanged(comboBox, EventArgs::Empty);
+        }
+    }
+
 
 
 

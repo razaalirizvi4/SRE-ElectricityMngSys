@@ -1,7 +1,9 @@
 #pragma once
+#include "week.h"
 namespace GlobalObjects
 {
     using namespace System::Windows::Forms;
+    using namespace System::Collections::Generic;
     public ref class Globals
     {
     public:
@@ -13,5 +15,6 @@ namespace GlobalObjects
         static DataGridView^ Gtable6 = gcnew DataGridView();
         static DataGridView^ Gtable7 = gcnew DataGridView();
         static DataGridView^ GTable8 = gcnew DataGridView();
+        static List<Week::Tables^>^ monthlyTables = gcnew List<Week::Tables^>();
     };
 }

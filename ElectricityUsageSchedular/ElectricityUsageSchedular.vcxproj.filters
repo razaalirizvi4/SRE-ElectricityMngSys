@@ -71,6 +71,9 @@
     <ClInclude Include="globals2.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="week.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CppCLR_WinFormsProject.cpp">

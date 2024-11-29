@@ -4,6 +4,7 @@
 #include <vector>
 #include <sqlite3.h>
 #include "helperStructs.h"
+#include "week.h"
 
 class UnmanagedGlobals
 {
@@ -14,6 +15,7 @@ public:
     sqlite3* dbr;
     char* errmsgr;
     float bill;
+    
     UnmanagedGlobals() {
         errmsgr = nullptr;
     }
