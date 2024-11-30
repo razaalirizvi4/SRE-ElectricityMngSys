@@ -6,6 +6,7 @@
 #include<sqlite3.h>
 #include <msclr/marshal_cppstd.h>
 #include "globals2.h"
+#include"RoundedRectangle.h"
 
 void InitializeTable1(System::Windows::Forms::DataGridView^ targetTable) {
     // Clear the target table
@@ -42,7 +43,8 @@ void InitializeTable1(System::Windows::Forms::DataGridView^ targetTable) {
     }
 }
 
-namespace EUS {
+namespace EUS 
+{
 
 
     LoginForm::LoginForm(void)
@@ -60,17 +62,24 @@ namespace EUS {
 
     void LoginForm::InitializeComponent(void)
     {
-        //Initialize variables
+        //Initialize
         insideTextBox = false;
 
         //Initialize containter
         this->components = gcnew System::ComponentModel::Container();
         this->Size = System::Drawing::Size(1200, 720);
         this->Text = L"Login";
+        this->BackgroundImage = System::Drawing::Image::FromFile("backdrop.jpg");
+        this->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
 
-        this->BackColor = Color::FromArgb(240, 248, 255);
-
-        // Create the login button and make it smaller
+        //Initialize panel (rounded)(bg1)
+        Panel^ backpanel1 = gcnew Panel();
+        backpanel1->Size = System::Drawing::Size(400,600);
+        backpanel1->Location = System::Drawing::Point(410, 50);
+        backpanel1->BackColor = Color::FromArgb(30, 30, 30);
+        ApplyRoundedRectangleToPanel(backpanel1, 20);
+        
+        //Initialize login button
         btnLogin = gcnew Button();
         btnLogin->Text = L"Login";
         btnLogin->Size = System::Drawing::Size(100, 50);
@@ -79,9 +88,9 @@ namespace EUS {
         btnLogin->ForeColor = Color::White;
         btnLogin->Click += gcnew EventHandler(this, &LoginForm::OnLoginClick);
 
-        this->Controls->Add(btnLogin);
+        
 
-        // Create the button to move to register page
+        //Initialize to register button
         btnToRegister = gcnew Button();
         btnToRegister->Text = L"Register";
         btnToRegister->Size = System::Drawing::Size(100, 50);
@@ -90,7 +99,7 @@ namespace EUS {
         btnToRegister->ForeColor = Color::White;
         btnToRegister->Click += gcnew EventHandler(this, &LoginForm::MoveToRegister);
 
-        this->Controls->Add(btnToRegister);
+
 
         //Email label and textbox
         emailText = gcnew Label();
@@ -98,7 +107,9 @@ namespace EUS {
         emailText->AutoSize = true;
         emailText->Location = System::Drawing::Point(500, 100);
         emailText->Font = gcnew System::Drawing::Font("Courier New", 18, System::Drawing::FontStyle::Bold);
-        this->Controls->Add(emailText);
+        emailText->BackColor = Color::FromArgb(30, 30, 30);
+        emailText->ForeColor = Color::FromArgb(80, 116, 174);
+
 
         emailBox = gcnew TextBox();
         emailBox->Size = System::Drawing::Size(200, 30);
@@ -106,7 +117,9 @@ namespace EUS {
         emailBox->GotFocus += gcnew EventHandler(this, &LoginForm::InsideTextBox);
         emailBox->LostFocus += gcnew EventHandler(this, &LoginForm::OutsideTextBox);
         emailBox->KeyDown += gcnew KeyEventHandler(this, &LoginForm::OnEnterPressed);
-        this->Controls->Add(emailBox);
+        emailBox->BackColor = Color::FromArgb(30, 30, 30);
+        emailBox->BorderStyle= BorderStyle::FixedSingle;
+
 
         // Password label and textbox
         passText = gcnew Label();
@@ -114,7 +127,9 @@ namespace EUS {
         passText->AutoSize = true;
         passText->Location = System::Drawing::Point(500, 180);
         passText->Font = gcnew System::Drawing::Font("Courier New", 18, System::Drawing::FontStyle::Bold);
-        this->Controls->Add(passText);
+        passText->BackColor = Color::FromArgb(30, 30, 30);
+        passText->ForeColor = Color::FromArgb(80, 116, 174);
+
 
         passBox = gcnew TextBox();
         passBox->Size = System::Drawing::Size(200, 30);
@@ -123,8 +138,20 @@ namespace EUS {
         passBox->LostFocus += gcnew EventHandler(this, &LoginForm::OutsideTextBox);
         passBox->KeyDown += gcnew KeyEventHandler(this, &LoginForm::OnEnterPressed);
         passBox->PasswordChar = '*';
-        this->Controls->Add(passBox);
+        passBox->BackColor = Color::FromArgb(30, 30, 30);
+        passBox->BorderStyle= BorderStyle::FixedSingle;
+        
 
+
+        //Add to controls order for display
+        this->Controls->Add(passBox);
+        this->Controls->Add(passText);
+        this->Controls->Add(emailBox);
+        this->Controls->Add(emailText);
+        this->Controls->Add(btnToRegister);
+        this->Controls->Add(btnLogin);
+        this->Controls->Add(backpanel1);
+        
 
     }
 
@@ -441,6 +468,15 @@ namespace EUS {
         }
         sqlite3_finalize(stmt);
         sqlite3_close(db);
+    }
+
+
+   void LoginForm::ApplyRoundedRectangleToPanel(Panel^ panel, int radius) {
+        System::Drawing::Drawing2D::GraphicsPath^ path = RoundedRectangles::RoundedRectangle::Create(
+            0, 0, panel->Width, panel->Height, radius,
+            RoundedRectangles::RoundedRectangle::RectangleCorners::All
+        );
+        panel->Region = gcnew System::Drawing::Region(path);
     }
 
 

@@ -47,6 +47,9 @@ namespace EUS {
         void InsideTextBox(Object^ sender, EventArgs^ e);
         void OutsideTextBox(Object^ sender, EventArgs^ e);
         void FetchDetailsOnLogin();
+
+        void ApplyRoundedRectangleToPanel(Panel^ panel, int radius);
+
     };
 
     class UserData
