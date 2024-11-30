@@ -2,13 +2,15 @@
 #include "AnalyticsUserControl.h"
 #include"week.h"
 
-namespace EUS {
+namespace EUS
+{
 
         AnalyticsUserControl::AnalyticsUserControl(void)
         {
             InitializeComponent();
             this->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &AnalyticsUserControl::MakePieChart);
             this->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &AnalyticsUserControl::MakeBarChart);
+            this->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &AnalyticsUserControl::MakeLineChart);
             this->DoubleBuffered = true;  // Add this line for smoother rendering
         }
 
@@ -254,7 +256,7 @@ namespace EUS {
 
             //text under pie chart
             Label^ PieLabel = gcnew Label();
-            PieLabel->Text = L"Each Appliance's energy\n\tConsumption";
+            PieLabel->Text = L"Top Most Energy Consuming\n\tAppliances";
             PieLabel->Font = gcnew System::Drawing::Font("Arial", 18, FontStyle::Bold);
             PieLabel->ForeColor = Color::FromArgb(69, 160, 227);
             PieLabel->AutoSize = true;
@@ -475,7 +477,7 @@ namespace EUS {
 
             //text under bar chart
             Label^ BarLabel = gcnew Label();
-            BarLabel->Text = L"Energy Consumed each\n\tHour";
+            BarLabel->Text = L"Energy Consumed each\n\tWeek";
             BarLabel->Font = gcnew System::Drawing::Font("Arial", 18, FontStyle::Bold);
             BarLabel->ForeColor = Color::FromArgb(69, 160, 227);
             BarLabel->AutoSize = true;
@@ -483,4 +485,212 @@ namespace EUS {
             BarLabel->TextAlign = ContentAlignment::MiddleCenter;
             this->Controls->Add(BarLabel);
         }
-    };
+        
+        void AnalyticsUserControl::MakeLineChart(Object^ sender, PaintEventArgs^ e)
+        {
+
+            Week::Tables^ week1 = GlobalObjects::Globals::monthlyTables[0];
+            Week::Tables^ week2 = GlobalObjects::Globals::monthlyTables[1];
+            Week::Tables^ week3 = GlobalObjects::Globals::monthlyTables[2];
+            Week::Tables^ week4 = GlobalObjects::Globals::monthlyTables[3];
+
+            int totalAppliances = week1->Gtable1->Rows->Count;
+            int W1oh = 0;
+            int W1fh = 0;
+            int W2oh = 0;
+            int W2fh = 0;
+            int W3oh = 0;
+            int W3fh = 0;
+            int W4oh = 0;
+            int W4fh = 0;
+
+            array<DataGridView^>^ ArrayW1 = gcnew array<DataGridView^>(7);
+            ArrayW1[0] = week1->Gtable1;
+            ArrayW1[1] = week1->Gtable2;
+            ArrayW1[2] = week1->Gtable3;
+            ArrayW1[3] = week1->Gtable4;
+            ArrayW1[4] = week1->Gtable5;
+            ArrayW1[5] = week1->Gtable6;
+            ArrayW1[6] = week1->GTable7;
+
+            array<DataGridView^>^ ArrayW2 = gcnew array<DataGridView^>(7);
+            ArrayW2[0] = week2->Gtable1;
+            ArrayW2[1] = week2->Gtable2;
+            ArrayW2[2] = week2->Gtable3;
+            ArrayW2[3] = week2->Gtable4;
+            ArrayW2[4] = week2->Gtable5;
+            ArrayW2[5] = week2->Gtable6;
+            ArrayW2[6] = week2->GTable7;
+
+            array<DataGridView^>^ ArrayW3 = gcnew array<DataGridView^>(7);
+            ArrayW3[0] = week3->Gtable1;
+            ArrayW3[1] = week3->Gtable2;
+            ArrayW3[2] = week3->Gtable3;
+            ArrayW3[3] = week3->Gtable4;
+            ArrayW3[4] = week3->Gtable5;
+            ArrayW3[5] = week3->Gtable6;
+            ArrayW3[6] = week3->GTable7;
+
+            array<DataGridView^>^ ArrayW4 = gcnew array<DataGridView^>(7);
+            ArrayW4[0] = week4->Gtable1;
+            ArrayW4[1] = week4->Gtable2;
+            ArrayW4[2] = week4->Gtable3;
+            ArrayW4[3] = week4->Gtable4;
+            ArrayW4[4] = week4->Gtable5;
+            ArrayW4[5] = week4->Gtable6;
+            ArrayW4[6] = week4->GTable7;
+
+            int count = 0;
+            for (int k = 0; k < 7; k++)         //for each day in week1
+            {
+                for (int i = 0; i < totalAppliances; i++)   //for each appliance
+                {
+                    count = 0;
+                    for (int j = 1; j < 24; j++)            //for each hour of the day
+                    {
+                        if (ArrayW1[k]->Rows[i]->Cells[j]->Value == "+")
+                        {
+                            count++;
+                        }
+                    }
+                }
+            }
+            W1oh += count;
+            W1fh = 168 - W1oh;
+
+            count = 0;
+            for (int k = 0; k < 7; k++)         //for each day in week2
+            {
+                for (int i = 0; i < totalAppliances; i++)   //for each appliance
+                {
+                    count = 0;
+                    for (int j = 1; j < 24; j++)            //for each hour of the day
+                    {
+                        if (ArrayW2[k]->Rows[i]->Cells[j]->Value == "+")
+                        {
+                            count++;
+                        }
+                    }
+                }
+            }
+            W2oh += count;
+            W2fh = 168 - W2oh;
+
+            count = 0;
+            for (int k = 0; k < 7; k++)         //for each day in week3
+            {
+                for (int i = 0; i < totalAppliances; i++)   //for each appliance
+                {
+                    count = 0;
+                    for (int j = 1; j < 24; j++)            //for each hour of the day
+                    {
+                        if (ArrayW3[k]->Rows[i]->Cells[j]->Value == "+")
+                        {
+                            count++;
+                        }
+                    }
+                }
+            }
+            W3oh += count;
+            W3fh = 168 - W3oh;
+
+            count = 0;
+            for (int k = 0; k < 7; k++)         //for each day in week4
+            {
+                for (int i = 0; i < totalAppliances; i++)   //for each appliance
+                {
+                    count = 0;
+                    for (int j = 1; j < 24; j++)            //for each hour of the day
+                    {
+                        if (ArrayW4[k]->Rows[i]->Cells[j]->Value == "+")
+                        {
+                            count++;
+                        }
+                    }
+                }
+            }
+            W4oh += count;
+            W4fh = 168 - W4oh;
+
+            // Sample data
+            array<float>^ week1Values = { W1oh, W2oh, W3oh, W4oh };
+            array<float>^ week2Values = { W1fh, W2fh, W3fh, W4fh };
+            array<String^>^ labels = { "Week 1", "Week 2", "Week 3", "Week 4" };
+
+            // Calculate colors for the lines
+            array<Color>^ week1Color = { Color::FromArgb(46, 138, 205) };
+            array<Color>^ week2Color = { Color::FromArgb(96, 188, 255) };
+
+            // Set up graphics
+            Graphics^ g = e->Graphics;
+            g->SmoothingMode = Drawing2D::SmoothingMode::AntiAlias;
+
+            // Define chart area
+            int marginLeft = 400;
+            int marginRight = 600;
+            int marginTop = 450;
+            int marginBottom = 70;
+            int x = marginLeft;
+            int y = marginTop;
+            int width = this->Width - (marginLeft + marginRight);
+            int height = this->Height - (marginTop + marginBottom);
+
+            // Calculate the maximum value for scaling
+            float maxValue = 0;
+            for each (float value in week1Values) {
+                if (value > maxValue) maxValue = value;
+            }
+            for each (float value in week2Values) {
+                if (value > maxValue) maxValue = value;
+            }
+
+            // Calculate line properties
+            int lineWidth = 3;
+            float scaleY = (height - 50) / maxValue;
+
+            // Draw lines and labels
+            System::Drawing::Font^ labelFont = gcnew System::Drawing::Font("Arial", 12);
+
+            // Draw Week 1 line
+            array<PointF>^ week1Points = gcnew array<PointF>(week1Values->Length);
+            for (int i = 0; i < week1Values->Length; i++) {
+                week1Points[i] = PointF(x + (i * (width / (week1Values->Length - 1))), y + height - (week1Values[i] * scaleY));
+            }
+            g->DrawLines(gcnew Pen(week1Color[0], lineWidth), week1Points);
+
+            // Draw Week 2 line
+            array<PointF>^ week2Points = gcnew array<PointF>(week2Values->Length);
+            for (int i = 0; i < week2Values->Length; i++) {
+                week2Points[i] = PointF(x + (i * (width / (week2Values->Length - 1))), y + height - (week2Values[i] * scaleY));
+            }
+            g->DrawLines(gcnew Pen(week2Color[0], lineWidth), week2Points);
+
+            // Draw x-axis
+            Pen^ axisPen = gcnew Pen(Color::Black, 2);
+            g->DrawLine(axisPen, x, y + height, x + width, y + height);
+
+            // Draw y-axis
+            g->DrawLine(axisPen, x, y, x, y + height);
+
+            // Draw labels
+            for (int i = 0; i < labels->Length; i++) {
+                SizeF labelSize = g->MeasureString(labels[i], labelFont);
+                g->DrawString(labels[i],
+                    labelFont,
+                    Brushes::Black,
+                    x + (i * (width / (labels->Length - 1))) - (labelSize.Width / 2),
+                    y + height + 10);
+            }
+
+            // Draw legend
+            int legendX = x + width + 30;
+            int legendY = y+150;
+            g->FillRectangle(gcnew SolidBrush(week1Color[0]), legendX, legendY, 20, 20);
+            g->DrawRectangle(Pens::Black, legendX, legendY, 20, 20);
+            g->DrawString("Applainces Left On Duration", labelFont, Brushes::Black, legendX + 25, legendY);
+
+            g->FillRectangle(gcnew SolidBrush(week2Color[0]), legendX, legendY + 30, 20, 20);
+            g->DrawRectangle(Pens::Black, legendX, legendY + 30, 20, 20);
+            g->DrawString("Appliances Left Off Duration", labelFont, Brushes::Black, legendX + 25, legendY + 30);
+        }
+};

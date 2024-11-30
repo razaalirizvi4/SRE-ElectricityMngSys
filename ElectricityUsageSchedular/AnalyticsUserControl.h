@@ -24,6 +24,7 @@ namespace EUS
             System::ComponentModel::Container^ components;
             void MakePieChart(Object^ sender, PaintEventArgs^ e);
             void MakeBarChart(Object^ sender, PaintEventArgs^ e);
+            void MakeLineChart(Object^ sender, PaintEventArgs^ e);
             void InitializeComponent(void);
     };
 }
