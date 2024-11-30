@@ -46,20 +46,23 @@ namespace EUS {
         void OnEnterPressed(Object^ sender,KeyEventArgs^e);
         void InsideTextBox(Object^ sender, EventArgs^ e);
         void OutsideTextBox(Object^ sender, EventArgs^ e);
+        void FetchDetailsOnLogin();
     };
 
     class UserData
     {
     public:
         static int userid;
-        static string username;
-        static string useremail;
-        static string userpassword;
-        static string userprovince;
-        static string usercity;
-        static string userarea;
-        static string userpeakstart;
-        static string userpeakend;
+        static std::string username;
+        static std::string useremail;
+        static std::string userpassword;
+        static std::string userprovince;
+        static std::string usercity;
+        static std::string userarea;
+        static std::string userpeakstart;
+        static std::string userpeakend;
+
+        UserData();
 
     };
 

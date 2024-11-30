@@ -132,6 +132,7 @@ namespace EUS {
     {
         if (LoginCheck())
         {
+            FetchDetailsOnLogin();
             LoginSuccess();
             return;
         }
@@ -281,7 +282,8 @@ namespace EUS {
         if (sqlite3_step(stmt) == SQLITE_ROW)
         {
             int count = sqlite3_column_int(stmt, 0);
-            if (count > 0) {
+            if (count > 0) 
+            {
                 loginSuccessful = true; // Match found
             }
         }
@@ -305,6 +307,7 @@ namespace EUS {
         {
             if (LoginCheck())
             {
+                FetchDetailsOnLogin();
                 LoginSuccess();
                 return;
             }
@@ -321,6 +324,123 @@ namespace EUS {
     void LoginForm::OutsideTextBox(Object^ sender, EventArgs^ e)
     {
         insideTextBox = false;
+    }
+
+
+    UserData::UserData()
+    {
+        userid = -1;
+        username = "";
+        useremail = "";
+        userpassword = "";
+        userprovince = "";
+        usercity = "";
+        userarea = "";
+        userpeakstart = "";
+        userpeakend = "";
+    }
+
+    // Initialize static variables
+    int EUS::UserData::userid = 0;                        // Set to some initial value
+    std::string EUS::UserData::username = "default_user";  // Set to some initial value
+    std::string EUS::UserData::useremail = "example@email.com";  // Set to some initial value
+    std::string EUS::UserData::userpassword = "default_password"; // Set to some initial value
+    std::string EUS::UserData::userprovince = "default_province"; // Set to some initial value
+    std::string EUS::UserData::usercity = "default_city";        // Set to some initial value
+    std::string EUS::UserData::userarea = "default_area";        // Set to some initial value
+    std::string EUS::UserData::userpeakstart = "some initial value"; // Set to some initial value
+    std::string EUS::UserData::userpeakend = "some initial value";   // Set to some initial value
+
+    void LoginForm::FetchDetailsOnLogin()
+    {
+        String^ enteredEmail = emailBox->Text;
+        String^ enteredPassword = passBox->Text;
+
+        // Convert managed String^ to std::string for SQLite
+        msclr::interop::marshal_context context;
+        std::string email = context.marshal_as<std::string>(enteredEmail);
+        std::string password = context.marshal_as<std::string>(enteredPassword);
+
+        sqlite3* db;
+        sqlite3_stmt* stmt;
+        int rc = sqlite3_open("user_management.db", &db);
+
+        if (rc != SQLITE_OK) {
+            MessageBox::Show("Failed to open database!");
+            return;
+        }
+
+        // Prepare SQL for login query
+        std::string sql = "SELECT User_ID, User_Email, User_Name, User_Password, User_Province, User_City, User_Area FROM Users WHERE User_Email = ? AND User_Password = ?";
+        rc = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr);
+        if (rc != SQLITE_OK) {
+            MessageBox::Show("Failed to prepare SQL statement!");
+            sqlite3_finalize(stmt);
+            sqlite3_close(db);
+            return;
+        }
+
+        sqlite3_bind_text(stmt, 1, email.c_str(), -1, SQLITE_STATIC);
+        sqlite3_bind_text(stmt, 2, password.c_str(), -1, SQLITE_STATIC);
+
+        rc = sqlite3_step(stmt);
+        if (rc == SQLITE_ROW) {
+            int userID = sqlite3_column_int(stmt, 0);
+            const unsigned char* userEmail = sqlite3_column_text(stmt, 1);
+            const unsigned char* userName = sqlite3_column_text(stmt, 2);
+            const unsigned char* userPassword = sqlite3_column_text(stmt, 3);
+            const unsigned char* userProvince = sqlite3_column_text(stmt, 4);
+            const unsigned char* userCity = sqlite3_column_text(stmt, 5);
+            const unsigned char* userArea = sqlite3_column_text(stmt, 6);
+
+            std::string userEmailStr(reinterpret_cast<const char*>(userEmail));
+            std::string userNameStr(reinterpret_cast<const char*>(userName));
+            std::string userPasswordStr(reinterpret_cast<const char*>(userPassword));
+            std::string userProvinceStr(reinterpret_cast<const char*>(userProvince));
+            std::string userCityStr(reinterpret_cast<const char*>(userCity));
+            std::string userAreaStr(reinterpret_cast<const char*>(userArea));
+
+            // Store static data in UserData class
+            UserData::userid = userID;
+            UserData::username = userNameStr;
+            UserData::useremail = userEmailStr;
+            UserData::userpassword = userPasswordStr;
+            UserData::userprovince = userProvinceStr;
+            UserData::usercity = userCityStr;
+            UserData::userarea = userAreaStr;
+        }
+        sqlite3_finalize(stmt);
+
+        // Fetch additional area details (PeakStart, PeakEnd)
+        std::string uarea = UserData::userarea;
+
+        sql = "SELECT Peak_Start, Peak_End FROM Areas WHERE Area = ?";
+
+        rc = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr);
+
+        if (rc != SQLITE_OK) 
+        {
+            MessageBox::Show("Failed to prepare area query!");
+            sqlite3_finalize(stmt);
+            sqlite3_close(db);
+            return;
+        }
+        sqlite3_bind_text(stmt, 1, uarea.c_str(), -1, SQLITE_STATIC);
+
+        rc = sqlite3_step(stmt);
+        if (rc == SQLITE_ROW) 
+        {
+            const unsigned char* pstart = sqlite3_column_text(stmt, 0);
+            const unsigned char* pend = sqlite3_column_text(stmt, 1);
+
+            std::string pstarti(reinterpret_cast<const char*>(pstart));
+            std::string pendi(reinterpret_cast<const char*>(pend));
+
+            UserData::userpeakstart = pstarti;
+            UserData::userpeakend = pendi;
+        }
+        sqlite3_finalize(stmt);
+        sqlite3_close(db);
     }
 
 
