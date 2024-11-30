@@ -302,8 +302,103 @@ void CheckConditionInBackground()
         struct tm localTime;
         localtime_s(&localTime, &now);
 
-        // Check if the time is 3:37 AM
-        if (localTime.tm_hour == 6 && localTime.tm_min == 52)
+        //get peak hours of the logged in user
+        sqlite3* db;
+        int rc = sqlite3_open("user_management.db", &db);
+        if (rc != SQLITE_OK)
+        {
+            System::Windows::Forms::MessageBox::Show("Failed to open database!");
+            return;
+        }
+
+        string loggedInEmail = "a@a.com"; // Replace this with the logged-in user's email
+        string city = "";  // Variable to store the fetched city
+        string area = "";
+        int start = -1;
+        int end = -1;
+
+        // Step 1: Fetch User_City and User_Area from the Users table
+        string query = "SELECT User_City, User_Area FROM Users WHERE User_Email = ?";
+        sqlite3_stmt* stmt;
+
+        if (sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, nullptr) == SQLITE_OK)
+        {
+            // Bind the logged-in user's email to the placeholder
+            sqlite3_bind_text(stmt, 1, loggedInEmail.c_str(), -1, SQLITE_STATIC);
+
+            if (sqlite3_step(stmt) == SQLITE_ROW)
+            {
+                const char* userCity = (const char*)sqlite3_column_text(stmt, 0);
+                const char* userArea = (const char*)sqlite3_column_text(stmt, 1);
+
+                if (userCity != nullptr) city = userCity; // Store the city
+                if (userArea != nullptr) area = userArea; // Store the area
+            }
+            else
+            {
+                System::Windows::Forms::MessageBox::Show("No data found for the specified user.");
+            }
+
+            sqlite3_finalize(stmt);
+        }
+        else
+        {
+            System::Windows::Forms::MessageBox::Show("Failed to prepare SQL statement.");
+        }
+
+        sqlite3_close(db);
+
+        //----------------------------------------------------------------------------------------------------//
+
+        sqlite3* db1;
+        int rc1 = sqlite3_open("user_management.db", &db1);
+        if (rc1 != SQLITE_OK)
+        {
+            System::Windows::Forms::MessageBox::Show("Failed to open database!");
+            return;
+        }
+
+        // Step 2: Fetch Peak_Start and Peak_End from the Areas table
+        string query1 = "SELECT Peak_Start, Peak_End FROM Areas WHERE City = ? AND Area = ?";
+        sqlite3_stmt* stmt1;
+
+        if (sqlite3_prepare_v2(db1, query1.c_str(), -1, &stmt1, nullptr) == SQLITE_OK)
+        {
+            // Bind city and area to the placeholders
+            sqlite3_bind_text(stmt1, 1, city.c_str(), -1, SQLITE_STATIC);
+            sqlite3_bind_text(stmt1, 2, area.c_str(), -1, SQLITE_STATIC);
+
+            if (sqlite3_step(stmt1) == SQLITE_ROW)
+            {
+                const char* peakStart = (const char*)sqlite3_column_text(stmt1, 0);
+                const char* peakEnd = (const char*)sqlite3_column_text(stmt1, 1);
+
+                if (peakStart != nullptr && peakEnd != nullptr)
+                {
+                    // Convert "HH:MM" format to integer hours
+                    start = stoi(string(peakStart).substr(0, 2));
+                    end = stoi(string(peakEnd).substr(0, 2));
+                }
+            }
+            else
+            {
+                System::Windows::Forms::MessageBox::Show("No data found for the specified city and area.");
+            }
+
+            sqlite3_finalize(stmt1);
+        }
+        else
+        {
+            System::Windows::Forms::MessageBox::Show("Failed to prepare SQL statement.");
+        }
+
+        sqlite3_close(db1);
+
+        //-------------------------------------------------------------------------------------------------//
+
+
+        // Check if the time is same as peak hours
+        if (localTime.tm_hour == start && localTime.tm_min == end)
         {
             ShowNotification(L"Alert !", L"Peak Hour Reached");
             // Wait a minute to avoid multiple notifications at the same time
