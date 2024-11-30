@@ -36,7 +36,7 @@ namespace EUS {
         btntoLogin = gcnew Button();
         btntoLogin->Text = L"Login";
         btntoLogin->Size = System::Drawing::Size(100, 50);
-        btntoLogin->Location = System::Drawing::Point(620, 510);
+        btntoLogin->Location = System::Drawing::Point(620, 560);
         btntoLogin->BackColor = Color::FromArgb(0, 122, 204);
         btntoLogin->ForeColor = Color::White;
         btntoLogin->Font = gcnew System::Drawing::Font(L"Arial", 12);
@@ -48,7 +48,7 @@ namespace EUS {
         btnRegister = gcnew Button();
         btnRegister->Text = L"Register";
         btnRegister->Size = System::Drawing::Size(100, 50);
-        btnRegister->Location = System::Drawing::Point(500, 510);
+        btnRegister->Location = System::Drawing::Point(500, 560);
         btnRegister->BackColor = Color::FromArgb(0, 204, 122);
         btnRegister->ForeColor = Color::White;
         btnRegister->Font = gcnew System::Drawing::Font(L"Arial", 12);
@@ -86,7 +86,7 @@ namespace EUS {
         this->Controls->Add(userProvince);
 
         userCity = gcnew Label();
-        userCity->Text = L"City / Area:";
+        userCity->Text = L"City:";
         userCity->Location = System::Drawing::Point(500, 420);
         userCity->Font = gcnew System::Drawing::Font("Courier New", 18, System::Drawing::FontStyle::Bold);
         userCity->AutoSize = true;
@@ -137,6 +137,24 @@ namespace EUS {
 
         // Form closure event
         this->FormClosed += gcnew FormClosedEventHandler(this, &RegisterForm::OnFormClosed);
+
+
+        userArea = gcnew Label();
+        userArea->Text = L"Area:";
+        userArea->Location = System::Drawing::Point(500, 500);
+        userArea->Font = gcnew System::Drawing::Font("Courier New", 18, System::Drawing::FontStyle::Bold);
+        userArea->AutoSize = true;
+        this->Controls->Add(userArea);
+
+        areaBox = gcnew ComboBox();
+        areaBox->Location = System::Drawing::Point(500, 530);
+        areaBox->Size = System::Drawing::Size(250, 30);
+        areaBox->Font = gcnew System::Drawing::Font(L"Arial", 10);
+        this->Controls->Add(areaBox);
+
+        cityBox->SelectedIndexChanged += gcnew EventHandler(this, &RegisterForm::OnCitySelected);
+
+
     }
 
     void RegisterForm::MoveToLogin(Object^ sender, EventArgs^ e)
@@ -226,8 +244,9 @@ namespace EUS {
         String^ email = emailBox->Text;
         String^ province = provinceBox->Text;
         String^ city = cityBox->Text;
+        String^ area = areaBox->Text;
 
-        if (ValidPassword(password) && ValidName(name) && ValidEmail(email) && ValidProvince(province) && ValidCity(city))
+        if (ValidPassword(password) && ValidName(name) && ValidEmail(email) && ValidProvince(province) && ValidCity(city) && ValidArea(area))
         {
             return true;
         }
@@ -269,6 +288,7 @@ namespace EUS {
         String^ enteredProvince = provinceBox->Text; 
         String^ enteredCity = cityBox->Text;
         String^ enteredName = nameBox->Text;  
+        String^ enteredArea = areaBox->Text;
 
         // Convert managed String^ to std::string for SQLite
         msclr::interop::marshal_context context;
@@ -277,6 +297,7 @@ namespace EUS {
         std::string province = context.marshal_as<std::string>(enteredProvince);
         std::string city = context.marshal_as<std::string>(enteredCity);
         std::string name = context.marshal_as<std::string>(enteredName);
+        std::string area = context.marshal_as<std::string>(enteredArea);
 
         sqlite3* db;
         sqlite3_stmt* stmt;
@@ -321,7 +342,7 @@ namespace EUS {
         }
 
         // Step 2: If email doesn't exist, insert new user into the database
-        std::string insertQuery = "INSERT INTO Users (User_Email, User_Name, User_Password, User_Province, User_City) VALUES (?, ?, ?, ?, ?)";
+        std::string insertQuery = "INSERT INTO Users (User_Email, User_Name, User_Password, User_Province, User_City, User_Area) VALUES (?, ?, ?, ?, ?, ?)";
         rc = sqlite3_prepare_v2(db, insertQuery.c_str(), -1, &stmt, nullptr);
 
         if (rc != SQLITE_OK)
@@ -337,6 +358,7 @@ namespace EUS {
         sqlite3_bind_text(stmt, 3, password.c_str(), -1, SQLITE_STATIC);
         sqlite3_bind_text(stmt, 4, province.c_str(), -1, SQLITE_STATIC);
         sqlite3_bind_text(stmt, 5, city.c_str(), -1, SQLITE_STATIC);
+        sqlite3_bind_text(stmt, 6, area.c_str(), -1, SQLITE_STATIC);
 
         // Execute the insert statement
         rc = sqlite3_step(stmt);
@@ -375,7 +397,7 @@ namespace EUS {
         }
 
         // Query to get cities for the selected province
-        std::string query = "SELECT City FROM Peak_Hours WHERE Province = ?";
+        std::string query = "SELECT City FROM Cities WHERE Province = ?";
         rc = sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, nullptr);
 
         if (rc != SQLITE_OK)
@@ -401,11 +423,109 @@ namespace EUS {
         }
 
 
-
         void RegisterForm::OnProvinceSelected(Object^ sender, EventArgs^ e)
         {
             String^ selectedProvince = provinceBox->SelectedItem->ToString();
-            LoadCitiesForProvince(selectedProvince); // Load cities for the selected province
+           
+            //Reset city and areabox
+            cityBox->Items->Clear();
+            areaBox->Items->Clear();
+            this->Controls->Remove(cityBox);
+            cityBox = gcnew ComboBox();
+            cityBox->Location = System::Drawing::Point(500, 450);
+            cityBox->Size = System::Drawing::Size(250, 30);
+            cityBox->Font = gcnew System::Drawing::Font(L"Arial", 10);
+            cityBox->SelectedIndexChanged += gcnew EventHandler(this, &RegisterForm::OnCitySelected);
+            this->Controls->Add(cityBox);
+
+            areaBox->Items->Clear();
+            this->Controls->Remove(areaBox);
+            areaBox = gcnew ComboBox();
+            areaBox = gcnew ComboBox();
+            areaBox->Location = System::Drawing::Point(500, 530);
+            areaBox->Size = System::Drawing::Size(250, 30);
+            areaBox->Font = gcnew System::Drawing::Font(L"Arial", 10);
+            this->Controls->Add(areaBox);
+
+            cityBox->SelectedIndexChanged += gcnew EventHandler(this, &RegisterForm::OnCitySelected);
+
+            LoadCitiesForProvince(selectedProvince);
+
+
+
+        }
+
+        void RegisterForm::OnCitySelected(Object^ sender, EventArgs^ e)
+        {
+            String^ selectedCity = cityBox->SelectedItem->ToString();
+
+            areaBox->Items->Clear();
+            this->Controls->Remove(areaBox);
+            areaBox = gcnew ComboBox();
+            areaBox = gcnew ComboBox();
+            areaBox->Location = System::Drawing::Point(500, 530);
+            areaBox->Size = System::Drawing::Size(250, 30);
+            areaBox->Font = gcnew System::Drawing::Font(L"Arial", 10);
+            this->Controls->Add(areaBox);
+
+            LoadAreasForCity(selectedCity);
+
+        }
+
+        void RegisterForm::LoadAreasForCity(String^ city)
+        {
+
+            areaBox->Items->Clear(); // Clear existing cities
+
+            // Convert the province to std::string for SQLite query
+            msclr::interop::marshal_context context;
+            std::string cityStr = context.marshal_as<std::string>(city);
+
+            sqlite3* db;
+            sqlite3_stmt* stmt;
+            int rc = sqlite3_open("user_management.db", &db);  // Open the database
+
+            if (rc != SQLITE_OK)
+            {
+                MessageBox::Show("Failed to open database!", "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+                return;
+            }
+
+            // Query to get cities for the selected province
+            std::string query = "SELECT Area FROM Areas WHERE City = ?";
+            rc = sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, nullptr);
+
+            if (rc != SQLITE_OK)
+            {
+                MessageBox::Show("Failed to prepare query! Error: " + gcnew String(sqlite3_errmsg(db)), "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+                sqlite3_close(db);
+                return;
+            }
+
+            // Bind the province to the query
+            sqlite3_bind_text(stmt, 1, cityStr.c_str(), -1, SQLITE_STATIC);
+
+            // Step through the result set and add cities to the cityBox
+            while (sqlite3_step(stmt) == SQLITE_ROW)
+            {
+                const char* city = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0));
+                areaBox->Items->Add(gcnew String(city));
+            }
+
+            sqlite3_finalize(stmt);
+            sqlite3_close(db);
+
+        }
+
+        bool RegisterForm::ValidArea(String^ area)
+        {
+            // Check if the province is empty or not selected
+            if (area == nullptr || area->Length == 0)
+            {
+                MessageBox::Show(L"Please select a area.", L"Invalid City", MessageBoxButtons::OK, MessageBoxIcon::Error);
+                return false;
+            }
+            return true;
         }
 
 }

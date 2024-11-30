@@ -47,4 +47,20 @@ namespace EUS {
         void InsideTextBox(Object^ sender, EventArgs^ e);
         void OutsideTextBox(Object^ sender, EventArgs^ e);
     };
+
+    class UserData
+    {
+    public:
+        static int userid;
+        static string username;
+        static string useremail;
+        static string userpassword;
+        static string userprovince;
+        static string usercity;
+        static string userarea;
+        static string userpeakstart;
+        static string userpeakend;
+
+    };
+
 }

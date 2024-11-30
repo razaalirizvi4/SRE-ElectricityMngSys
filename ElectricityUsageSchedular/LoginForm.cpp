@@ -133,6 +133,7 @@ namespace EUS {
         if (LoginCheck())
         {
             LoginSuccess();
+            return;
         }
 
         LoginFailure();
@@ -234,15 +235,14 @@ namespace EUS {
 
     void LoginForm::LoginFailure()
     {
-        //CustomMessageForm^ msg = gcnew CustomMessageForm("Please try again!", "Login Status", true);
-        //msg->Show();
+        CustomMessageForm^ msg = gcnew CustomMessageForm("Please try again!", "Login Status", true);
+        msg->Show();
     }
 
     bool LoginForm::LoginCheck()
     {
         // Retrieve email and password from textboxes
         String^ enteredEmail = emailBox->Text;
-        //big_boi = msclr::interop::marshal_as<string>(enteredEmail);
         String^ enteredPassword = passBox->Text;
 
         // Convert managed String^ to std::string for SQLite
@@ -255,9 +255,8 @@ namespace EUS {
         sqlite3_stmt* stmt;
         int rc = sqlite3_open("user_management.db", &db);  // Use filename only
 
-        if (rc != SQLITE_OK) 
+        if (rc != SQLITE_OK)
         {
-            // If opening the database failed, display an error and return false
             MessageBox::Show("Failed to open database!", "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
             return false;
         }
@@ -266,16 +265,12 @@ namespace EUS {
         std::string sql = "SELECT COUNT(*) FROM Users WHERE User_Email = ? AND User_Password = ?";
         rc = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr);
 
-        if (rc != SQLITE_OK) 
+        if (rc != SQLITE_OK)
         {
-            // Display the error message returned by SQLite
             MessageBox::Show("Failed to prepare SQL query! Error: " + gcnew String(sqlite3_errmsg(db)), "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
             sqlite3_close(db);
-            return false;
+            return false; // Return immediately after a failure
         }
-
-        // Debugging: Output the email and password to check if they are correct
-        MessageBox::Show("Email: " + gcnew String(email.c_str()) + "\nPassword: " + gcnew String(password.c_str()));
 
         // Bind email and password to the prepared statement
         sqlite3_bind_text(stmt, 1, email.c_str(), -1, SQLITE_STATIC);
@@ -283,25 +278,25 @@ namespace EUS {
 
         // Execute the query and check if we have a match
         bool loginSuccessful = false;
-        if (sqlite3_step(stmt) == SQLITE_ROW) 
+        if (sqlite3_step(stmt) == SQLITE_ROW)
         {
             int count = sqlite3_column_int(stmt, 0);
             if (count > 0) {
                 loginSuccessful = true; // Match found
             }
         }
-        else 
+        else
         {
-            // Debugging: Output if sqlite3_step fails
-            MessageBox::Show("SQLite Step failed! Error: " + gcnew String(sqlite3_errmsg(db)));
+            MessageBox::Show("Failed to execute query. Error: " + gcnew String(sqlite3_errmsg(db)), "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
         }
 
-        // Clean up
+        // Final cleanup
         sqlite3_finalize(stmt);
         sqlite3_close(db);
 
-        return loginSuccessful;
+        return loginSuccessful; // Return whether login was successful
     }
+
 
 
     void LoginForm::OnEnterPressed(Object^ sender, KeyEventArgs^ e)
