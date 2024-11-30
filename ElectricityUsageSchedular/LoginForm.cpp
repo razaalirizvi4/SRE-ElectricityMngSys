@@ -75,25 +75,37 @@ namespace EUS
         //Initialize panel (rounded)(bg1)
         Panel^ backpanel1 = gcnew Panel();
         backpanel1->Size = System::Drawing::Size(400,600);
-        backpanel1->Location = System::Drawing::Point(410, 50);
+        backpanel1->Location = System::Drawing::Point(440, 50);
         backpanel1->BackColor = Color::FromArgb(30, 30, 30);
         ApplyRoundedRectangleToPanel(backpanel1, 20);
 
         //Initialize panel (rounded)(bg2)
         Panel^ backpanel2 = gcnew Panel();
         backpanel2->Size = System::Drawing::Size(400, 600);
-        backpanel2->Location = System::Drawing::Point(405, 55);
-        backpanel2->BackColor = Color::FromArgb(69, 160, 227);
+        backpanel2->Location = System::Drawing::Point(435, 55);
+        backpanel2->BackColor = Color::FromArgb(0, 122, 204);
         ApplyRoundedRectangleToPanel(backpanel2, 20);
+
+        //Initialize to register label text
+        Label^ rl1 = gcnew Label();
+        rl1->AutoSize = true;
+        rl1->Location = System::Drawing::Point(500, 380);
+        rl1->BackColor = Color::FromArgb(30,30,30);
+        rl1->ForeColor = Color::FromArgb(69, 160, 227);
+        rl1->Text = L"Do not have an account?";
+        rl1->Font = gcnew System::Drawing::Font("Helvetica", 12);
+
 
         
         //Initialize login button
         btnLogin = gcnew Button();
         btnLogin->Text = L"Login";
-        btnLogin->Size = System::Drawing::Size(100, 50);
-        btnLogin->Location = System::Drawing::Point(500, 270);
+        btnLogin->Size = System::Drawing::Size(150, 50);
+        btnLogin->Location = System::Drawing::Point(560, 280);
         btnLogin->BackColor = Color::FromArgb(0, 122, 204);
         btnLogin->ForeColor = Color::White;
+        btnLogin->FlatStyle = FlatStyle::Flat;
+        btnLogin->FlatAppearance->BorderSize = 0;
         btnLogin->Click += gcnew EventHandler(this, &LoginForm::OnLoginClick);
 
         
@@ -102,9 +114,11 @@ namespace EUS
         btnToRegister = gcnew Button();
         btnToRegister->Text = L"Register";
         btnToRegister->Size = System::Drawing::Size(100, 50);
-        btnToRegister->Location = System::Drawing::Point(620, 270);
-        btnToRegister->BackColor = Color::FromArgb(0, 204, 122);
+        btnToRegister->Location = System::Drawing::Point(675, 365);
+        btnToRegister->BackColor = Color::FromArgb(30, 30, 30);
         btnToRegister->ForeColor = Color::White;
+        btnToRegister->FlatStyle = FlatStyle::Flat;
+        btnToRegister->FlatAppearance->BorderSize = 0;
         btnToRegister->Click += gcnew EventHandler(this, &LoginForm::MoveToRegister);
 
 
@@ -113,15 +127,15 @@ namespace EUS
         emailText = gcnew Label();
         emailText->Text = "Email";
         emailText->AutoSize = true;
-        emailText->Location = System::Drawing::Point(500, 100);
-        emailText->Font = gcnew System::Drawing::Font("Courier New", 18, System::Drawing::FontStyle::Bold);
+        emailText->Location = System::Drawing::Point(530, 100);
+        emailText->Font = gcnew System::Drawing::Font("Helvetica", 18, System::Drawing::FontStyle::Bold);
         emailText->BackColor = Color::FromArgb(30, 30, 30);
         emailText->ForeColor = Color::FromArgb(80, 116, 174);
 
 
         emailBox = gcnew TextBox();
         emailBox->Size = System::Drawing::Size(200, 30);
-        emailBox->Location = System::Drawing::Point(500, 130);
+        emailBox->Location = System::Drawing::Point(530, 130);
         emailBox->GotFocus += gcnew EventHandler(this, &LoginForm::InsideTextBox);
         emailBox->LostFocus += gcnew EventHandler(this, &LoginForm::OutsideTextBox);
         emailBox->KeyDown += gcnew KeyEventHandler(this, &LoginForm::OnEnterPressed);
@@ -132,17 +146,17 @@ namespace EUS
 
         // Password label and textbox
         passText = gcnew Label();
-        passText->Text = "Passcode";
+        passText->Text = "Password";
         passText->AutoSize = true;
-        passText->Location = System::Drawing::Point(500, 180);
-        passText->Font = gcnew System::Drawing::Font("Courier New", 18, System::Drawing::FontStyle::Bold);
+        passText->Location = System::Drawing::Point(530, 180);
+        passText->Font = gcnew System::Drawing::Font("Helvetica", 18, System::Drawing::FontStyle::Bold);
         passText->BackColor = Color::FromArgb(30, 30, 30);
         passText->ForeColor = Color::FromArgb(80, 116, 174);
 
 
         passBox = gcnew TextBox();
         passBox->Size = System::Drawing::Size(200, 30);
-        passBox->Location = System::Drawing::Point(500, 210);
+        passBox->Location = System::Drawing::Point(530, 210);
         passBox->GotFocus += gcnew EventHandler(this, &LoginForm::InsideTextBox);
         passBox->LostFocus += gcnew EventHandler(this, &LoginForm::OutsideTextBox);
         passBox->KeyDown += gcnew KeyEventHandler(this, &LoginForm::OnEnterPressed);
@@ -159,6 +173,7 @@ namespace EUS
         this->Controls->Add(emailText);
         this->Controls->Add(btnToRegister);
         this->Controls->Add(btnLogin);
+        this->Controls->Add(rl1);
         this->Controls->Add(backpanel1);
         this->Controls->Add(backpanel2);
         
