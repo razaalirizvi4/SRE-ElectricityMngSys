@@ -24,107 +24,142 @@ namespace EUS {
 
     void RegisterForm::InitializeComponent(void)
     {
-        //Initialize container
+        //Initialize containter
         this->components = gcnew System::ComponentModel::Container();
         this->Size = System::Drawing::Size(1200, 720);
         this->Text = L"Register";
+        this->BackgroundImage = System::Drawing::Image::FromFile("backdrop.jpg");
+        this->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
 
-        // Set the form's background color to a light blue
-        this->BackColor = Color::FromArgb(240, 248, 255); // Light blue background
 
-        // Create the login button 
+        //Initialize panel (rounded)(bg1)
+        Panel^ backpanel1 = gcnew Panel();
+        backpanel1->Size = System::Drawing::Size(400, 640);
+        backpanel1->Location = System::Drawing::Point(440, 30);
+        backpanel1->BackColor = Color::FromArgb(30, 30, 30);
+        ApplyRoundedRectangleToPanel(backpanel1, 20);
+
+        //Initialize panel (rounded)(bg2)
+        Panel^ backpanel2 = gcnew Panel();
+        backpanel2->Size = System::Drawing::Size(400, 640);
+        backpanel2->Location = System::Drawing::Point(435, 35);
+        backpanel2->BackColor = Color::FromArgb(0, 122, 204);
+        ApplyRoundedRectangleToPanel(backpanel2, 20);
+
+        //Initialize to register label text
+        Label^ rl1 = gcnew Label();
+        rl1->AutoSize = true;
+        rl1->Location = System::Drawing::Point(500, 610);
+        rl1->BackColor = Color::FromArgb(30, 30, 30);
+        rl1->ForeColor = Color::FromArgb(69, 160, 227);
+        rl1->Text = L"Already have an account?";
+        rl1->Font = gcnew System::Drawing::Font("Helvetica", 12);
+
+        // Create the move to login
         btntoLogin = gcnew Button();
         btntoLogin->Text = L"Login";
         btntoLogin->Size = System::Drawing::Size(100, 50);
-        btntoLogin->Location = System::Drawing::Point(620, 560);
-        btntoLogin->BackColor = Color::FromArgb(0, 122, 204);
+        btntoLogin->Location = System::Drawing::Point(690, 595);
+        btntoLogin->BackColor = Color::FromArgb(30, 30, 30);
         btntoLogin->ForeColor = Color::White;
-        btntoLogin->Font = gcnew System::Drawing::Font(L"Arial", 12);
+        btntoLogin->FlatStyle = FlatStyle::Flat;
+        btntoLogin->FlatAppearance->BorderSize = 0;
         btntoLogin->Click += gcnew EventHandler(this, &RegisterForm::MoveToLogin);
 
-        this->Controls->Add(btntoLogin);
 
-        // Create the button to move to register page
+
+        // Create the button to register
         btnRegister = gcnew Button();
         btnRegister->Text = L"Register";
-        btnRegister->Size = System::Drawing::Size(100, 50);
-        btnRegister->Location = System::Drawing::Point(500, 560);
+        btnRegister->Size = System::Drawing::Size(150, 50);
+        btnRegister->Location = System::Drawing::Point(560, 540);
         btnRegister->BackColor = Color::FromArgb(0, 204, 122);
         btnRegister->ForeColor = Color::White;
-        btnRegister->Font = gcnew System::Drawing::Font(L"Arial", 12);
+        btnRegister->FlatStyle = FlatStyle::Flat;
+        btnRegister->FlatAppearance->BorderSize = 0;
         btnRegister->Click += gcnew EventHandler(this, &RegisterForm::OnRegisterClick);
 
-        this->Controls->Add(btnRegister);
 
-        // Create Labels for User Details with adjusted font and position
+
+        //Create username and box
         userName = gcnew Label();
         userName->Text = L"Username:";
-        userName->Location = System::Drawing::Point(500, 100);
+        userName->Location = System::Drawing::Point(530, 70);
         userName->Font = gcnew System::Drawing::Font("Courier New", 18, System::Drawing::FontStyle::Bold);
         userName->AutoSize = true;
-        this->Controls->Add(userName);
+        userName->Font = gcnew System::Drawing::Font("Helvetica", 18, System::Drawing::FontStyle::Bold);
+        userName->BackColor = Color::FromArgb(30, 30, 30);
+        userName->ForeColor = Color::FromArgb(80, 116, 174);
 
+
+        nameBox = gcnew TextBox();
+        nameBox->Location = System::Drawing::Point(530, 100);
+        nameBox->Size = System::Drawing::Size(200, 30);
+        nameBox->Font = gcnew System::Drawing::Font(L"Arial", 10);
+        nameBox->BackColor = Color::FromArgb(30, 30, 30);
+        nameBox->BorderStyle = BorderStyle::FixedSingle;
+        nameBox->ForeColor = Color::FromArgb(212, 237, 250);
+
+
+        //Create email and box
         userEmail = gcnew Label();
         userEmail->Text = L"Email:";
-        userEmail->Location = System::Drawing::Point(500, 180);
+        userEmail->Location = System::Drawing::Point(530, 150);
         userEmail->Font = gcnew System::Drawing::Font("Courier New", 18, System::Drawing::FontStyle::Bold);
         userEmail->AutoSize = true;
-        this->Controls->Add(userEmail);
+        userEmail->Font = gcnew System::Drawing::Font("Helvetica", 18, System::Drawing::FontStyle::Bold);
+        userEmail->BackColor = Color::FromArgb(30, 30, 30);
+        userEmail->ForeColor = Color::FromArgb(80, 116, 174);
 
-        userPassword = gcnew Label();
-        userPassword->Text = L"Password:";
-        userPassword->Location = System::Drawing::Point(500, 260);
-        userPassword->Font = gcnew System::Drawing::Font("Courier New", 18, System::Drawing::FontStyle::Bold);
-        userPassword->AutoSize = true;
-        this->Controls->Add(userPassword);
-
-        userProvince = gcnew Label();
-        userProvince->Text = L"Province:";
-        userProvince->Location = System::Drawing::Point(500, 340);
-        userProvince->Font = gcnew System::Drawing::Font("Courier New", 18, System::Drawing::FontStyle::Bold);
-        userProvince->AutoSize = true;
-        this->Controls->Add(userProvince);
-
-        userCity = gcnew Label();
-        userCity->Text = L"City:";
-        userCity->Location = System::Drawing::Point(500, 420);
-        userCity->Font = gcnew System::Drawing::Font("Courier New", 18, System::Drawing::FontStyle::Bold);
-        userCity->AutoSize = true;
-        this->Controls->Add(userCity);
-
-        // Create Textboxes for User Inputs with improved layout
-        nameBox = gcnew TextBox();
-        nameBox->Location = System::Drawing::Point(500, 130);
-        nameBox->Size = System::Drawing::Size(250, 30);
-        nameBox->Font = gcnew System::Drawing::Font(L"Arial", 10);
-        this->Controls->Add(nameBox);
 
         emailBox = gcnew TextBox();
-        emailBox->Location = System::Drawing::Point(500, 210);
-        emailBox->Size = System::Drawing::Size(250, 30);
+        emailBox->Location = System::Drawing::Point(530, 180);
+        emailBox->Size = System::Drawing::Size(200, 30);
         emailBox->Font = gcnew System::Drawing::Font(L"Arial", 10);
-        this->Controls->Add(emailBox);
+        emailBox->BackColor = Color::FromArgb(30, 30, 30);
+        emailBox->BorderStyle = BorderStyle::FixedSingle;
+        emailBox->ForeColor = Color::FromArgb(212, 237, 250);
+
+
+        //Create password and box
+        userPassword = gcnew Label();
+        userPassword->Text = L"Password:";
+        userPassword->Location = System::Drawing::Point(530, 230);
+        userPassword->Font = gcnew System::Drawing::Font("Courier New", 18, System::Drawing::FontStyle::Bold);
+        userPassword->AutoSize = true;
+        userPassword->Font = gcnew System::Drawing::Font("Helvetica", 18, System::Drawing::FontStyle::Bold);
+        userPassword->BackColor = Color::FromArgb(30, 30, 30);
+        userPassword->ForeColor = Color::FromArgb(80, 116, 174);
+
 
         passwordBox = gcnew TextBox();
-        passwordBox->Location = System::Drawing::Point(500, 290);
-        passwordBox->Size = System::Drawing::Size(250, 30);
+        passwordBox->Location = System::Drawing::Point(530, 260);
+        passwordBox->Size = System::Drawing::Size(200, 30);
         passwordBox->PasswordChar = '*';  // Mask the password
         passwordBox->Font = gcnew System::Drawing::Font(L"Arial", 10);
-        this->Controls->Add(passwordBox);
+        passwordBox->BackColor = Color::FromArgb(30, 30, 30);
+        passwordBox->BorderStyle = BorderStyle::FixedSingle;
+        passwordBox->ForeColor = Color::FromArgb(212, 237, 250);
 
-        // Create province and city selection boxes
+
+        //Create province and box
+        userProvince = gcnew Label();
+        userProvince->Text = L"Province:";
+        userProvince->Location = System::Drawing::Point(530, 310);
+        userProvince->Font = gcnew System::Drawing::Font("Courier New", 18, System::Drawing::FontStyle::Bold);
+        userProvince->AutoSize = true;
+        userProvince->Font = gcnew System::Drawing::Font("Helvetica", 18, System::Drawing::FontStyle::Bold);
+        userProvince->BackColor = Color::FromArgb(30, 30, 30);
+        userProvince->ForeColor = Color::FromArgb(80, 116, 174);
+
+
         provinceBox = gcnew ComboBox();
-        provinceBox->Location = System::Drawing::Point(500, 370);
-        provinceBox->Size = System::Drawing::Size(250, 30);
+        provinceBox->Location = System::Drawing::Point(530, 340);
+        provinceBox->Size = System::Drawing::Size(200, 30);
         provinceBox->Font = gcnew System::Drawing::Font(L"Arial", 10);
+        provinceBox->BackColor = Color::FromArgb(30, 30, 30);
+        provinceBox->ForeColor = Color::FromArgb(0, 122, 204);
 
-        cityBox = gcnew ComboBox();
-        cityBox->Location = System::Drawing::Point(500, 450);
-        cityBox->Size = System::Drawing::Size(250, 30);
-        cityBox->Font = gcnew System::Drawing::Font(L"Arial", 10);
-        this->Controls->Add(cityBox);
-
-        // Add the list of provinces
         std::vector<std::string> provinces = { "Sindh","Punjab","Khyber Pakhtunkhwa","Balochistan","Other" };
         for (int i = 0; i < 5; ++i)
         {
@@ -132,29 +167,68 @@ namespace EUS {
             provinceBox->Items->Add(gcnew String(provinces[i].c_str()));
         }
 
-        this->Controls->Add(provinceBox);
+
         provinceBox->SelectedIndexChanged += gcnew EventHandler(this, &RegisterForm::OnProvinceSelected);
 
-        // Form closure event
-        this->FormClosed += gcnew FormClosedEventHandler(this, &RegisterForm::OnFormClosed);
+        //Create city and box
+        userCity = gcnew Label();
+        userCity->Text = L"City:";
+        userCity->Location = System::Drawing::Point(530, 390);
+        userCity->Font = gcnew System::Drawing::Font("Courier New", 18, System::Drawing::FontStyle::Bold);
+        userCity->AutoSize = true;
+        userCity->Font = gcnew System::Drawing::Font("Helvetica", 18, System::Drawing::FontStyle::Bold);
+        userCity->BackColor = Color::FromArgb(30, 30, 30);
+        userCity->ForeColor = Color::FromArgb(80, 116, 174);
 
 
+        cityBox = gcnew ComboBox();
+        cityBox->Location = System::Drawing::Point(530, 420);
+        cityBox->Size = System::Drawing::Size(200, 30);
+        cityBox->Font = gcnew System::Drawing::Font(L"Arial", 10);
+        cityBox->BackColor = Color::FromArgb(30, 30, 30);
+        cityBox->ForeColor = Color::FromArgb(0, 122, 204);
+
+
+        //Create area and box
         userArea = gcnew Label();
         userArea->Text = L"Area:";
-        userArea->Location = System::Drawing::Point(500, 500);
-        userArea->Font = gcnew System::Drawing::Font("Courier New", 18, System::Drawing::FontStyle::Bold);
+        userArea->Location = System::Drawing::Point(530, 470);
         userArea->AutoSize = true;
-        this->Controls->Add(userArea);
+        userArea->Font = gcnew System::Drawing::Font("Helvetica", 18, System::Drawing::FontStyle::Bold);
+        userArea->BackColor = Color::FromArgb(30, 30, 30);
+        userArea->ForeColor = Color::FromArgb(80, 116, 174);
+
 
         areaBox = gcnew ComboBox();
-        areaBox->Location = System::Drawing::Point(500, 530);
-        areaBox->Size = System::Drawing::Size(250, 30);
+        areaBox->Location = System::Drawing::Point(530, 500);
+        areaBox->Size = System::Drawing::Size(200, 30);
         areaBox->Font = gcnew System::Drawing::Font(L"Arial", 10);
-        this->Controls->Add(areaBox);
-
         cityBox->SelectedIndexChanged += gcnew EventHandler(this, &RegisterForm::OnCitySelected);
+        areaBox->BackColor = Color::FromArgb(30, 30, 30);
+        areaBox->ForeColor = Color::FromArgb(0, 122, 204);
 
 
+        //Add end application on closing form
+        this->FormClosed += gcnew FormClosedEventHandler(this, &RegisterForm::OnFormClosed);
+
+        //Add to controls order for display
+        this->Controls->Add(areaBox);
+        this->Controls->Add(userArea);
+        this->Controls->Add(cityBox);
+        this->Controls->Add(userCity);
+        this->Controls->Add(provinceBox);
+        this->Controls->Add(userProvince);
+        this->Controls->Add(passwordBox);
+        this->Controls->Add(userPassword);
+        this->Controls->Add(emailBox);
+        this->Controls->Add(userEmail);
+        this->Controls->Add(nameBox);
+        this->Controls->Add(userName);
+        this->Controls->Add(btnRegister);
+        this->Controls->Add(btntoLogin);
+        this->Controls->Add(rl1);
+        this->Controls->Add(backpanel1);
+        this->Controls->Add(backpanel2);
     }
 
     void RegisterForm::MoveToLogin(Object^ sender, EventArgs^ e)
@@ -432,20 +506,25 @@ namespace EUS {
             areaBox->Items->Clear();
             this->Controls->Remove(cityBox);
             cityBox = gcnew ComboBox();
-            cityBox->Location = System::Drawing::Point(500, 450);
+            cityBox->Location = System::Drawing::Point(530, 420);
             cityBox->Size = System::Drawing::Size(250, 30);
             cityBox->Font = gcnew System::Drawing::Font(L"Arial", 10);
+            cityBox->BackColor = Color::FromArgb(30, 30, 30);
+            cityBox->ForeColor = Color::FromArgb(0, 122, 204);
             cityBox->SelectedIndexChanged += gcnew EventHandler(this, &RegisterForm::OnCitySelected);
             this->Controls->Add(cityBox);
+            cityBox->BringToFront();
 
             areaBox->Items->Clear();
             this->Controls->Remove(areaBox);
             areaBox = gcnew ComboBox();
-            areaBox = gcnew ComboBox();
-            areaBox->Location = System::Drawing::Point(500, 530);
+            areaBox->Location = System::Drawing::Point(530, 500);
             areaBox->Size = System::Drawing::Size(250, 30);
             areaBox->Font = gcnew System::Drawing::Font(L"Arial", 10);
+            areaBox->BackColor = Color::FromArgb(30, 30, 30);
+            areaBox->ForeColor = Color::FromArgb(0, 122, 204);
             this->Controls->Add(areaBox);
+            areaBox->BringToFront();
 
             cityBox->SelectedIndexChanged += gcnew EventHandler(this, &RegisterForm::OnCitySelected);
 
@@ -462,11 +541,13 @@ namespace EUS {
             areaBox->Items->Clear();
             this->Controls->Remove(areaBox);
             areaBox = gcnew ComboBox();
-            areaBox = gcnew ComboBox();
-            areaBox->Location = System::Drawing::Point(500, 530);
+            areaBox->Location = System::Drawing::Point(530, 500);
             areaBox->Size = System::Drawing::Size(250, 30);
             areaBox->Font = gcnew System::Drawing::Font(L"Arial", 10);
+            areaBox->BackColor = Color::FromArgb(30, 30, 30);
+            areaBox->ForeColor = Color::FromArgb(0, 122, 204);
             this->Controls->Add(areaBox);
+            areaBox->BringToFront();
 
             LoadAreasForCity(selectedCity);
 
@@ -526,6 +607,14 @@ namespace EUS {
                 return false;
             }
             return true;
+        }
+
+        void RegisterForm::ApplyRoundedRectangleToPanel(Panel^ panel, int radius) {
+            System::Drawing::Drawing2D::GraphicsPath^ path = RoundedRectangles::RoundedRectangle::Create(
+                0, 0, panel->Width, panel->Height, radius,
+                RoundedRectangles::RoundedRectangle::RectangleCorners::All
+            );
+            panel->Region = gcnew System::Drawing::Region(path);
         }
 
 }

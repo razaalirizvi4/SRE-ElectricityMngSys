@@ -43,6 +43,8 @@ void InitializeTable1(System::Windows::Forms::DataGridView^ targetTable) {
     }
 }
 
+
+
 namespace EUS 
 {
 
@@ -74,15 +76,15 @@ namespace EUS
 
         //Initialize panel (rounded)(bg1)
         Panel^ backpanel1 = gcnew Panel();
-        backpanel1->Size = System::Drawing::Size(400,600);
-        backpanel1->Location = System::Drawing::Point(440, 50);
+        backpanel1->Size = System::Drawing::Size(400,640);
+        backpanel1->Location = System::Drawing::Point(440, 30);
         backpanel1->BackColor = Color::FromArgb(30, 30, 30);
         ApplyRoundedRectangleToPanel(backpanel1, 20);
 
         //Initialize panel (rounded)(bg2)
         Panel^ backpanel2 = gcnew Panel();
-        backpanel2->Size = System::Drawing::Size(400, 600);
-        backpanel2->Location = System::Drawing::Point(435, 55);
+        backpanel2->Size = System::Drawing::Size(400, 640);
+        backpanel2->Location = System::Drawing::Point(435, 35);
         backpanel2->BackColor = Color::FromArgb(0, 122, 204);
         ApplyRoundedRectangleToPanel(backpanel2, 20);
 

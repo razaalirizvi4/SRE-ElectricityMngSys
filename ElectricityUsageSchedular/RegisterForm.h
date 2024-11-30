@@ -59,6 +59,8 @@ namespace EUS {
         void OnCitySelected(Object^ sender, EventArgs^ e);
         void LoadAreasForCity(String^ city);
 
+        void ApplyRoundedRectangleToPanel(Panel^ panel, int radius);
+
 
     };
 }
