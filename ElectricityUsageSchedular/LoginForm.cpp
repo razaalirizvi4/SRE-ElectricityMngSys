@@ -78,6 +78,14 @@ namespace EUS
         backpanel1->Location = System::Drawing::Point(410, 50);
         backpanel1->BackColor = Color::FromArgb(30, 30, 30);
         ApplyRoundedRectangleToPanel(backpanel1, 20);
+
+        //Initialize panel (rounded)(bg2)
+        Panel^ backpanel2 = gcnew Panel();
+        backpanel2->Size = System::Drawing::Size(400, 600);
+        backpanel2->Location = System::Drawing::Point(405, 55);
+        backpanel2->BackColor = Color::FromArgb(69, 160, 227);
+        ApplyRoundedRectangleToPanel(backpanel2, 20);
+
         
         //Initialize login button
         btnLogin = gcnew Button();
@@ -119,6 +127,7 @@ namespace EUS
         emailBox->KeyDown += gcnew KeyEventHandler(this, &LoginForm::OnEnterPressed);
         emailBox->BackColor = Color::FromArgb(30, 30, 30);
         emailBox->BorderStyle= BorderStyle::FixedSingle;
+        emailBox->ForeColor = Color::FromArgb(212, 237, 250);
 
 
         // Password label and textbox
@@ -140,7 +149,7 @@ namespace EUS
         passBox->PasswordChar = '*';
         passBox->BackColor = Color::FromArgb(30, 30, 30);
         passBox->BorderStyle= BorderStyle::FixedSingle;
-        
+        passBox->ForeColor = Color::FromArgb(212, 237, 250);
 
 
         //Add to controls order for display
@@ -151,6 +160,7 @@ namespace EUS
         this->Controls->Add(btnToRegister);
         this->Controls->Add(btnLogin);
         this->Controls->Add(backpanel1);
+        this->Controls->Add(backpanel2);
         
 
     }
