@@ -11,7 +11,7 @@ using namespace System::Drawing;
 #include <ctime>
 #include <sqlite3.h>
 
-//---------------------------Functions Definition-------------------------------------
+//---------------------------------------------------------Functions Definition--------------------------------------------------
 #include "GlobalFunctions.h"
 #include <Shellapi.h>
 #pragma comment(lib, "user32.lib")
@@ -31,8 +31,6 @@ void ShowNotification(const wchar_t* title, const wchar_t* message)
     Shell_NotifyIcon(NIM_MODIFY, &nid); // Show the notification
     Shell_NotifyIcon(NIM_DELETE, &nid); // Remove it
 }
-
-
 
 
 vector<schedule_appliance::Appliance> sortit(vector<schedule_appliance::Appliance> app, int priorityLevel) {
@@ -56,8 +54,6 @@ vector<schedule_appliance::Appliance> sortit(vector<schedule_appliance::Applianc
     }
     return sorted;
 }
-
-
 
 
 int traverseCols(int row) {
@@ -297,10 +293,6 @@ void RandomizeTable(System::Windows::Forms::DataGridView^ tbl) {
     }
 }
 
-
-
-
-
 void CheckConditionInBackground()
 {
     while (true)
@@ -323,7 +315,7 @@ void CheckConditionInBackground()
     }
 }
 
-//--------------------------------Main stuff--------------------------------------------
+//--------------------------------------------------------Main stuff--------------------------------------------------------
 using namespace System;
 using namespace System::Windows::Forms;
 

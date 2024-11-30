@@ -42,6 +42,8 @@ namespace EUS {
             int totalAppliances = GlobalObjects::Globals::Gtable->Rows->Count;
             int* hoursForEachAppliance = new int[totalAppliances-1];
 
+
+
             //get all hours in an array, each index represenitng appliance number and value representing hours run
             for (int i = 0; i < totalAppliances; i++)   //for each appliance
             {
