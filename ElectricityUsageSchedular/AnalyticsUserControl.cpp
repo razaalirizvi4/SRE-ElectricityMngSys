@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "AnalyticsUserControl.h"
+#include"week.h"
 
 namespace EUS {
 
@@ -39,24 +40,120 @@ namespace EUS {
         void AnalyticsUserControl::MakePieChart(Object^ sender, PaintEventArgs^ e)
         {
 
-            int totalAppliances = GlobalObjects::Globals::Gtable->Rows->Count;
-            int* hoursForEachAppliance = new int[totalAppliances-1];
+            Week::Tables^ week1 = GlobalObjects::Globals::monthlyTables[0];
+            Week::Tables^ week2 = GlobalObjects::Globals::monthlyTables[1];
+            Week::Tables^ week3 = GlobalObjects::Globals::monthlyTables[2];
+            Week::Tables^ week4 = GlobalObjects::Globals::monthlyTables[3];
 
-
-
-            //get all hours in an array, each index represenitng appliance number and value representing hours run
-            for (int i = 0; i < totalAppliances; i++)   //for each appliance
+            int totalAppliances = week1->Gtable1->Rows->Count;
+            int* hoursForEachAppliance = new int[totalAppliances - 1];
+            for (int i = 0; i < totalAppliances; i++)
             {
-                int count = 0;
-                for (int j = 1; j < 24; j++)            //for each hour
-                {
-                    if (GlobalObjects::Globals::Gtable->Rows[i]->Cells[j]->Value == "+")
-                    {
-                        count++;
-                    }
-                }
-                hoursForEachAppliance[i] = count;
+                hoursForEachAppliance[i] = 0;
             }
+
+            array<DataGridView^>^ ArrayW1 = gcnew array<DataGridView^>(7);
+            ArrayW1[0] = week1->Gtable1;
+            ArrayW1[1] = week1->Gtable2;
+            ArrayW1[2] = week1->Gtable3;
+            ArrayW1[3] = week1->Gtable4;
+            ArrayW1[4] = week1->Gtable5;
+            ArrayW1[5] = week1->Gtable6;
+            ArrayW1[6] = week1->GTable7;
+
+            array<DataGridView^>^ ArrayW2 = gcnew array<DataGridView^>(7);
+            ArrayW2[0] = week2->Gtable1;
+            ArrayW2[1] = week2->Gtable2;
+            ArrayW2[2] = week2->Gtable3;
+            ArrayW2[3] = week2->Gtable4;
+            ArrayW2[4] = week2->Gtable5;
+            ArrayW2[5] = week2->Gtable6;
+            ArrayW2[6] = week2->GTable7;
+
+            array<DataGridView^>^ ArrayW3 = gcnew array<DataGridView^>(7);
+            ArrayW3[0] = week3->Gtable1;
+            ArrayW3[1] = week3->Gtable2;
+            ArrayW3[2] = week3->Gtable3;
+            ArrayW3[3] = week3->Gtable4;
+            ArrayW3[4] = week3->Gtable5;
+            ArrayW3[5] = week3->Gtable6;
+            ArrayW3[6] = week3->GTable7;
+
+            array<DataGridView^>^ ArrayW4 = gcnew array<DataGridView^>(7);
+            ArrayW4[0] = week4->Gtable1;
+            ArrayW4[1] = week4->Gtable2;
+            ArrayW4[2] = week4->Gtable3;
+            ArrayW4[3] = week4->Gtable4;
+            ArrayW4[4] = week4->Gtable5;
+            ArrayW4[5] = week4->Gtable6;
+            ArrayW4[6] = week4->GTable7;
+            
+
+            
+            for (int k = 0; k < 7; k++)         //for each day in week1
+            {
+                for (int i = 0; i < totalAppliances; i++)   //for each appliance
+                {
+                    int count = 0;
+                    for (int j = 1; j < 24; j++)            //for each hour of the day
+                    {
+                        if (ArrayW1[k]->Rows[i]->Cells[j]->Value == "+")
+                        {
+                            count++;
+                        }
+                    }
+                    hoursForEachAppliance[i] += count;
+                }
+            }
+
+            for (int k = 0; k < 7; k++)         //for each day in week2
+            {
+                for (int i = 0; i < totalAppliances; i++)   //for each appliance
+                {
+                    int count = 0;
+                    for (int j = 1; j < 24; j++)            //for each hour of the day
+                    {
+                        if (ArrayW2[k]->Rows[i]->Cells[j]->Value == "+")
+                        {
+                            count++;
+                        }
+                    }
+                    hoursForEachAppliance[i] += count;
+                }
+            }
+
+            for (int k = 0; k < 7; k++)         //for each day in week3
+            {
+                for (int i = 0; i < totalAppliances; i++)   //for each appliance
+                {
+                    int count = 0;
+                    for (int j = 1; j < 24; j++)            //for each hour of the day
+                    {
+                        if (ArrayW3[k]->Rows[i]->Cells[j]->Value == "+")
+                        {
+                            count++;
+                        }
+                    }
+                    hoursForEachAppliance[i] += count;
+                }
+            }
+
+            for (int k = 0; k < 7; k++)         //for each day in week4
+            {
+                for (int i = 0; i < totalAppliances; i++)   //for each appliance
+                {
+                    int count = 0;
+                    for (int j = 1; j < 24; j++)            //for each hour of the day
+                    {
+                        if (ArrayW4[k]->Rows[i]->Cells[j]->Value == "+")
+                        {
+                            count++;
+                        }
+                    }
+                    hoursForEachAppliance[i] += count;
+                }
+            }
+
 
             int topFourAppliancesIndexes[4] = { 0 };
             int topFourAppliancesHours[4] = { 0 };
@@ -82,7 +179,7 @@ namespace EUS {
 
             // Data for the pie chart
             array<float>^ values = { topFourAppliancesHours[0],topFourAppliancesHours[1],topFourAppliancesHours[2],topFourAppliancesHours[3] };
-            array<String^>^ labels = { GlobalObjects::Globals::Gtable->Rows[topFourAppliancesIndexes[0]]->Cells[0]->Value->ToString(), GlobalObjects::Globals::Gtable->Rows[topFourAppliancesIndexes[1]]->Cells[0]->Value->ToString(), GlobalObjects::Globals::Gtable->Rows[topFourAppliancesIndexes[2]]->Cells[0]->Value->ToString(), GlobalObjects::Globals::Gtable->Rows[topFourAppliancesIndexes[3]]->Cells[0]->Value->ToString() };
+            array<String^>^ labels = { week1->Gtable1->Rows[topFourAppliancesIndexes[0]]->Cells[0]->Value->ToString(), week1->Gtable1->Rows[topFourAppliancesIndexes[1]]->Cells[0]->Value->ToString(), week1->Gtable1->Rows[topFourAppliancesIndexes[2]]->Cells[0]->Value->ToString(), week1->Gtable1->Rows[topFourAppliancesIndexes[3]]->Cells[0]->Value->ToString() };
             
             //alternating theme-matching colours
             int startR = 0, startG = 91, startB = 156;

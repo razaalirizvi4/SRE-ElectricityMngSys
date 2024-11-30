@@ -2,6 +2,7 @@
 #include "LoginForm.h"
 #include"GlobalObjects.h"
 #include "globals2.h"
+#include "LoginForm.h"
 using namespace System;
 using namespace System::ComponentModel;
 using namespace System::Windows::Forms;
@@ -311,7 +312,7 @@ void CheckConditionInBackground()
             return;
         }
 
-        string loggedInEmail = "a@a.com"; // Replace this with the logged-in user's email
+        string loggedInEmail = EUS::UserData::useremail; // Replace this with the logged-in user's email
         string city = "";  // Variable to store the fetched city
         string area = "";
         int start = -1;
@@ -419,9 +420,6 @@ int main()
 {
     Application::EnableVisualStyles();
     Application::SetCompatibleTextRenderingDefault(false);
-
-    thread backgroundThread(CheckConditionInBackground);
-    backgroundThread.detach();
 
     EUS::LoginForm form;
     Application::Run(% form);

@@ -12,3 +12,4 @@ int callback(void* data, int argc, char** argv, char** azColName);
 void retrive_appliance_names();
 void get_appliances();
 void RandomizeTable(System::Windows::Forms::DataGridView^ tbl);
+void CheckConditionInBackground();

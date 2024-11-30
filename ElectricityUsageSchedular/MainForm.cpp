@@ -6,6 +6,8 @@
 #include <string>
 #include <msclr/marshal_cppstd.h>
 #include <chrono>
+#include "LoginForm.h"
+#include <thread>
 
 namespace EUS
 {
@@ -21,7 +23,7 @@ namespace EUS
             return;
         }
 
-        string loggedInEmail = "a@a.com"; // Replace this with the logged-in user's email
+        string loggedInEmail = UserData::useremail; // Replace this with the logged-in user's email
         string city = "";  // Variable to store the fetched city
         string area = "";
         int start = -1;
@@ -153,6 +155,9 @@ namespace EUS
         InitializeSidebar();
         InitializeContentPanel();
         SetupEventHandlers();
+
+        thread backgroundThread(CheckConditionInBackground);
+        backgroundThread.detach();
     }
 
     void MainForm::InitializeFormProperties() {
