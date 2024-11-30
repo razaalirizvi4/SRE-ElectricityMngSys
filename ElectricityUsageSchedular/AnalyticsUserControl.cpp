@@ -266,9 +266,124 @@ namespace EUS {
         void AnalyticsUserControl::MakeBarChart(Object^ sender, PaintEventArgs^ e)
         {
 
+            Week::Tables^ week1 = GlobalObjects::Globals::monthlyTables[0];
+            Week::Tables^ week2 = GlobalObjects::Globals::monthlyTables[1];
+            Week::Tables^ week3 = GlobalObjects::Globals::monthlyTables[2];
+            Week::Tables^ week4 = GlobalObjects::Globals::monthlyTables[3];
+
+            int totalAppliances = week1->Gtable1->Rows->Count;
+            int week1H = 0;
+            int week2H = 0;
+            int week3H = 0;
+            int week4H = 0;
+
+            array<DataGridView^>^ ArrayW1 = gcnew array<DataGridView^>(7);
+            ArrayW1[0] = week1->Gtable1;
+            ArrayW1[1] = week1->Gtable2;
+            ArrayW1[2] = week1->Gtable3;
+            ArrayW1[3] = week1->Gtable4;
+            ArrayW1[4] = week1->Gtable5;
+            ArrayW1[5] = week1->Gtable6;
+            ArrayW1[6] = week1->GTable7;
+
+            array<DataGridView^>^ ArrayW2 = gcnew array<DataGridView^>(7);
+            ArrayW2[0] = week2->Gtable1;
+            ArrayW2[1] = week2->Gtable2;
+            ArrayW2[2] = week2->Gtable3;
+            ArrayW2[3] = week2->Gtable4;
+            ArrayW2[4] = week2->Gtable5;
+            ArrayW2[5] = week2->Gtable6;
+            ArrayW2[6] = week2->GTable7;
+
+            array<DataGridView^>^ ArrayW3 = gcnew array<DataGridView^>(7);
+            ArrayW3[0] = week3->Gtable1;
+            ArrayW3[1] = week3->Gtable2;
+            ArrayW3[2] = week3->Gtable3;
+            ArrayW3[3] = week3->Gtable4;
+            ArrayW3[4] = week3->Gtable5;
+            ArrayW3[5] = week3->Gtable6;
+            ArrayW3[6] = week3->GTable7;
+
+            array<DataGridView^>^ ArrayW4 = gcnew array<DataGridView^>(7);
+            ArrayW4[0] = week4->Gtable1;
+            ArrayW4[1] = week4->Gtable2;
+            ArrayW4[2] = week4->Gtable3;
+            ArrayW4[3] = week4->Gtable4;
+            ArrayW4[4] = week4->Gtable5;
+            ArrayW4[5] = week4->Gtable6;
+            ArrayW4[6] = week4->GTable7;
+
+            int count = 0;
+            for (int k = 0; k < 7; k++)         //for each day in week1
+            {
+                for (int i = 0; i < totalAppliances; i++)   //for each appliance
+                {
+                    count = 0;
+                    for (int j = 1; j < 24; j++)            //for each hour of the day
+                    {
+                        if (ArrayW1[k]->Rows[i]->Cells[j]->Value == "+")
+                        {
+                            count++;
+                        }
+                    }
+                }
+            }
+            week1H = count;
+
+            count = 0;
+            for (int k = 0; k < 7; k++)         //for each day in week1
+            {
+                for (int i = 0; i < totalAppliances; i++)   //for each appliance
+                {
+                    count = 0;
+                    for (int j = 1; j < 24; j++)            //for each hour of the day
+                    {
+                        if (ArrayW2[k]->Rows[i]->Cells[j]->Value == "+")
+                        {
+                            count++;
+                        }
+                    }
+                }
+            }
+            week2H = count;
+
+            count = 0;
+            for (int k = 0; k < 7; k++)         //for each day in week1
+            {
+                for (int i = 0; i < totalAppliances; i++)   //for each appliance
+                {
+                    count = 0;
+                    for (int j = 1; j < 24; j++)            //for each hour of the day
+                    {
+                        if (ArrayW3[k]->Rows[i]->Cells[j]->Value == "+")
+                        {
+                            count++;
+                        }
+                    }
+                }
+            }
+            week3H = count;
+
+            count = 0;
+            for (int k = 0; k < 7; k++)         //for each day in week1
+            {
+                for (int i = 0; i < totalAppliances; i++)   //for each appliance
+                {
+                    count = 0;
+                    for (int j = 1; j < 24; j++)            //for each hour of the day
+                    {
+                        if (ArrayW4[k]->Rows[i]->Cells[j]->Value == "+")
+                        {
+                            count++;
+                        }
+                    }
+                }
+            }
+            week4H = count;
+
             // Data for the bar chart
-            array<float>^ values = { 10.0f, 20.0f, 4.0f, 32.0f,56.0f,12.0f,69.0f,21.0f,32.5f, 10.0f, 20.0f, 4.0f, 32.0f,56.0f,12.0f,69.0f,21.0f,32.5f, 56.0f,45.6f,52.01f,34.56f,12.0f };
-            array<String^>^ labels = { "00-01", "01-02", "02-03", "03-04", "04-05", "05-06", "06-07", "07-08", "08-09", "09-10", "10-11", "11-12", "12-13", "13-14", "14-15", "15-16", "16-17", "17-18", "18-19", "19-20", "20-21", "21-22", "22-23", "23-00" };
+            array<float>^ values = { week1H, week2H, week3H, week4H};
+            array<String^>^ labels = { "Week 1", "Week 2", "Week 3", "Week 4"};
 
             // Calculate colors for each bar
             int numBars = values->Length;
@@ -291,9 +406,9 @@ namespace EUS {
 
             // Define chart area with more space for rotated labels         //overall graph size
             int marginLeft = 850;
-            int marginRight = 125;  // Space for legend
-            int marginTop = 110;
-            int marginBottom = 380;  // More space for rotated labels
+            int marginRight = 250;  // Space for legend
+            int marginTop = 130;
+            int marginBottom = 360;  // More space for rotated labels
             int x = marginLeft;
             int y = marginTop;
             int width = this->Width - (marginLeft + marginRight);
@@ -307,18 +422,18 @@ namespace EUS {
             }
 
             // Calculate bar properties with thinner bars
-            int barWidth = (width) / (numBars * 1);                       //width
-            int barSpacing = barWidth / 8;  // Less spacing
+            int barWidth = (width) / (numBars * 1.1);                       //width
+            int barSpacing = barWidth / 4;  // Less spacing
             float scaleY = (height - 50) / maxValue;
 
             // Draw bars and labels
-            System::Drawing::Font^ labelFont = gcnew System::Drawing::Font("Arial", 8);  // Smaller font
-            System::Drawing::Font^ valueFont = gcnew System::Drawing::Font("Arial", 8);  // Smaller font
+            System::Drawing::Font^ labelFont = gcnew System::Drawing::Font("Arial", 12);  // Bottom text
+            System::Drawing::Font^ valueFont = gcnew System::Drawing::Font("Arial", 10);  // top text
 
             for (int i = 0; i < numBars; i++)
             {
                 // Calculate bar dimensions
-                int barX = x + (i * (barWidth + barSpacing));
+                int barX = x + (i * (barWidth + barSpacing))+25;
                 int barHeight = (int)(values[i] * scaleY);                //height
                 int barY = y + height - barHeight - 40;
 
@@ -343,7 +458,7 @@ namespace EUS {
                         barX + (barWidth) / 2,
                         y + height - 25
                     );
-                    g->RotateTransform(-35);  // 45-degree angle
+                    g->RotateTransform(-25);  // 45-degree angle
                     g->DrawString(labels[i],
                         labelFont,
                         Brushes::Black,
@@ -356,15 +471,15 @@ namespace EUS {
             // Draw axes
             Pen^ axisPen = gcnew Pen(Color::Black, 2);
             g->DrawLine(axisPen, x, y + height - 40, x, y);
-            g->DrawLine(axisPen, x, y + height - 40, x + width+50, y + height - 40);
+            g->DrawLine(axisPen, x, y + height - 40, x + width+80, y + height - 40);
 
-            //text under pie chart
+            //text under bar chart
             Label^ BarLabel = gcnew Label();
             BarLabel->Text = L"Energy Consumed each\n\tHour";
             BarLabel->Font = gcnew System::Drawing::Font("Arial", 18, FontStyle::Bold);
             BarLabel->ForeColor = Color::FromArgb(69, 160, 227);
             BarLabel->AutoSize = true;
-            BarLabel->Location = Point(x + 130, y + height + 10);
+            BarLabel->Location = Point(x + 85, y + height + 10);
             BarLabel->TextAlign = ContentAlignment::MiddleCenter;
             this->Controls->Add(BarLabel);
         }
