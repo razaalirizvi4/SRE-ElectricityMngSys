@@ -14,6 +14,28 @@ namespace EUS {
         }
     }
 
+    Button^ DashboardUserControl::CreateRoundedButton(String^ iconPath, int size, Point location) {
+        Button^ button = gcnew Button();
+        button->Size = System::Drawing::Size(size, size);
+        button->Location = location;
+        button->BackColor = DashboardStyles::PanelBackColor;
+        button->FlatStyle = FlatStyle::Flat;
+        button->FlatAppearance->BorderSize = 0;
+
+        // Set the icon
+        button->Image = Image::FromFile(iconPath);
+        button->ImageAlign = ContentAlignment::MiddleCenter;
+
+        // Apply rounded corners
+        System::Drawing::Drawing2D::GraphicsPath^ path = RoundedRectangles::RoundedRectangle::Create(
+            0, 0, size, size, size / 2,
+            RoundedRectangles::RoundedRectangle::RectangleCorners::All
+        );
+        button->Region = gcnew System::Drawing::Region(path);
+
+        return button;
+    }
+
     Label^ DashboardUserControl::CreateLabel(String^ text, System::Drawing::Font^ font, Color color, int width, int height, Point location) {
         Label^ label = gcnew Label();
         label->Text = text;
@@ -72,145 +94,71 @@ namespace EUS {
         panel->Region = gcnew System::Drawing::Region(path);
     }
 
-    Panel^ DashboardUserControl::CreateTopLeftSection() {
-        PanelConfig config;
-        config.Width = this->Width - DashboardStyles::DefaultMargin;
-        config.Height = this->Height / 2 - DashboardStyles::DefaultMargin;
-        config.Location = Point(DashboardStyles::DefaultMargin, DashboardStyles::DefaultMargin);
-        config.BackColor = DashboardStyles::PanelBackColor;
-        config.LineSpacing = 70;
-        config.ContentYOffset = 90;
-        config.Title = "Energy Consumption Overview";
-        config.Content =
-            "Daily Usage: 28.5 kWh                                Current Power: 2.4 kW\n"
-            "Peak Today: 3.8 kW at 18:30                          Week-over-Week Change: -5.2%\n";
+    Panel^ DashboardUserControl::CreateTopSection() {
+        // Create a container for the top section
+        Panel^ topSectionPanel = gcnew Panel();
+			topSectionPanel->Size = System::Drawing::Size(1400, this->Height / 3);
+        topSectionPanel->Location = Point(DashboardStyles::DefaultMargin, DashboardStyles::DefaultMargin);
+        topSectionPanel->BackColor = DashboardStyles::MainBackColor;
 
-        return CreatePanel(config);
-    }
+        ApplyRoundedRectangleToPanel(topSectionPanel, DashboardStyles::DefaultCornerRadius);
 
-    Panel^ DashboardUserControl::CreateBottomLeftSection(Point location) {
-        Panel^ containerPanel = gcnew Panel();
-        containerPanel->Size = System::Drawing::Size(
-            this->Width - DashboardStyles::DefaultMargin,
-            this->Height / 2 - DashboardStyles::DefaultMargin + DashboardStyles::MiniBoxHeight
-        );
-        containerPanel->Location = location;
-        containerPanel->BackColor = DashboardStyles::MainBackColor;
+        int boxWidth = (topSectionPanel->Width - DashboardStyles::DefaultSpacing - 100) / 3;
+        int boxHeight = topSectionPanel->Height - DashboardStyles::DefaultSpacing2;
 
-        ApplyRoundedRectangleToPanel(containerPanel, DashboardStyles::DefaultCornerRadius);
-
-        int boxHeight = (containerPanel->Height - DashboardStyles::DefaultSpacing - 100);
-
-        // Device Management Box
+        // First Box Configuration
         PanelConfig box1Config;
-        box1Config.Width = containerPanel->Width / 2 - DashboardStyles::DefaultSpacing + 70;
-        box1Config.Height = boxHeight - 110;
+        box1Config.Width = boxWidth;
+        box1Config.Height = boxHeight;
         box1Config.Location = Point(0, 0);
         box1Config.BackColor = DashboardStyles::PanelBackColor;
         box1Config.LineSpacing = 3;
         box1Config.ContentYOffset = 60;
-        box1Config.Title = "Current Rate Info";
-        box1Config.Content = "Current Rate: $0.14/kWh\n"
+        box1Config.Title = "Energy Consumption Overview";
+        box1Config.Content =
+            "Daily Usage: 28.5 kWh\n"
+            "Current Power: 2.4 kW\n"
+            "Peak Today: 3.8 kW at 18:30\n"
+            "Week-over-Week Change: -5.2%";
+
+        // Second Box Configuration
+        PanelConfig box2Config = box1Config;
+        box2Config.Location = Point(boxWidth + DashboardStyles::DefaultSpacing, 0);
+        box2Config.Title = "Current Rate Info";
+        box2Config.Content =
+            "Current Rate: $0.14/kWh\n"
             "Peak Hours: 14:00 - 19:00\n"
             "Next Rate Change: 2hrs 15min\n"
             "Today's Est. Cost: $8.45";
 
-        containerPanel->Controls->Add(CreatePanel(box1Config));
-
-        // Performance Metrics Box
-        PanelConfig box2Config;
-        box2Config.Width = containerPanel->Width / 2 - DashboardStyles::DefaultSpacing + 75;
-        box2Config.Height = boxHeight - 110;
-        box2Config.Location = Point(containerPanel->Width / 2 - 25, boxHeight - 90);
-        box2Config.BackColor = DashboardStyles::PanelBackColor; 
-        box2Config.LineSpacing = 3;
-        box2Config.ContentYOffset = 60;
-        box2Config.Title = "Energy Saving Tips";
-        box2Config.Content = "• Schedule laundry for off-peak hours\n"
+        // Third Box Configuration
+        PanelConfig box3Config = box1Config;
+        box3Config.Location = Point(2 * (boxWidth + DashboardStyles::DefaultSpacing), 0);
+        box3Config.Title = "Energy Saving Tips";
+        box3Config.Content =
+            "• Schedule laundry for off-peak hours\n"
             "• HVAC efficiency decreasing (check filter)\n"
             "• Smart scheduling could save $25/month\n"
             "• Consider upgrading to LED bulbs";
 
-        containerPanel->Controls->Add(CreatePanel(box2Config));
+        topSectionPanel->Controls->Add(CreatePanel(box1Config));
+        topSectionPanel->Controls->Add(CreatePanel(box2Config));
 
-        return containerPanel;
-    }
+        Button^ roundedButton = CreateRoundedButton("icon_settings.png", 100, Point(2 * (boxWidth + DashboardStyles::DefaultSpacing) + 310, 52));
+        topSectionPanel->Controls->Add(roundedButton);
 
-    Panel^ DashboardUserControl::CreateRightSection(Point location) {
-        Panel^ containerPanel = gcnew Panel();
-        containerPanel->Size = System::Drawing::Size(
-            this->Width - 520 - 5,
-            this->Height - DashboardStyles::DefaultMargin + 100
-        );
-        containerPanel->Location = location;
-        containerPanel->BackColor = DashboardStyles::MainBackColor;
-
-        ApplyRoundedRectangleToPanel(containerPanel, DashboardStyles::DefaultCornerRadius);
-
-        // Rate Information Box
-        PanelConfig box1Config;
-        box1Config.Width = containerPanel->Width;
-        box1Config.Height = containerPanel->Height / 2 - DashboardStyles::DefaultSpacing + 40;
-        box1Config.Location = Point(0, 0);
-        box1Config.BackColor = DashboardStyles::PanelBackColor;
-        box1Config.LineSpacing = 15;
-        box1Config.ContentYOffset = 110;
-        box1Config.Title = "Device Management";
-        box1Config.Content = "• HVAC System: ON (2.1 kW)\n"
-            "• Water Heater: Standby (0.1 kW)\n"
-            "• Washing Machine: OFF\n"
-            "• Dishwasher: Scheduled (21:00)";
-
-        containerPanel->Controls->Add(CreatePanel(box1Config));
-
-        // Energy Tips Box
-        PanelConfig box2Config;
-        box2Config.Width = containerPanel->Width;
-        box2Config.Height = containerPanel->Height / 2 - DashboardStyles::DefaultSpacing + 45;
-        box2Config.Location = Point(0, box1Config.Height + DashboardStyles::DefaultSpacing2);
-        box2Config.BackColor = DashboardStyles::PanelBackColor;
-        box2Config.LineSpacing = 15;
-        box2Config.ContentYOffset = 110;
-        box2Config.Title = "Performance Metrics";
-        box2Config.Content = "Energy Efficiency Score: 85/100\n"
-            "Weekly Goal Progress: 68%\n"
-            "Monthly Savings: $42.30\n"
-            "Carbon Footprint: -15% vs. Last Month";
-
-        containerPanel->Controls->Add(CreatePanel(box2Config));
-
-        return containerPanel;
+        return topSectionPanel;
     }
 
     void DashboardUserControl::InitializeComponent(void) {
         this->components = gcnew System::ComponentModel::Container();
+        this->Size = System::Drawing::Size(1400, 685);
 
-        if (screenWidth == 1920) {
-            this->Size = System::Drawing::Size(1140, 900);
-        }
-        else {
-            this->Size = System::Drawing::Size(940, 685);
-            DashboardStyles::MiniBoxHeight = 165;
-        }
-
+        this->Dock = DockStyle::Fill;
         this->BackColor = DashboardStyles::MainBackColor;
 
-        // Create and add top-left section
-        Panel^ topLeftPanel = CreateTopLeftSection();
-        this->Controls->Add(topLeftPanel);
-
-        // Create and add bottom-left section
-        Panel^ bottomLeftPanel = CreateBottomLeftSection(
-            Point(DashboardStyles::DefaultMargin,
-                topLeftPanel->Bottom + DashboardStyles::DefaultSpacing)
-        );
-        this->Controls->Add(bottomLeftPanel);
-
-        // Create and add right section
-        Panel^ rightPanel = CreateRightSection(
-            Point(topLeftPanel->Right + DashboardStyles::DefaultSpacing,
-                DashboardStyles::DefaultMargin)
-        );
-        this->Controls->Add(rightPanel);
+        // Create and add the top section
+        Panel^ topSectionPanel = CreateTopSection();
+        this->Controls->Add(topSectionPanel);
     }
 }
