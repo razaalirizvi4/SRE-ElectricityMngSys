@@ -229,20 +229,7 @@ namespace EUS
         initializeTable();
         makeTable(dailyBill, dailyThreshold, arr);
         GlobalObjectsRaza::Globals::unmanagedGlobals->bill = dailyBill;
-        InitializeTable1(GlobalObjects::Globals::Gtable2);
-        RandomizeTable(GlobalObjects::Globals::Gtable2);
-        InitializeTable1(GlobalObjects::Globals::Gtable3);
-        RandomizeTable(GlobalObjects::Globals::Gtable3);
-        InitializeTable1(GlobalObjects::Globals::Gtable4);
-        RandomizeTable(GlobalObjects::Globals::Gtable4);
-        InitializeTable1(GlobalObjects::Globals::Gtable5);
-        RandomizeTable(GlobalObjects::Globals::Gtable5);
-        InitializeTable1(GlobalObjects::Globals::Gtable6);
-        RandomizeTable(GlobalObjects::Globals::Gtable6);
-        InitializeTable1(GlobalObjects::Globals::Gtable7);
-        RandomizeTable(GlobalObjects::Globals::Gtable7);
-        InitializeTable1(GlobalObjects::Globals::GTable8);
-        RandomizeTable(GlobalObjects::Globals::GTable8);
+        
         for (int i = 0; i < 4; i++) {
             Week::Tables^ weekTables = gcnew Week::Tables(); // Create an instance of Tables for each week
 

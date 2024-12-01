@@ -6,43 +6,6 @@
 
 
 
-//void InitializeTable1(System::Windows::Forms::DataGridView^ targetTable) {
-//    // Clear the target table
-//    targetTable->Rows->Clear();
-//    targetTable->Columns->Clear();
-//
-//    targetTable->AutoSizeColumnsMode = System::Windows::Forms::DataGridViewAutoSizeColumnsMode::Fill;
-//    targetTable ->ColumnHeadersVisible = true;
-//    targetTable->RowHeadersVisible = false;
-//    targetTable->AllowUserToAddRows = false;
-//
-//    // Copy column structure from Gtable
-//    for (int i = 0; i < GlobalObjects::Globals::Gtable->ColumnCount; ++i) {
-//        auto newColumn = gcnew System::Windows::Forms::DataGridViewTextBoxColumn();
-//        newColumn->HeaderText = GlobalObjects::Globals::Gtable->Columns[i]->HeaderText;
-//        newColumn->Width = GlobalObjects::Globals::Gtable->Columns[i]->Width;
-//        targetTable->Columns->Add(newColumn);
-//    }
-//
-//    // Copy row data from Gtable
-//    for (int i = 0; i < GlobalObjects::Globals::Gtable->RowCount; ++i) {
-//        // Create a new row for the target table
-//        System::Windows::Forms::DataGridViewRow^ newRow = gcnew System::Windows::Forms::DataGridViewRow();
-//
-//        // Copy each cell's value from Gtable to the new row
-//        for (int j = 0; j < GlobalObjects::Globals::Gtable->ColumnCount; ++j) {
-//            System::Windows::Forms::DataGridViewCell^ newCell = gcnew System::Windows::Forms::DataGridViewTextBoxCell();
-//            newCell->Value = GlobalObjects::Globals::Gtable->Rows[i]->Cells[j]->Value;
-//            newRow->Cells->Add(newCell);
-//        }
-//
-//        // Add the newly created row to the target table
-//        targetTable->Rows->Add(newRow);
-//    }
-//}
-
-
-
 
 namespace EUS {
 
