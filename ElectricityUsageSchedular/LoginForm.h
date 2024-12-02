@@ -2,6 +2,7 @@
 
 #include "MainForm.h"
 #include<string.h>
+#include"Userclass.h"
 
 namespace EUS {
 
@@ -49,23 +50,6 @@ namespace EUS {
         void FetchDetailsOnLogin();
 
         void ApplyRoundedRectangleToPanel(Panel^ panel, int radius);
-
-    };
-
-    class UserData
-    {
-    public:
-        static int userid;
-        static std::string username;
-        static std::string useremail;
-        static std::string userpassword;
-        static std::string userprovince;
-        static std::string usercity;
-        static std::string userarea;
-        static std::string userpeakstart;
-        static std::string userpeakend;
-
-        UserData();
 
     };
 

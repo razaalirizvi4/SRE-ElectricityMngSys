@@ -2,7 +2,7 @@
 #include "LoginForm.h"
 #include"GlobalObjects.h"
 #include "globals2.h"
-#include "LoginForm.h"
+#include"Userclass.h"
 using namespace System;
 using namespace System::ComponentModel;
 using namespace System::Windows::Forms;

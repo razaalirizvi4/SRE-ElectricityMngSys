@@ -161,6 +161,7 @@
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="unmanaged.h" />
+    <ClInclude Include="Userclass.h" />
     <ClInclude Include="week.h" />
   </ItemGroup>
   <ItemGroup>
@@ -181,6 +182,7 @@
     <ClCompile Include="RegisterForm.cpp" />
     <ClCompile Include="SchedulerUserControl.cpp" />
     <ClCompile Include="SettingsUserControl.cpp" />
+    <ClCompile Include="Userclass.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\EUS\EUS\icon_dashboard.png" />
