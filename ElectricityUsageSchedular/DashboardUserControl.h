@@ -1,6 +1,6 @@
 #pragma once
 #include "RoundedRectangle.h"
-
+#include"Userclass.h"
 namespace EUS {
     using namespace System;
     using namespace System::ComponentModel;

@@ -372,6 +372,7 @@ namespace EUS {
         std::string city = context.marshal_as<std::string>(enteredCity);
         std::string name = context.marshal_as<std::string>(enteredName);
         std::string area = context.marshal_as<std::string>(enteredArea);
+        int defaultBudget = 50000;
 
         sqlite3* db;
         sqlite3_stmt* stmt;
@@ -416,7 +417,7 @@ namespace EUS {
         }
 
         // Step 2: If email doesn't exist, insert new user into the database
-        std::string insertQuery = "INSERT INTO Users (User_Email, User_Name, User_Password, User_Province, User_City, User_Area) VALUES (?, ?, ?, ?, ?, ?)";
+        std::string insertQuery = "INSERT INTO Users (User_Email, User_Name, User_Password, User_Province, User_City, User_Area, User_Budget) VALUES (?, ?, ?, ?, ?, ?, ?)";
         rc = sqlite3_prepare_v2(db, insertQuery.c_str(), -1, &stmt, nullptr);
 
         if (rc != SQLITE_OK)
@@ -433,6 +434,8 @@ namespace EUS {
         sqlite3_bind_text(stmt, 4, province.c_str(), -1, SQLITE_STATIC);
         sqlite3_bind_text(stmt, 5, city.c_str(), -1, SQLITE_STATIC);
         sqlite3_bind_text(stmt, 6, area.c_str(), -1, SQLITE_STATIC);
+        sqlite3_bind_int(stmt, 7, defaultBudget);
+
 
         // Execute the insert statement
         rc = sqlite3_step(stmt);
@@ -507,7 +510,7 @@ namespace EUS {
             this->Controls->Remove(cityBox);
             cityBox = gcnew ComboBox();
             cityBox->Location = System::Drawing::Point(530, 420);
-            cityBox->Size = System::Drawing::Size(250, 30);
+            cityBox->Size = System::Drawing::Size(200, 30);
             cityBox->Font = gcnew System::Drawing::Font(L"Arial", 10);
             cityBox->BackColor = Color::FromArgb(30, 30, 30);
             cityBox->ForeColor = Color::FromArgb(0, 122, 204);
@@ -519,7 +522,7 @@ namespace EUS {
             this->Controls->Remove(areaBox);
             areaBox = gcnew ComboBox();
             areaBox->Location = System::Drawing::Point(530, 500);
-            areaBox->Size = System::Drawing::Size(250, 30);
+            areaBox->Size = System::Drawing::Size(200, 30);
             areaBox->Font = gcnew System::Drawing::Font(L"Arial", 10);
             areaBox->BackColor = Color::FromArgb(30, 30, 30);
             areaBox->ForeColor = Color::FromArgb(0, 122, 204);

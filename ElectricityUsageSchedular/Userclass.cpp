@@ -1,7 +1,10 @@
 #include "pch.h"
 #include"Userclass.h"
 
-namespace EUS{
+
+namespace EUS
+{
+
 
     // Initialize static variables
     int EUS::UserData::userid = 0;                        // Set to some initial value
@@ -13,6 +16,6 @@ namespace EUS{
     std::string EUS::UserData::userarea = "default_area";        // Set to some initial value
     std::string EUS::UserData::userpeakstart = "some initial value"; // Set to some initial value
     std::string EUS::UserData::userpeakend = "some initial value";   // Set to some initial value
-
+    int EUS::UserData::userbudget = -1;
 
 }

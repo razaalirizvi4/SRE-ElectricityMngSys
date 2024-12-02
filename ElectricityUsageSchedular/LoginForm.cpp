@@ -387,7 +387,7 @@ namespace EUS
         }
 
         // Prepare SQL for login query
-        std::string sql = "SELECT User_ID, User_Email, User_Name, User_Password, User_Province, User_City, User_Area FROM Users WHERE User_Email = ? AND User_Password = ?";
+        std::string sql = "SELECT User_ID, User_Email, User_Name, User_Password, User_Province, User_City, User_Area, User_Budget FROM Users WHERE User_Email = ? AND User_Password = ?";
         rc = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr);
         if (rc != SQLITE_OK) {
             MessageBox::Show("Failed to prepare SQL statement!");
@@ -408,6 +408,7 @@ namespace EUS
             const unsigned char* userProvince = sqlite3_column_text(stmt, 4);
             const unsigned char* userCity = sqlite3_column_text(stmt, 5);
             const unsigned char* userArea = sqlite3_column_text(stmt, 6);
+            int userBudget = sqlite3_column_int(stmt, 7);
 
             std::string userEmailStr(reinterpret_cast<const char*>(userEmail));
             std::string userNameStr(reinterpret_cast<const char*>(userName));
@@ -424,6 +425,7 @@ namespace EUS
             UserData::userprovince = userProvinceStr;
             UserData::usercity = userCityStr;
             UserData::userarea = userAreaStr;
+            UserData::userbudget = userBudget;
         }
         sqlite3_finalize(stmt);
 
