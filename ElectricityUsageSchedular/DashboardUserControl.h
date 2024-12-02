@@ -1,5 +1,6 @@
 #pragma once
 #include "RoundedRectangle.h"
+#include "Userclass.h"
 
 namespace EUS {
     using namespace System;
@@ -44,8 +45,14 @@ namespace EUS {
         Button^ CreateRoundedButton(String^ iconPath, int size, Point location);
 
     private:
+        array<String^>^ energySavingTips;
+        int currentTipIndex;
+
         System::ComponentModel::Container^ components;
         int screenWidth = Screen::PrimaryScreen->Bounds.Width;
+
+        Panel^ tipsPanel;  
+        PanelConfig tipsPanelConfig; 
 
         Label^ CreateLabel(String^ text, System::Drawing::Font^ font, Color color, int width, int height, Point location);
         Panel^ CreatePanel(PanelConfig config);
@@ -53,6 +60,10 @@ namespace EUS {
 
         // Section creation methods
         Panel^ CreateTopSection();
+        Panel^ CreateBottomSection();
         void InitializeComponent(void);
+        void ShowPreviousTip(Object^ sender, EventArgs^ e);
+        void ShowNextTip(Object^ sender, EventArgs^ e);
+        void UpdateTipContent();
     };
 }
