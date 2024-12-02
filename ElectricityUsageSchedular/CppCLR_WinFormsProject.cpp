@@ -53,9 +53,37 @@ vector<schedule_appliance::Appliance> sortit(vector<schedule_appliance::Applianc
             sorted.push_back(app[i]);
         }
     }
+    for (int i = 0; i < app.size(); i++) {
+        if (app[i].priority == 4) {
+            sorted.push_back(app[i]);
+        }
+    }
+    for (int i = 0; i < app.size(); i++) {
+        if (app[i].priority == 5) {
+            sorted.push_back(app[i]);
+        }
+    }
     return sorted;
 }
 
+int timetoInt(const std::string& time)
+{
+    // Split the time string into hours and minutes
+    int hours, minutes;
+    char colon;
+    std::stringstream ss(time);  // Use std::stringstream here
+    ss >> hours >> colon >> minutes;
+
+    // Round up if minutes >= 30, else round down
+    if (minutes >= 30)
+    {
+        return hours + 1; // Round up to next hour
+    }
+    else
+    {
+        return hours; // Round down to current hour
+    }
+}
 
 int traverseCols(int row) {
     for (int i = 1; i < 24; i++) {
@@ -81,6 +109,12 @@ void makeTable(float& daily, float threshold, const vector<schedule_appliance::A
             for (int j = 1; j < 24; j++) {
                 if (GlobalObjects::Globals::Gtable->Rows[i]->Cells[j]->Value == nullptr) {  // Find empty column
                     GlobalObjects::Globals::Gtable->Rows[i]->Cells[j]->Value = "+";  // Mark as used
+                    int ps = timetoInt(EUS::UserData::userpeakstart);
+                    int diff = timetoInt(EUS::UserData::userpeakend) - ps;
+                    if (j > ps && j < ps + diff) {
+                        daily += arr[i].kwh * 47;
+                    }
+                    else 
                     daily += arr[i].kwh * 41.6;  // Add kWh to daily usage
                 }
             }
@@ -90,13 +124,25 @@ void makeTable(float& daily, float threshold, const vector<schedule_appliance::A
             empty = traverseCols(i);
             if (empty != -1) {
                 GlobalObjects::Globals::Gtable->Rows[i]->Cells[empty]->Value = "+";
-                daily += arr[i].kwh * 41.6;
+                int ps = timetoInt(EUS::UserData::userpeakstart);
+                int diff = timetoInt(EUS::UserData::userpeakend) - ps;
+                if (empty > ps && empty < ps + diff) {
+                    daily += arr[i].kwh * 47;
+                }
+                else
+                    daily += arr[i].kwh * 41.6;  // Add kWh to daily usage
             }
 
             empty = traverseCols( i);  // Look for another empty spot
             if (empty != -1) {
                 GlobalObjects::Globals::Gtable->Rows[i]->Cells[empty]->Value = "+";
-                daily += arr[i].kwh * 41.6;
+                int ps = timetoInt(EUS::UserData::userpeakstart);
+                int diff = timetoInt(EUS::UserData::userpeakend) - ps;
+                if (empty > ps && empty < ps + diff) {
+                    daily += arr[i].kwh * 47;
+                }
+                else
+                    daily += arr[i].kwh * 41.6;  // Add kWh to daily usage
             }
         }
         if (arr[i].priority == 1) {
@@ -104,7 +150,13 @@ void makeTable(float& daily, float threshold, const vector<schedule_appliance::A
             empty = traverseCols(i);
             if (empty != -1) {
                 GlobalObjects::Globals::Gtable->Rows[i]->Cells[empty]->Value = "+";
-                daily += arr[i].kwh * 41.6;
+                int ps = timetoInt(EUS::UserData::userpeakstart);
+                int diff = timetoInt(EUS::UserData::userpeakend) - ps;
+                if (empty > ps && empty < ps + diff) {
+                    daily += arr[i].kwh * 47;
+                }
+                else
+                    daily += arr[i].kwh * 41.6;  // Add kWh to daily usage
             }
         }
     }
@@ -256,7 +308,7 @@ void get_appliances()
 
 void RandomizeTable(System::Windows::Forms::DataGridView^ tbl) {
     // Assign to global table
-    GlobalObjects::Globals::Gtable = tbl;
+    //GlobalObjects::Globals::Gtable = tbl;
 
     // Random number generator
     std::random_device rd;
@@ -266,6 +318,10 @@ void RandomizeTable(System::Windows::Forms::DataGridView^ tbl) {
     for (int i = 0; i < tbl->RowCount; ++i) {
         // Extract time slot values (ignore first column)
         std::vector<int> rowValues;
+
+        // Get ps (peak start) and diff (difference in indices)
+        int ps = timetoInt(EUS::UserData::userpeakstart);  // Assuming timetoInt converts time to integer indices
+        int diff = timetoInt(EUS::UserData::userpeakend) - ps;
 
         for (int j = 1; j < tbl->ColumnCount; ++j) {
             System::Object^ cellValue = tbl->Rows[i]->Cells[j]->Value;
@@ -283,16 +339,35 @@ void RandomizeTable(System::Windows::Forms::DataGridView^ tbl) {
             }
         }
 
-        // Shuffle the time slot values
-        std::shuffle(rowValues.begin(), rowValues.end(), gen);
+        // Shuffle the time slot values, excluding the range where ps < index < ps + diff
+        std::vector<int> availableIndices;
 
-        // Assign shuffled values back to the time slots
+        // Collect indices that are allowed for randomization (excluding the restricted range)
         for (int j = 0; j < rowValues.size(); ++j) {
-            // Assign "+" if the value is 1, or nullptr if the value is 0
-            tbl->Rows[i]->Cells[j + 1]->Value = (rowValues[j] == 1) ? gcnew System::String("+") : nullptr;
+            if (j < ps || j >= (ps + diff)) {
+                availableIndices.push_back(j);  // Collect index if it's outside the restricted range
+            }
+        }
+
+        // Shuffle only the available indices
+        std::shuffle(availableIndices.begin(), availableIndices.end(), gen);
+
+        // Reassign values, keeping the restricted range unchanged
+        for (int j = 0; j < rowValues.size(); ++j) {
+            if (j >= ps && j < (ps + diff)) {
+                // Keep original value in the restricted range
+                tbl->Rows[i]->Cells[j + 1]->Value = rowValues[j] == 1 ? gcnew System::String("+") : nullptr;
+            }
+            else {
+                // Assign shuffled value to the allowed range
+                int idx = availableIndices.back();  // Get the last index from availableIndices
+                availableIndices.pop_back();  // Remove the used index from the available pool
+                tbl->Rows[i]->Cells[j + 1]->Value = (rowValues[idx] == 1) ? gcnew System::String("+") : nullptr;
+            }
         }
     }
 }
+
 
 void CheckConditionInBackground()
 {

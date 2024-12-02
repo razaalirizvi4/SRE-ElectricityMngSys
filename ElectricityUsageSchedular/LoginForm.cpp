@@ -43,6 +43,21 @@ void InitializeTable1(System::Windows::Forms::DataGridView^ targetTable) {
     }
 }
 
+int p4 = 0;//3 times a week
+int p5 = 0;//1 time a week
+
+void getWrongP() {
+    for (int i = 0; i < GlobalObjectsRaza::Globals::unmanagedGlobals->apl.size(); i++) {
+        if (GlobalObjectsRaza::Globals::unmanagedGlobals->apl[i].priority == 4) {
+            p4++;
+        }
+        else if (GlobalObjectsRaza::Globals::unmanagedGlobals->apl[i].priority == 5) {
+            p5++;
+        }
+    }
+}
+
+
 
 
 namespace EUS 
@@ -217,14 +232,14 @@ namespace EUS
         for (int i = 0; i < GlobalObjectsRaza::Globals::unmanagedGlobals->apl.size(); i++) {
             int p = (i % 2) + 1;
             if (i == 7)
-                p = 3;
+                p = 4;
             GlobalObjectsRaza::Globals::unmanagedGlobals->apl[i].priority = p;
         }
         vector<schedule_appliance::Appliance> arr = sortit(GlobalObjectsRaza::Globals::unmanagedGlobals->apl, 0);
 
         float dailyBill = 0.0f;
         const float monthlyThreshold = 60000.0f;
-
+        getWrongP();
         const float dailyThreshold = monthlyThreshold / 30.0f; // Calculate daily threshold
         initializeTable();
         makeTable(dailyBill, dailyThreshold, arr);
@@ -243,16 +258,22 @@ namespace EUS
             DataGridView^ day7 = gcnew DataGridView();
 
             InitializeTable1(day1);
+            
             RandomizeTable(day1);
+            day1->Rows[17]->Cells[5]->Value = "+";
+            GlobalObjectsRaza::Globals::unmanagedGlobals->bill += GlobalObjectsRaza::Globals::unmanagedGlobals->apl[i].kwh * 41.6;
+           // setP5(day1);
             InitializeTable1(day2);
             RandomizeTable(day2);
             InitializeTable1(day3);
+            //setP4(day3);
             RandomizeTable(day3);
             InitializeTable1(day4);
             RandomizeTable(day4);
             InitializeTable1(day5);
             RandomizeTable(day5);
             InitializeTable1(day6);
+            //setP4(day6);
             RandomizeTable(day6);
             InitializeTable1(day7);
             RandomizeTable(day7);

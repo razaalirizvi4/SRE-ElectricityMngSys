@@ -13,3 +13,4 @@ void retrive_appliance_names();
 void get_appliances();
 void RandomizeTable(System::Windows::Forms::DataGridView^ tbl);
 void CheckConditionInBackground();
+int timetoInt(const std::string& time);
