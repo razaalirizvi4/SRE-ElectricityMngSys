@@ -479,6 +479,30 @@ namespace EUS
             UserData::userpeakend = pendi;
         }
         sqlite3_finalize(stmt);
+
+
+        std::string uprov = UserData::userprovince;
+
+        sql = "SELECT PeakRate, OffPeakRate FROM Provinces WHERE Provinces = ?";
+
+        rc = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr);
+
+        if (rc != SQLITE_OK)
+        {
+            MessageBox::Show("Failed to prepare area query!");
+            sqlite3_finalize(stmt);
+            sqlite3_close(db);
+            return;
+        }
+        sqlite3_bind_text(stmt, 1, uprov.c_str(), -1, SQLITE_STATIC);
+
+        rc = sqlite3_step(stmt);
+        if (rc == SQLITE_ROW)
+        {
+            UserData::peakrate = sqlite3_column_double(stmt, 0);
+            UserData::offpeakrate = sqlite3_column_double(stmt, 1);
+        }
+        sqlite3_finalize(stmt);
         sqlite3_close(db);
     }
 

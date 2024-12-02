@@ -17,7 +17,9 @@ namespace EUS
         static std::string userarea;
         static std::string userpeakstart;
         static std::string userpeakend;
-        static int userbudget;
+        static double userbudget;
+        static double offpeakrate;
+        static double peakrate;
 
         UserData()
         {
@@ -31,6 +33,8 @@ namespace EUS
             userpeakstart = "";
             userpeakend = "";
             userbudget = -1;
+            offpeakrate = -1;
+            peakrate = -1;
         }
 
         // Convert time (HH:MM) to integer (round to nearest hour)

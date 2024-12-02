@@ -16,6 +16,8 @@ namespace EUS
     std::string EUS::UserData::userarea = "default_area";        // Set to some initial value
     std::string EUS::UserData::userpeakstart = "some initial value"; // Set to some initial value
     std::string EUS::UserData::userpeakend = "some initial value";   // Set to some initial value
-    int EUS::UserData::userbudget = -1;
+    double EUS::UserData::userbudget = -1;
+    double EUS::UserData::peakrate = -1;
+    double EUS::UserData::offpeakrate = -1;
 
 }
