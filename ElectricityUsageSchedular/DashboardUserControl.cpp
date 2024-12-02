@@ -60,7 +60,7 @@ namespace EUS {
                 Color::White,
                 panel->Width,
                 30,
-                Point(10, 10)); // Offset for title
+                Point(0, 10)); // Offset for title
             panel->Controls->Add(titleLabel);
         }
 
@@ -97,14 +97,14 @@ namespace EUS {
     Panel^ DashboardUserControl::CreateTopSection() {
         // Create a container for the top section
         Panel^ topSectionPanel = gcnew Panel();
-			topSectionPanel->Size = System::Drawing::Size(1400, this->Height / 3);
-        topSectionPanel->Location = Point(DashboardStyles::DefaultMargin, DashboardStyles::DefaultMargin);
+		topSectionPanel->Size = System::Drawing::Size(1420, this->Height / 3);
+        topSectionPanel->Location = Point(DashboardStyles::DefaultMargin, DashboardStyles::DefaultMargin - 30);
         topSectionPanel->BackColor = DashboardStyles::MainBackColor;
 
         ApplyRoundedRectangleToPanel(topSectionPanel, DashboardStyles::DefaultCornerRadius);
 
-        int boxWidth = (topSectionPanel->Width - DashboardStyles::DefaultSpacing - 100) / 3;
-        int boxHeight = topSectionPanel->Height - DashboardStyles::DefaultSpacing2;
+        int boxWidth = (topSectionPanel->Width - DashboardStyles::DefaultSpacing - 90) / 2;
+        int boxHeight = topSectionPanel->Height - DashboardStyles::DefaultSpacing2 - 50;
 
         // First Box Configuration
         PanelConfig box1Config;
@@ -113,46 +113,80 @@ namespace EUS {
         box1Config.Location = Point(0, 0);
         box1Config.BackColor = DashboardStyles::PanelBackColor;
         box1Config.LineSpacing = 3;
-        box1Config.ContentYOffset = 60;
+        box1Config.ContentYOffset = 50;
         box1Config.Title = "Energy Consumption Overview";
-        box1Config.Content =
-            "Daily Usage: 28.5 kWh\n"
-            "Current Power: 2.4 kW\n"
-            "Peak Today: 3.8 kW at 18:30\n"
-            "Week-over-Week Change: -5.2%";
+        box1Config.Content = gcnew String(
+            ("Daily Usage: " + std::to_string(UserData::userid) + " kWh\n" +
+                "Current Power: " + UserData::username + "\n" +
+                "Peak Today: " + UserData::userpeakstart + "\n").c_str());
 
         // Second Box Configuration
         PanelConfig box2Config = box1Config;
-        box2Config.Location = Point(boxWidth + DashboardStyles::DefaultSpacing, 0);
+        box2Config.Location = Point(boxWidth + DashboardStyles::DefaultSpacing + 10, 0);
         box2Config.Title = "Current Rate Info";
-        box2Config.Content =
-            "Current Rate: $0.14/kWh\n"
-            "Peak Hours: 14:00 - 19:00\n"
-            "Next Rate Change: 2hrs 15min\n"
-            "Today's Est. Cost: $8.45";
+        box2Config.Content = gcnew String(
+            ("Current Rate: $0.14/kWh\nPeak Hours: " + UserData::userpeakstart + " - " + UserData::userpeakend + "\n" +
+             "Today's Est. Cost: $8.45").c_str());
 
-        // Third Box Configuration
-        PanelConfig box3Config = box1Config;
-        box3Config.Location = Point(2 * (boxWidth + DashboardStyles::DefaultSpacing), 0);
-        box3Config.Title = "Energy Saving Tips";
-        box3Config.Content =
-            "• Schedule laundry for off-peak hours\n"
-            "• HVAC efficiency decreasing (check filter)\n"
-            "• Smart scheduling could save $25/month\n"
-            "• Consider upgrading to LED bulbs";
 
         topSectionPanel->Controls->Add(CreatePanel(box1Config));
         topSectionPanel->Controls->Add(CreatePanel(box2Config));
 
-        Button^ roundedButton = CreateRoundedButton("icon_settings.png", 100, Point(2 * (boxWidth + DashboardStyles::DefaultSpacing) + 310, 52));
-        topSectionPanel->Controls->Add(roundedButton);
-
         return topSectionPanel;
+    }
+
+    Panel^ DashboardUserControl::CreateBottomSection() {
+        energySavingTips = gcnew array<String^> {
+            "Schedule laundry for off-peak hours.",
+                "Turn off lights when not in use.",
+                "Unplug devices that are not being used.",
+                "Use a programmable thermostat to save energy.",
+                "Seal windows and doors to reduce energy waste.",
+                "Set your water heater to 50°C for efficiency.",
+                "Use energy-efficient LED light bulbs.",
+                "Clean or replace air filters regularly."
+        };
+        currentTipIndex = 4;
+
+        // Create a container for the bottom section
+        Panel^ bottomSectionPanel = gcnew Panel();
+        bottomSectionPanel->Size = System::Drawing::Size(1430, this->Height / 5);
+        bottomSectionPanel->Location = Point(DashboardStyles::DefaultMargin, 685);
+        bottomSectionPanel->BackColor = DashboardStyles::MainBackColor;
+
+        ApplyRoundedRectangleToPanel(bottomSectionPanel, DashboardStyles::DefaultCornerRadius);
+
+        // Add rounded buttons
+        Button^ prevButton = CreateRoundedButton("icon_settings.png", 75, Point(0, bottomSectionPanel->Height / 2 - 40));
+        Button^ nextButton = CreateRoundedButton("icon_settings.png", 75, Point(bottomSectionPanel->Width - 160, bottomSectionPanel->Height / 2 - 40));
+
+        // Add central rounded box
+        tipsPanelConfig;
+        tipsPanelConfig.Width = bottomSectionPanel->Width - 450;
+        tipsPanelConfig.Height = bottomSectionPanel->Height - 20;
+        tipsPanelConfig.Location = Point(180, 10);
+        tipsPanelConfig.BackColor = DashboardStyles::PanelBackColor;
+        tipsPanelConfig.LineSpacing = 5;
+        tipsPanelConfig.ContentYOffset = 55;
+        tipsPanelConfig.Title = "Energy Saving Tips";
+        tipsPanelConfig.Content = energySavingTips[currentTipIndex];
+
+        Panel^ tipsPanel = CreatePanel(tipsPanelConfig);
+
+        // Add cycling logic
+        prevButton->Click += gcnew EventHandler(this, &DashboardUserControl::ShowPreviousTip);
+        nextButton->Click += gcnew EventHandler(this, &DashboardUserControl::ShowNextTip);
+
+        bottomSectionPanel->Controls->Add(prevButton);
+        bottomSectionPanel->Controls->Add(nextButton);
+        bottomSectionPanel->Controls->Add(tipsPanel);
+
+        return bottomSectionPanel;
     }
 
     void DashboardUserControl::InitializeComponent(void) {
         this->components = gcnew System::ComponentModel::Container();
-        this->Size = System::Drawing::Size(1400, 685);
+        this->Size = System::Drawing::Size(1480, 685);
 
         this->Dock = DockStyle::Fill;
         this->BackColor = DashboardStyles::MainBackColor;
@@ -160,5 +194,39 @@ namespace EUS {
         // Create and add the top section
         Panel^ topSectionPanel = CreateTopSection();
         this->Controls->Add(topSectionPanel);
+
+        // Create and add the bottom section
+        Panel^ bottomSectionPanel = CreateBottomSection();
+        this->Controls->Add(bottomSectionPanel);
+    }
+
+    // Tip cycling logic
+    void DashboardUserControl::ShowPreviousTip(Object^ sender, EventArgs^ e) {
+        if (energySavingTips->Length == 0) return;
+
+        currentTipIndex = (currentTipIndex - 1 + energySavingTips->Length) % energySavingTips->Length;
+        UpdateTipContent();
+    }
+
+    void DashboardUserControl::ShowNextTip(Object^ sender, EventArgs^ e) {
+        if (energySavingTips->Length == 0) return;
+
+        currentTipIndex = (currentTipIndex + 1) % energySavingTips->Length;
+        UpdateTipContent();
+    }
+
+    void DashboardUserControl::UpdateTipContent() {
+        // Find the central panel and update its content
+        Panel^ bottomSectionPanel = dynamic_cast<Panel^>(this->Controls[1]);
+        if (bottomSectionPanel) {
+            Panel^ tipsPanel = dynamic_cast<Panel^>(bottomSectionPanel->Controls[2]);
+            if (tipsPanel && tipsPanel->Controls->Count > 0) {
+                Label^ contentLabel = dynamic_cast<Label^>(tipsPanel->Controls[1]);
+                if (contentLabel) {
+                    contentLabel->Text = energySavingTips[currentTipIndex];
+                }
+                return;
+            }
+        }
     }
 }
