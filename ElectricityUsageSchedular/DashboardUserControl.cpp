@@ -163,6 +163,7 @@ namespace EUS
         // vars
         int bill = static_cast<int>(GlobalObjectsRaza::Globals::unmanagedGlobals->bill);
         int units = bill / currentRate;
+        int du = static_cast<int>(GlobalObjectsRaza::Globals::unmanagedGlobals->dailyunits);
 
         // First Box Configuration
         PanelConfig box1Config;
@@ -175,7 +176,7 @@ namespace EUS
         box1Config.Title = "Energy Consumption Overview";
         box1Config.Content = gcnew String(
             ("Daily Usage: " + std::to_string(units) + " kWh\n" +
-                "Today's Units: " + std::to_string(units) + "\n" +
+                "Today's Units: " + std::to_string(du) + "\n" +
                 "Peak Today: " + UserData::userpeakstart + "\n").c_str());
 
         // Second Box Configuration

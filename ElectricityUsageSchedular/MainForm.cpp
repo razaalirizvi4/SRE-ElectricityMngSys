@@ -82,11 +82,6 @@ void populateP5(System::Windows::Forms::DataGridView^ targetTable) {
     }
 }
 
-
-
-
-
-
 namespace EUS
 {
     MainForm::MainForm(void)
@@ -372,23 +367,20 @@ namespace EUS
         btnDashboard = CreateIconButton("icon_dashboard.png", MainPageStyles::ButtonSize);
         btnScheduler = CreateIconButton("icon_scheduler.png", MainPageStyles::ButtonSize);
         btnDevices = CreateIconButton("icon_devices.png", MainPageStyles::ButtonSize);
-        btnAnalytics = CreateIconButton("icon_analytics.png", MainPageStyles::ButtonSize);
         btnSettings = CreateIconButton("icon_settings.png", MainPageStyles::ButtonSize);
 
         ConfigureButtonDocking();
     }
 
     void MainForm::ConfigureButtonDocking() {
-        btnSettings->Dock = DockStyle::Bottom;
         btnDashboard->Dock = DockStyle::Top;
         btnScheduler->Dock = DockStyle::Top;
         btnDevices->Dock = DockStyle::Top;
-        btnAnalytics->Dock = DockStyle::Top;
+        btnSettings->Dock = DockStyle::Top;
     }
 
     void MainForm::AddControlsToSidebar() {
         sidebarPanel->Controls->Add(btnSettings);
-        sidebarPanel->Controls->Add(btnAnalytics);
         sidebarPanel->Controls->Add(btnDevices);
         sidebarPanel->Controls->Add(btnScheduler);
         sidebarPanel->Controls->Add(btnDashboard);
@@ -482,7 +474,6 @@ namespace EUS
         if (button == btnDashboard) return gcnew DashboardUserControl();
         if (button == btnScheduler) return gcnew SchedulerUserControl();
         if (button == btnDevices) return gcnew DevicesUserControl();
-        if (button == btnAnalytics) return gcnew AnalyticsUserControl();
         if (button == btnSettings) return gcnew SettingsUserControl();
         return nullptr;
     }
