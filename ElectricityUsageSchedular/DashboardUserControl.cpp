@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "DashboardUserControl.h"
 #include"week.h"
 
@@ -102,14 +102,14 @@ namespace EUS
     Panel^ DashboardUserControl::CreateTopSection() {
         // Create a container for the top section
         Panel^ topSectionPanel = gcnew Panel();
-        topSectionPanel->Size = System::Drawing::Size(1420, this->Height / 3);
+        topSectionPanel->Size = System::Drawing::Size(1420, this->Height / 3 - 60);
         topSectionPanel->Location = Point(DashboardStyles::DefaultMargin, DashboardStyles::DefaultMargin - 30);
         topSectionPanel->BackColor = DashboardStyles::MainBackColor;
 
         ApplyRoundedRectangleToPanel(topSectionPanel, DashboardStyles::DefaultCornerRadius);
 
         int boxWidth = (topSectionPanel->Width - DashboardStyles::DefaultSpacing - 90) / 2;
-        int boxHeight = topSectionPanel->Height - DashboardStyles::DefaultSpacing2 - 50;
+        int boxHeight = topSectionPanel->Height - DashboardStyles::DefaultSpacing2;
 
         // Determine current time and whether it's within peak hours
         DateTime now = DateTime::Now;
@@ -161,7 +161,7 @@ namespace EUS
                 "Unplug devices that are not being used.",
                 "Use a programmable thermostat to save energy.",
                 "Seal windows and doors to reduce energy waste.",
-                "Set your water heater to 50�C for efficiency.",
+                "Set your water heater to 50°C for efficiency.",
                 "Use energy-efficient LED light bulbs.",
                 "Clean or replace air filters regularly."
         };
@@ -422,8 +422,8 @@ namespace EUS
         g->SmoothingMode = Drawing2D::SmoothingMode::AntiAlias;
 
         // Define chart area
-        int x = 215;
-        int y = 275;
+        int x = 150;
+        int y = 260;
         int width = 300;
         int height = 300;
         Drawing::Rectangle rect = Drawing::Rectangle(x, y, width, height);
@@ -470,7 +470,7 @@ namespace EUS
         PieLabel->Font = gcnew System::Drawing::Font("Arial", 18, FontStyle::Bold);
         PieLabel->ForeColor = Color::FromArgb(69, 160, 227);
         PieLabel->AutoSize = true;
-        PieLabel->Location = Point(x - 50, y + 280);
+        PieLabel->Location = Point(x - 20, y + 330);
         PieLabel->TextAlign = ContentAlignment::MiddleCenter;
         this->Controls->Add(PieLabel);
     }
@@ -499,75 +499,105 @@ namespace EUS
                     count++;
                 }
             }
-            eachHourEnergy[j-1] = count;
+            eachHourEnergy[j - 1] = count;
         }
 
         // (previous code blocks omitted for brevity, would be similar to W1 calculation)
 
             // Sample data with four lines
-            cli::array<float>^ val1 = { eachHourEnergy[0], eachHourEnergy[1],eachHourEnergy[2], eachHourEnergy[3],eachHourEnergy[4],eachHourEnergy[5],eachHourEnergy[6],eachHourEnergy[7],eachHourEnergy[8],eachHourEnergy[9],eachHourEnergy[10],eachHourEnergy[11],eachHourEnergy[12],eachHourEnergy[13],eachHourEnergy[14],eachHourEnergy[15],eachHourEnergy[16],eachHourEnergy[17],eachHourEnergy[18],eachHourEnergy[19],eachHourEnergy[20],eachHourEnergy[21],eachHourEnergy[22] };
-            cli::array<String^>^ labels = { "00","01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22","23"};
+        cli::array<float>^ val1 = { eachHourEnergy[0], eachHourEnergy[1],eachHourEnergy[2], eachHourEnergy[3],eachHourEnergy[4],eachHourEnergy[5],eachHourEnergy[6],eachHourEnergy[7],eachHourEnergy[8],eachHourEnergy[9],eachHourEnergy[10],eachHourEnergy[11],eachHourEnergy[12],eachHourEnergy[13],eachHourEnergy[14],eachHourEnergy[15],eachHourEnergy[16],eachHourEnergy[17],eachHourEnergy[18],eachHourEnergy[19],eachHourEnergy[20],eachHourEnergy[21],eachHourEnergy[22] };
+        cli::array<String^>^ labels = { "00","01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22","23" };
 
-            // Calculate colors for the lines
-            cli::array<Color>^ colorArray = {
-                Color::FromArgb(46, 138, 205),   // Blue
-            };
+        // Calculate colors for the lines
+        cli::array<Color>^ colorArray = {
+            Color::FromArgb(46, 138, 205),   // Blue
+        };
 
-            // Set up graphics
-            Graphics^ g = e->Graphics;
-            g->SmoothingMode = Drawing2D::SmoothingMode::AntiAlias;
+        // Set up graphics
+        Graphics^ g = e->Graphics;
+        g->SmoothingMode = Drawing2D::SmoothingMode::AntiAlias;
 
-            // Define chart area (same as before)
-            int marginLeft = 775;
-            int marginRight = 100;
-            int marginTop = 220;
-            int marginBottom = 200;
-            int x = marginLeft;
-            int y = marginTop;
-            int width = this->Width - (marginLeft + marginRight);
-            int height = this->Height - (marginTop + marginBottom);
+        // Define chart area (same as before)
+        int marginLeft = 775;
+        int marginRight = 100;
+        int marginTop = 220;
+        int marginBottom = 200;
+        int x = marginLeft;
+        int y = marginTop;
+        int width = this->Width - (marginLeft + marginRight);
+        int height = this->Height - (marginTop + marginBottom);
 
-            // Calculate the maximum value for scaling
-            float maxValue = 0;
-            for each (float value in val1) if (value > maxValue) maxValue = value;
+        // Calculate the maximum value for scaling
+        float maxValue = 0;
+        for each (float value in val1) if (value > maxValue) maxValue = value;
 
-            // Calculate line properties
-            int lineWidth = 3;
-            float scaleY = (height - 50) / maxValue;
+        // Calculate line properties
+        int lineWidth = 3;
+        float scaleY = (height - 50) / maxValue;
 
-            // Draw lines and labels
-            System::Drawing::Font^ labelFont = gcnew System::Drawing::Font("Arial", 12);
+        // Draw lines and labels
+        System::Drawing::Font^ labelFont = gcnew System::Drawing::Font("Arial", 12);
 
-            // Draw four lines
-            cli::array<cli::array<PointF>^>^ linesPoints = gcnew cli::array<cli::array<PointF>^>(1);
-            cli::array<cli::array<float>^>^ valArrays = { val1 };
+        // Draw four lines
+        cli::array<cli::array<PointF>^>^ linesPoints = gcnew cli::array<cli::array<PointF>^>(1);
+        cli::array<cli::array<float>^>^ valArrays = { val1 };
 
-            for (int lineIndex = 0; lineIndex < 1; lineIndex++)
+        for (int lineIndex = 0; lineIndex < 1; lineIndex++)
+        {
+            linesPoints[lineIndex] = gcnew cli::array<PointF>(valArrays[lineIndex]->Length);
+            for (int i = 0; i < valArrays[lineIndex]->Length; i++)
             {
-                linesPoints[lineIndex] = gcnew cli::array<PointF>(valArrays[lineIndex]->Length);
-                for (int i = 0; i < valArrays[lineIndex]->Length; i++)
-                {
-                    linesPoints[lineIndex][i] = PointF(
-                        x + (i * (width / (valArrays[lineIndex]->Length - 1))),
-                        y + height - (valArrays[lineIndex][i] * scaleY)
-                    );
-                }
-                g->DrawLines(gcnew Pen(colorArray[lineIndex], lineWidth), linesPoints[lineIndex]);
+                linesPoints[lineIndex][i] = PointF(
+                    x + (i * (width / (valArrays[lineIndex]->Length - 1))),
+                    y + height - (valArrays[lineIndex][i] * scaleY)
+                );
             }
+            g->DrawLines(gcnew Pen(colorArray[lineIndex], lineWidth), linesPoints[lineIndex]);
+        }
 
-            // Draw axes and labels (same as before)
-            Pen^ axisPen = gcnew Pen(Color::Black, 2);
-            g->DrawLine(axisPen, x, y + height, x + width, y + height);
-            g->DrawLine(axisPen, x, y, x, y + height);
+        // Draw axes and labels (same as before)
+        Pen^ axisPen = gcnew Pen(Color::Black, 2);
+        g->DrawLine(axisPen, x, y + height, x + width, y + height);
+        g->DrawLine(axisPen, x, y, x, y + height);
 
-            for (int i = 0; i < labels->Length; i++) {
-                SizeF labelSize = g->MeasureString(labels[i], labelFont);
-                g->DrawString(labels[i],
-                    labelFont,
-                    Brushes::Black,
-                    x + (i * (width / (labels->Length - 1))) - (labelSize.Width / 2),
-                    y + height + 10);
-            }
+        for (int i = 0; i < labels->Length; i++) {
+            SizeF labelSize = g->MeasureString(labels[i], labelFont);
+            g->DrawString(labels[i],
+                labelFont,
+                Brushes::Black,
+                x + (i * (width / (labels->Length - 1))) - (labelSize.Width / 2),
+                y + height + 10);
+        }
+
+        //text under Line chart
+        Label^ LLabel = gcnew Label();
+        LLabel->Text = L"Energy Consumption in each Hour";
+        LLabel->Font = gcnew System::Drawing::Font("Arial", 16, FontStyle::Bold);
+        LLabel->ForeColor = Color::FromArgb(69, 160, 227);
+        LLabel->AutoSize = true;
+        LLabel->Location = Point(x+120, y-20);
+        LLabel->TextAlign = ContentAlignment::MiddleCenter;
+        this->Controls->Add(LLabel);
+
+        //text under Line chart
+        Label^ tLabel = gcnew Label();
+        tLabel->Text = L"Time (Hours)->";
+        tLabel->Font = gcnew System::Drawing::Font("Arial", 12, FontStyle::Bold);
+        tLabel->ForeColor = Color::FromArgb(0,0,0);
+        tLabel->AutoSize = true;
+        tLabel->Location = Point(x + 120, y + 420);
+        tLabel->TextAlign = ContentAlignment::MiddleCenter;
+        this->Controls->Add(tLabel);
+
+        //text under Line chart
+        Label^ pLabel = gcnew Label();
+        pLabel->Text = L"↑\nPrice";
+        pLabel->Font = gcnew System::Drawing::Font("Arial", 12, FontStyle::Bold);
+        pLabel->ForeColor = Color::FromArgb(0, 0, 0);
+        pLabel->AutoSize = true;
+        pLabel->Location = Point(x-60, y + 200);
+        pLabel->TextAlign = ContentAlignment::MiddleCenter;
+        this->Controls->Add(pLabel);
     }
     
 }
