@@ -8,6 +8,7 @@
 #include <chrono>
 #include "LoginForm.h"
 #include <thread>
+#include "Userclass.h"
 
 
 void InitializeTable1(System::Windows::Forms::DataGridView^ targetTable) {
@@ -64,7 +65,7 @@ void populateP4(System::Windows::Forms::DataGridView^ targetTable) {
     for (int i = 0; i < arr.size(); i++) {
         if (arr[i].priority == 4) {
             targetTable->Rows[i]->Cells[3]->Value = "+";
-            GlobalObjectsRaza::Globals::unmanagedGlobals->bill += (41.6 * arr[i].kwh) / 3;
+            GlobalObjectsRaza::Globals::unmanagedGlobals->bill += (EUS::UserData::offpeakrate * arr[i].kwh) / 3;
             GlobalObjectsRaza::Globals::unmanagedGlobals->dailyunits += arr[i].kwh / 3;
         }
     }
@@ -75,7 +76,7 @@ void populateP5(System::Windows::Forms::DataGridView^ targetTable) {
     for (int i = 0; i < arr.size(); i++) {
         if (arr[i].priority == 5) {
             targetTable->Rows[i]->Cells[3]->Value = "+";
-            GlobalObjectsRaza::Globals::unmanagedGlobals->bill += (41.6 * arr[i].kwh) / 3;
+            GlobalObjectsRaza::Globals::unmanagedGlobals->bill += (EUS::UserData::offpeakrate * arr[i].kwh) / 3;
             GlobalObjectsRaza::Globals::unmanagedGlobals->dailyunits += arr[i].kwh / 3;
         }
     }
@@ -247,7 +248,7 @@ namespace EUS
         vector<schedule_appliance::Appliance> arr = sortit(GlobalObjectsRaza::Globals::unmanagedGlobals->apl, 0);
 
         float dailyBill = 0.0f;
-        const float monthlyThreshold = 60000.0f;
+        const float monthlyThreshold = EUS::UserData::userbudget;
         getWrongP();
         const float dailyThreshold = monthlyThreshold / 30.0f; // Calculate daily threshold
         initializeTable();

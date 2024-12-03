@@ -112,10 +112,10 @@ void makeTable(float& daily, float threshold, const vector<schedule_appliance::A
                     int ps = timetoInt(EUS::UserData::userpeakstart);
                     int diff = timetoInt(EUS::UserData::userpeakend) - ps;
                     if (j > ps && j < ps + diff) {
-                        daily += arr[i].kwh * 47;
+                        daily += arr[i].kwh * EUS::UserData::peakrate;
                     }
                     else 
-                    daily += arr[i].kwh * 41.6;  // Add kWh to daily usage
+                    daily += arr[i].kwh * EUS::UserData::offpeakrate;  // Add kWh to daily usage
                     GlobalObjectsRaza::Globals::unmanagedGlobals->dailyunits += arr[i].kwh;
                 }
             }
@@ -131,10 +131,10 @@ void makeTable(float& daily, float threshold, const vector<schedule_appliance::A
                 int ps = timetoInt(EUS::UserData::userpeakstart);
                 int diff = timetoInt(EUS::UserData::userpeakend) - ps;
                 if (empty > ps && empty < ps + diff) {
-                    daily += arr[i].kwh * 47;
+                    daily += arr[i].kwh * EUS::UserData::peakrate;
                 }
                 else
-                    daily += arr[i].kwh * 41.6;  // Add kWh to daily usage
+                    daily += arr[i].kwh * EUS::UserData::offpeakrate;  // Add kWh to daily usage
                 GlobalObjectsRaza::Globals::unmanagedGlobals->dailyunits += arr[i].kwh;
             }
 
@@ -144,10 +144,10 @@ void makeTable(float& daily, float threshold, const vector<schedule_appliance::A
                 int ps = timetoInt(EUS::UserData::userpeakstart);
                 int diff = timetoInt(EUS::UserData::userpeakend) - ps;
                 if (empty > ps && empty < ps + diff) {
-                    daily += arr[i].kwh * 47;
+                    daily += arr[i].kwh * EUS::UserData::peakrate;
                 }
                 else
-                    daily += arr[i].kwh * 41.6;  // Add kWh to daily usage
+                    daily += arr[i].kwh * EUS::UserData::offpeakrate;  // Add kWh to daily usage
                 GlobalObjectsRaza::Globals::unmanagedGlobals->dailyunits += arr[i].kwh;
             }
         }
@@ -162,10 +162,10 @@ void makeTable(float& daily, float threshold, const vector<schedule_appliance::A
                 int ps = timetoInt(EUS::UserData::userpeakstart);
                 int diff = timetoInt(EUS::UserData::userpeakend) - ps;
                 if (empty > ps && empty < ps + diff) {
-                    daily += arr[i].kwh * 47;
+                    daily += arr[i].kwh * EUS::UserData::peakrate;
                 }
                 else
-                    daily += arr[i].kwh * 41.6;  // Add kWh to daily usage
+                    daily += arr[i].kwh * EUS::UserData::offpeakrate;  // Add kWh to daily usage
                 GlobalObjectsRaza::Globals::unmanagedGlobals->dailyunits += arr[i].kwh;
             }
         }
