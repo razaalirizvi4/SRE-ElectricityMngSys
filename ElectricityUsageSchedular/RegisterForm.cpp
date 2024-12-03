@@ -545,7 +545,7 @@ namespace EUS {
             this->Controls->Remove(areaBox);
             areaBox = gcnew ComboBox();
             areaBox->Location = System::Drawing::Point(530, 500);
-            areaBox->Size = System::Drawing::Size(250, 30);
+            areaBox->Size = System::Drawing::Size(200, 30);
             areaBox->Font = gcnew System::Drawing::Font(L"Arial", 10);
             areaBox->BackColor = Color::FromArgb(30, 30, 30);
             areaBox->ForeColor = Color::FromArgb(0, 122, 204);
