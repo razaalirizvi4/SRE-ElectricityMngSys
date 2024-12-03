@@ -2,7 +2,7 @@
 #include "MainForm.h"
 #include"GlobalFunctions.h"
 #include <sstream>
-#include <sqlite3.h>
+#include "sqlite3.h"
 #include <string>
 #include <msclr/marshal_cppstd.h>
 #include <chrono>
@@ -234,11 +234,15 @@ namespace EUS
         retrive_appliance_names();
         get_appliances();
 
-        for (int i = 0; i < GlobalObjectsRaza::Globals::unmanagedGlobals->apl.size(); i++) {
+     /*   for (int i = 0; i < GlobalObjectsRaza::Globals::unmanagedGlobals->apl.size(); i++) {
             int p = (i % 2) + 1;
             if (i == 7)
                 p = 4;
             GlobalObjectsRaza::Globals::unmanagedGlobals->apl[i].priority = p;
+        }*/
+        for (int i = 0; i < GlobalObjectsRaza::Globals::unmanagedGlobals->t1.size(); i++)
+        {
+            GlobalObjectsRaza::Globals::unmanagedGlobals->apl[i].priority = stoi(GlobalObjectsRaza::Globals::unmanagedGlobals->t1[i]);
         }
         vector<schedule_appliance::Appliance> arr = sortit(GlobalObjectsRaza::Globals::unmanagedGlobals->apl, 0);
 
