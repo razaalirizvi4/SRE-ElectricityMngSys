@@ -422,10 +422,10 @@ namespace EUS
         g->SmoothingMode = Drawing2D::SmoothingMode::AntiAlias;
 
         // Define chart area
-        int x = 100;
-        int y = 125;
-        int width = 250;
-        int height = 250;
+        int x = 215;
+        int y = 275;
+        int width = 300;
+        int height = 300;
         Drawing::Rectangle rect = Drawing::Rectangle(x, y, width, height);
 
         // Draw pie slices
@@ -470,127 +470,13 @@ namespace EUS
         PieLabel->Font = gcnew System::Drawing::Font("Arial", 18, FontStyle::Bold);
         PieLabel->ForeColor = Color::FromArgb(69, 160, 227);
         PieLabel->AutoSize = true;
-        PieLabel->Location = Point(x - 15, y + 280);
+        PieLabel->Location = Point(x - 50, y + 280);
         PieLabel->TextAlign = ContentAlignment::MiddleCenter;
         this->Controls->Add(PieLabel);
     }
 
     void DashboardUserControl::MakeLineChart(Object^ sender, PaintEventArgs^ e)
     {
-        //Week::Tables^ week1 = GlobalObjects::Globals::monthlyTables[0];
-        //Week::Tables^ week2 = GlobalObjects::Globals::monthlyTables[1];
-        //Week::Tables^ week3 = GlobalObjects::Globals::monthlyTables[2];
-        //Week::Tables^ week4 = GlobalObjects::Globals::monthlyTables[3];
-
-        //int totalAppliances = week1->Gtable1->Rows->Count;
-        //int week1H = 0;
-        //int week2H = 0;
-        //int week3H = 0;
-        //int week4H = 0;
-
-        //cli::array<DataGridView^>^ ArrayW1 = gcnew cli::array<DataGridView^>(7);
-        //ArrayW1[0] = week1->Gtable1;
-        //ArrayW1[1] = week1->Gtable2;
-        //ArrayW1[2] = week1->Gtable3;
-        //ArrayW1[3] = week1->Gtable4;
-        //ArrayW1[4] = week1->Gtable5;
-        //ArrayW1[5] = week1->Gtable6;
-        //ArrayW1[6] = week1->GTable7;
-
-        //cli::array<DataGridView^>^ ArrayW2 = gcnew cli::array<DataGridView^>(7);
-        //ArrayW2[0] = week2->Gtable1;
-        //ArrayW2[1] = week2->Gtable2;
-        //ArrayW2[2] = week2->Gtable3;
-        //ArrayW2[3] = week2->Gtable4;
-        //ArrayW2[4] = week2->Gtable5;
-        //ArrayW2[5] = week2->Gtable6;
-        //ArrayW2[6] = week2->GTable7;
-
-        //cli::array<DataGridView^>^ ArrayW3 = gcnew cli::array<DataGridView^>(7);
-        //ArrayW3[0] = week3->Gtable1;
-        //ArrayW3[1] = week3->Gtable2;
-        //ArrayW3[2] = week3->Gtable3;
-        //ArrayW3[3] = week3->Gtable4;
-        //ArrayW3[4] = week3->Gtable5;
-        //ArrayW3[5] = week3->Gtable6;
-        //ArrayW3[6] = week3->GTable7;
-
-        //cli::array<DataGridView^>^ ArrayW4 = gcnew cli::array<DataGridView^>(7);
-        //ArrayW4[0] = week4->Gtable1;
-        //ArrayW4[1] = week4->Gtable2;
-        //ArrayW4[2] = week4->Gtable3;
-        //ArrayW4[3] = week4->Gtable4;
-        //ArrayW4[4] = week4->Gtable5;
-        //ArrayW4[5] = week4->Gtable6;
-        //ArrayW4[6] = week4->GTable7;
-
-        //int count = 0;
-        //for (int k = 0; k < 7; k++)         //for each day in week1
-        //{
-        //    for (int j = 1; j < 24; j++)   //for each appliance
-        //    {
-        //        for (int i = 0; i < totalAppliances; i++)            //for each hour of the day
-        //        {
-        //            if (ArrayW1[k]->Rows[i]->Cells[j]->Value == "+")
-        //            {
-        //                count++;
-        //                break;
-        //            }
-        //        }
-        //    }
-        //}
-        //week1H = count;
-
-        //count = 0;
-        //for (int k = 0; k < 7; k++)         //for each day in week1
-        //{
-        //    for (int j = 1; j < 24; j++)   //for each appliance
-        //    {
-        //        for (int i = 0; i < totalAppliances; i++)            //for each hour of the day
-        //        {
-        //            if (ArrayW2[k]->Rows[i]->Cells[j]->Value == "+")
-        //            {
-        //                count++;
-        //                break;
-        //            }
-        //        }
-        //    }
-        //}
-        //week2H = count;
-
-        //count = 0;
-        //for (int k = 0; k < 7; k++)         //for each day in week1
-        //{
-        //    for (int j = 1; j < 24; j++)   //for each appliance
-        //    {
-        //        for (int i = 0; i < totalAppliances; i++)            //for each hour of the day
-        //        {
-        //            if (ArrayW3[k]->Rows[i]->Cells[j]->Value == "+")
-        //            {
-        //                count++;
-        //                break;
-        //            }
-        //        }
-        //    }
-        //}
-        //week3H = count;
-
-        //count = 0;
-        //for (int k = 0; k < 7; k++)         //for each day in week1
-        //{
-        //    for (int j = 1; j < 24; j++)   //for each appliance
-        //    {
-        //        for (int i = 0; i < totalAppliances; i++)            //for each hour of the day
-        //        {
-        //            if (ArrayW4[k]->Rows[i]->Cells[j]->Value == "+")
-        //            {
-        //                count++;
-        //                break;
-        //            }
-        //        }
-        //    }
-        //}
-        //week4H = count;
 
         Week::Tables^ week1 = GlobalObjects::Globals::monthlyTables[0];
 
@@ -599,7 +485,7 @@ namespace EUS
         DataGridView^ ArrayW1 = gcnew DataGridView;
 
         ArrayW1 = week1->Gtable1;
-        int* eachHourEnergy = new int[totalAppliances];
+        int* eachHourEnergy = new int[24];
 
         // Calculation logic
         int count = 0;
@@ -613,21 +499,14 @@ namespace EUS
                     count++;
                 }
             }
-            eachHourEnergy[j] = count;
+            eachHourEnergy[j-1] = count;
         }
 
-        // Repeat similar calculation blocks for W2oh, W2fh, W3oh, W3fh, W4oh, W4fh
         // (previous code blocks omitted for brevity, would be similar to W1 calculation)
 
-       
-
-
             // Sample data with four lines
-            cli::array<float>^ val1 = { 0, 1, 2, 3,5,6,34,3,4,6,4,2,4,6,4,3,5,4,2,4,6,4,2 };
-            cli::array<String^>^ labels = { "00-01:00", "01-02:00", "02-03:00", "03-04:00", "04-05:00", "05-06:00", "06-07:00", "07-08:00", "08-09:00", "09-10:00", "10-11:00", "11-12:00", "12-13:00", "13-14:00", "14-15:00", "15-16:00", "16-17:00", "17-18:00", "18-19:00", "19-20:00", "20-21:00", "21-22:00", "22-23:00" };
-
-            //cli::array<float>^ val1 = { 0, 1, 2, 3 };
-            //cli::array<String^>^ labels = { "Week 1", "Week 2", "Week 3", "Week 4" };
+            cli::array<float>^ val1 = { eachHourEnergy[0], eachHourEnergy[1],eachHourEnergy[2], eachHourEnergy[3],eachHourEnergy[4],eachHourEnergy[5],eachHourEnergy[6],eachHourEnergy[7],eachHourEnergy[8],eachHourEnergy[9],eachHourEnergy[10],eachHourEnergy[11],eachHourEnergy[12],eachHourEnergy[13],eachHourEnergy[14],eachHourEnergy[15],eachHourEnergy[16],eachHourEnergy[17],eachHourEnergy[18],eachHourEnergy[19],eachHourEnergy[20],eachHourEnergy[21],eachHourEnergy[22] };
+            cli::array<String^>^ labels = { "00","01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22","23"};
 
             // Calculate colors for the lines
             cli::array<Color>^ colorArray = {
@@ -639,10 +518,10 @@ namespace EUS
             g->SmoothingMode = Drawing2D::SmoothingMode::AntiAlias;
 
             // Define chart area (same as before)
-            int marginLeft = 400;
-            int marginRight = 600;
-            int marginTop = 450;
-            int marginBottom = 70;
+            int marginLeft = 775;
+            int marginRight = 100;
+            int marginTop = 220;
+            int marginBottom = 200;
             int x = marginLeft;
             int y = marginTop;
             int width = this->Width - (marginLeft + marginRight);
@@ -663,9 +542,11 @@ namespace EUS
             cli::array<cli::array<PointF>^>^ linesPoints = gcnew cli::array<cli::array<PointF>^>(1);
             cli::array<cli::array<float>^>^ valArrays = { val1 };
 
-            for (int lineIndex = 0; lineIndex < 1; lineIndex++) {
+            for (int lineIndex = 0; lineIndex < 1; lineIndex++)
+            {
                 linesPoints[lineIndex] = gcnew cli::array<PointF>(valArrays[lineIndex]->Length);
-                for (int i = 0; i < valArrays[lineIndex]->Length; i++) {
+                for (int i = 0; i < valArrays[lineIndex]->Length; i++)
+                {
                     linesPoints[lineIndex][i] = PointF(
                         x + (i * (width / (valArrays[lineIndex]->Length - 1))),
                         y + height - (valArrays[lineIndex][i] * scaleY)
@@ -686,22 +567,6 @@ namespace EUS
                     Brushes::Black,
                     x + (i * (width / (labels->Length - 1))) - (labelSize.Width / 2),
                     y + height + 10);
-            }
-
-            // Draw legend
-            int legendX = x + width + 30;
-            int legendY = y + 150;
-            cli::array<String^>^ legendLabels = {
-                "Appliances Left On Duration 1",
-                "Appliances Left Off Duration 1",
-                "Appliances Left On Duration 2",
-                "Appliances Left Off Duration 2"
-            };
-
-            for (int i = 0; i < 1; i++) {
-                g->FillRectangle(gcnew SolidBrush(colorArray[i]), legendX, legendY + (i * 30), 20, 20);
-                g->DrawRectangle(Pens::Black, legendX, legendY + (i * 30), 20, 20);
-                g->DrawString(legendLabels[i], labelFont, Brushes::Black, legendX + 25, legendY + (i * 30));
             }
     }
     
