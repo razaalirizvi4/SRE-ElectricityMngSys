@@ -9,6 +9,12 @@
 #include "LoginForm.h"
 #include <thread>
 #include "Userclass.h"
+#include <Windows.h>
+
+
+using namespace System;
+using namespace System::Windows::Forms;
+using namespace System::Diagnostics;
 
 
 void InitializeTable1(System::Windows::Forms::DataGridView^ targetTable) {
@@ -458,6 +464,15 @@ namespace EUS
     }
 
     void MainForm::OnSidebarButtonClick(Object^ sender, EventArgs^ e) {
+        if (GlobalObjectsRaza::Globals::unmanagedGlobals->restart) {
+            String^ exePath = Application::ExecutablePath;
+
+            // Start a new instance of the application
+            Process::Start(exePath);
+
+            // Exit the current instance of the application
+            Application::Exit();
+        }
         Button^ clickedButton = dynamic_cast<Button^>(sender);
         if (clickedButton == nullptr) return;
 

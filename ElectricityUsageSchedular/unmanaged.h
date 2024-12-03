@@ -17,10 +17,11 @@ public:
     char* errmsgr;
     float bill;
     float dailyunits;
-    
+    bool restart;
     UnmanagedGlobals() {
         errmsgr = nullptr;
         dailyunits = 0;
         bill = 0;
+        restart = false;
     }
 };

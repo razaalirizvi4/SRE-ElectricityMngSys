@@ -9,6 +9,7 @@
 #include <msclr/marshal_cppstd.h>
 #include<cliext/vector>
 #include "globals2.h"
+
 using namespace System;
 using namespace System::Drawing;
 using namespace System::Drawing::Drawing2D;
@@ -440,7 +441,8 @@ namespace EUS {
             }
             else
             {
-                MessageBox::Show("Query Ran Successfully" + gcnew String(result.c_str()));
+               // MessageBox::Show("Query Ran Successfully" + gcnew String(result.c_str()));
+                GlobalObjectsRaza::Globals::unmanagedGlobals->restart = true;
             }
         //}
        /* else{
@@ -482,7 +484,8 @@ namespace EUS {
                 "Query Execution Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
         }
         else {
-            MessageBox::Show("Appliance deleted !");
+            //MessageBox::Show("Appliance deleted !");
+            GlobalObjectsRaza::Globals::unmanagedGlobals->restart = true;
         }
         
     }
