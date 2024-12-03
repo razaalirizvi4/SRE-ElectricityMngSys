@@ -541,9 +541,6 @@ namespace EUS
 
             // Sample data with four lines
             array<float>^ val1 = { 0, 1, 2, 3 };
-            array<float>^ val2 = { 3, 4, 2,1 };
-            array<float>^ val3 = { 6, 50, 60, W4oh * 0.5f }; // Example third line
-            array<float>^ val4 = { W1fh * 0.5f, W2fh * 0.5f, W3fh * 0.5f, W4fh * 0.5f }; // Example fourth line
             array<String^>^ labels = { "Week 1", "Week 2", "Week 3", "Week 4" };
 
             // Calculate colors for the lines
@@ -571,9 +568,6 @@ namespace EUS
             // Calculate the maximum value for scaling
             float maxValue = 0;
             for each (float value in val1) if (value > maxValue) maxValue = value;
-            for each (float value in val2) if (value > maxValue) maxValue = value;
-            for each (float value in val3) if (value > maxValue) maxValue = value;
-            for each (float value in val4) if (value > maxValue) maxValue = value;
 
             // Calculate line properties
             int lineWidth = 3;
@@ -583,10 +577,10 @@ namespace EUS
             System::Drawing::Font^ labelFont = gcnew System::Drawing::Font("Arial", 12);
 
             // Draw four lines
-            array<array<PointF>^>^ linesPoints = gcnew array<array<PointF>^>(4);
-            array<array<float>^>^ valArrays = { val1, val2, val3, val4 };
+            array<array<PointF>^>^ linesPoints = gcnew array<array<PointF>^>(1);
+            array<array<float>^>^ valArrays = { val1};
 
-            for (int lineIndex = 0; lineIndex < 4; lineIndex++) {
+            for (int lineIndex = 0; lineIndex < 1; lineIndex++) {
                 linesPoints[lineIndex] = gcnew array<PointF>(valArrays[lineIndex]->Length);
                 for (int i = 0; i < valArrays[lineIndex]->Length; i++) {
                     linesPoints[lineIndex][i] = PointF(

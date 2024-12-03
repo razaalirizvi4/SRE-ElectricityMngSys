@@ -1,8 +1,9 @@
-#pragma once
 #include "RoundedRectangle.h"
 #include "Userclass.h"
 #include "globals2.h"
 #include <msclr/marshal.h>
+#include<vector>
+#include"GlobalObjects.h"
 
 namespace EUS {
     using namespace System;
@@ -53,8 +54,8 @@ namespace EUS {
         System::ComponentModel::Container^ components;
         int screenWidth = Screen::PrimaryScreen->Bounds.Width;
 
-        Panel^ tipsPanel;  
-        PanelConfig tipsPanelConfig; 
+        Panel^ tipsPanel;
+        PanelConfig tipsPanelConfig;
 
         Label^ CreateLabel(String^ text, System::Drawing::Font^ font, Color color, int width, int height, Point location);
         Panel^ CreatePanel(PanelConfig config);
@@ -68,7 +69,7 @@ namespace EUS {
         void ShowNextTip(Object^ sender, EventArgs^ e);
         void UpdateTipContent();
 
-        int timetoInt(const std::string& time) 
+        int timetoInt(const std::string& time)
         {
             // Split the time string into hours and minutes
             int hours, minutes;
@@ -77,15 +78,18 @@ namespace EUS {
             ss >> hours >> colon >> minutes;
 
             // Round up if minutes >= 30, else round down
-            if (minutes >= 30) 
+            if (minutes >= 30)
             {
                 return hours + 1; // Round up to next hour
             }
-            else 
+            else
             {
                 return hours; // Round down to current hour
             }
         }
+
+        void MakePieChart(Object^ sender, PaintEventArgs^ e);
+        void MakeLineChart(Object^ sender, PaintEventArgs^ e);
 
     };
 }
