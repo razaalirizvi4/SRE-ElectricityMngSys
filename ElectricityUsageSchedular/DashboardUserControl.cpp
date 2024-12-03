@@ -165,6 +165,12 @@ namespace EUS
         int units = bill / currentRate;
         int du = static_cast<int>(GlobalObjectsRaza::Globals::unmanagedGlobals->dailyunits);
 
+        // Get current day number of the month
+        int currentDayOfMonth = DateTime::Now.Day;
+
+        // Calculate total units so far
+        int totalUnitsSoFar = du * currentDayOfMonth;
+
         // First Box Configuration
         PanelConfig box1Config;
         box1Config.Width = boxWidth;
@@ -176,7 +182,7 @@ namespace EUS
         box1Config.Title = "Energy Consumption Overview";
         box1Config.Content = gcnew String(
             ("Daily Usage: " + std::to_string(units) + " kWh\n" +
-                "Today's Units: " + std::to_string(du) + "\n" +
+                "Units so far: " + std::to_string(totalUnitsSoFar) + " KWh\n" +
                 "Peak Today: " + UserData::userpeakstart + "\n").c_str());
 
         // Second Box Configuration

@@ -52,6 +52,7 @@ namespace EUS {
         Button^ btnAnalytics;
         Button^ btnSettings;
         Button^ activeButton;
+        Button^ btnLogout;
 
         // Initialization methods
         void InitializeComponent(void);
@@ -63,6 +64,7 @@ namespace EUS {
         void InitializeSidebarButtons();
         void ConfigureButtonDocking();
         void AddControlsToSidebar();
+        void OnLogoutButtonClick(Object^ sender, EventArgs^ e);
         void SetupEventHandlers();
 
         // Helper methods

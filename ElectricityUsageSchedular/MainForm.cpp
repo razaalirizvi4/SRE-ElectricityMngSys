@@ -368,23 +368,32 @@ namespace EUS
         btnScheduler = CreateIconButton("icon_scheduler.png", MainPageStyles::ButtonSize);
         btnDevices = CreateIconButton("icon_devices.png", MainPageStyles::ButtonSize);
         btnSettings = CreateIconButton("icon_settings.png", MainPageStyles::ButtonSize);
+        btnLogout = CreateIconButton("icon_logout.png", MainPageStyles::ButtonSize);
 
         ConfigureButtonDocking();
     }
 
     void MainForm::ConfigureButtonDocking() {
+        btnLogout->Dock = DockStyle::Bottom;
         btnDashboard->Dock = DockStyle::Top;
         btnScheduler->Dock = DockStyle::Top;
         btnDevices->Dock = DockStyle::Top;
         btnSettings->Dock = DockStyle::Top;
+
+        btnLogout->Click += gcnew EventHandler(this, &MainForm::OnLogoutButtonClick);
     }
 
     void MainForm::AddControlsToSidebar() {
+        sidebarPanel->Controls->Add(btnLogout);
         sidebarPanel->Controls->Add(btnSettings);
         sidebarPanel->Controls->Add(btnDevices);
         sidebarPanel->Controls->Add(btnScheduler);
         sidebarPanel->Controls->Add(btnDashboard);
         sidebarPanel->Controls->Add(labelEUS);
+    }
+
+    void MainForm::OnLogoutButtonClick(Object^ sender, EventArgs^ e) {
+        Application::Exit();
     }
 
     void MainForm::InitializeContentPanel() {
