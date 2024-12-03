@@ -91,6 +91,45 @@ namespace EUS
         return panel;
     }
 
+    Panel^ DashboardUserControl::CreatePanel2(PanelConfig config, Color textColor) {
+        Panel^ panel = gcnew Panel();
+        panel->Size = System::Drawing::Size(config.Width, config.Height);
+        panel->Location = config.Location;
+        panel->BackColor = config.BackColor;
+
+        // Title
+        if (!String::IsNullOrEmpty(config.Title)) {
+            Label^ titleLabel = CreateLabel(config.Title,
+                DashboardStyles::TitleFont,
+                textColor, // Apply the text color
+                panel->Width,
+                30,
+                Point(0, 10)); // Offset for title
+            panel->Controls->Add(titleLabel);
+        }
+
+        // Content
+        if (!String::IsNullOrEmpty(config.Content)) {
+            cli::array<String^>^ contentLines = config.Content->Split('\n');
+            int yOffset = config.ContentYOffset;
+
+            for each (String ^ line in contentLines) {
+                Label^ lineLabel = CreateLabel(line,
+                    DashboardStyles::ContentFont,
+                    textColor, // Apply the text color
+                    panel->Width - 20,
+                    25, // Set the height of each line label
+                    Point(10, yOffset));
+                lineLabel->AutoSize = false;
+                panel->Controls->Add(lineLabel);
+                yOffset += 25 + config.LineSpacing;
+            }
+        }
+
+        ApplyRoundedRectangleToPanel(panel, DashboardStyles::DefaultCornerRadius);
+        return panel;
+    }
+
     void DashboardUserControl::ApplyRoundedRectangleToPanel(Panel^ panel, int radius) {
         System::Drawing::Drawing2D::GraphicsPath^ path = RoundedRectangles::RoundedRectangle::Create(
             0, 0, panel->Width, panel->Height, radius,
@@ -104,7 +143,7 @@ namespace EUS
         Panel^ topSectionPanel = gcnew Panel();
         topSectionPanel->Size = System::Drawing::Size(1420, this->Height / 3 - 60);
         topSectionPanel->Location = Point(DashboardStyles::DefaultMargin, DashboardStyles::DefaultMargin - 30);
-        topSectionPanel->BackColor = DashboardStyles::MainBackColor;
+        topSectionPanel->BackColor = Color::FromArgb(234, 237, 244);
 
         ApplyRoundedRectangleToPanel(topSectionPanel, DashboardStyles::DefaultCornerRadius);
 
@@ -130,13 +169,13 @@ namespace EUS
         box1Config.Width = boxWidth;
         box1Config.Height = boxHeight;
         box1Config.Location = Point(0, 0);
-        box1Config.BackColor = DashboardStyles::PanelBackColor;
+        box1Config.BackColor = Color::FromArgb(255, 255, 255);
         box1Config.LineSpacing = 3;
         box1Config.ContentYOffset = 50;
         box1Config.Title = "Energy Consumption Overview";
         box1Config.Content = gcnew String(
             ("Daily Usage: " + std::to_string(units) + " kWh\n" +
-                "Todays Units: " + std::to_string(units) + "\n" +
+                "Today's Units: " + std::to_string(units) + "\n" +
                 "Peak Today: " + UserData::userpeakstart + "\n").c_str());
 
         // Second Box Configuration
@@ -145,14 +184,20 @@ namespace EUS
         box2Config.Title = "Current Rate Info";
 
         box2Config.Content = gcnew String(
-            ("Current Rate: Pkr " + std::to_string(static_cast<int>(UserData::offpeakrate)) + "/kWh\nPeak Hours: " + UserData::userpeakstart + " - " + UserData::userpeakend + "\n" +
+            ("Current Rate: Pkr " + std::to_string(static_cast<int>(UserData::offpeakrate)) + "/kWh\n" +
+                "Peak Hours: " + UserData::userpeakstart + " - " + UserData::userpeakend + "\n" +
                 "Today's Est. Cost: Pkr " + std::to_string(bill)).c_str());
 
-        topSectionPanel->Controls->Add(CreatePanel(box1Config));
-        topSectionPanel->Controls->Add(CreatePanel(box2Config));
+        // Text color to apply
+        Color textColor = Color::FromArgb(123, 130, 165);
+
+        // Create panels with colored text
+        topSectionPanel->Controls->Add(CreatePanel2(box1Config, textColor));
+        topSectionPanel->Controls->Add(CreatePanel2(box2Config, textColor));
 
         return topSectionPanel;
     }
+
 
     Panel^ DashboardUserControl::CreateBottomSection() {
         energySavingTips = gcnew cli::array<String^> {
@@ -171,7 +216,7 @@ namespace EUS
         Panel^ bottomSectionPanel = gcnew Panel();
         bottomSectionPanel->Size = System::Drawing::Size(1430, this->Height / 5);
         bottomSectionPanel->Location = Point(DashboardStyles::DefaultMargin, 685);
-        bottomSectionPanel->BackColor = DashboardStyles::MainBackColor;
+        bottomSectionPanel->BackColor = Color::FromArgb(234, 237, 244);
 
         ApplyRoundedRectangleToPanel(bottomSectionPanel, DashboardStyles::DefaultCornerRadius);
 
@@ -184,18 +229,23 @@ namespace EUS
         tipsPanelConfig.Width = bottomSectionPanel->Width - 450;
         tipsPanelConfig.Height = bottomSectionPanel->Height - 20;
         tipsPanelConfig.Location = Point(180, 10);
-        tipsPanelConfig.BackColor = DashboardStyles::PanelBackColor;
+        tipsPanelConfig.BackColor = Color::FromArgb(255,255,255);
         tipsPanelConfig.LineSpacing = 5;
         tipsPanelConfig.ContentYOffset = 55;
         tipsPanelConfig.Title = "Energy Saving Tips";
         tipsPanelConfig.Content = energySavingTips[currentTipIndex];
 
-        Panel^ tipsPanel = CreatePanel(tipsPanelConfig);
+        // Text color to apply
+        Color textColor = Color::FromArgb(123, 130, 165);
+
+        // Create the tips panel with colored text
+        Panel^ tipsPanel = CreatePanel2(tipsPanelConfig, textColor);
 
         // Add cycling logic
         prevButton->Click += gcnew EventHandler(this, &DashboardUserControl::ShowPreviousTip);
         nextButton->Click += gcnew EventHandler(this, &DashboardUserControl::ShowNextTip);
 
+        // Add controls to the bottom section panel
         bottomSectionPanel->Controls->Add(prevButton);
         bottomSectionPanel->Controls->Add(nextButton);
         bottomSectionPanel->Controls->Add(tipsPanel);
@@ -203,12 +253,13 @@ namespace EUS
         return bottomSectionPanel;
     }
 
+
     void DashboardUserControl::InitializeComponent(void) {
         this->components = gcnew System::ComponentModel::Container();
         this->Size = System::Drawing::Size(1480, 685);
 
         this->Dock = DockStyle::Fill;
-        this->BackColor = DashboardStyles::MainBackColor;
+        this->BackColor = Color::FromArgb(234, 237, 244);
 
         // Create and add the top section
         Panel^ topSectionPanel = CreateTopSection();
@@ -400,15 +451,10 @@ namespace EUS
         int numSlices = values->Length;
         cli::array<Color>^ colors = gcnew cli::array<Color>(numSlices);
 
-        for (int i = 0; i < numSlices; i++)
-        {
-            // Calculate intermediate color values
-            int r = startR + ((endR - startR) * i / (numSlices - 1));
-            int g = startG + ((endG - startG) * i / (numSlices - 1));
-            int b = startB + ((endB - startB) * i / (numSlices - 1));
-
-            colors[i] = Color::FromArgb(r, g, b);
-        }
+        colors[0] = Color::FromArgb(17, 0, 185); 
+        colors[1] = Color::FromArgb(67, 24, 255); 
+        colors[2] = Color::FromArgb(106, 210, 255);
+        colors[3] = Color::FromArgb(66, 170, 215);
 
         // Calculate total for percentages
         float total = 0;
@@ -468,7 +514,7 @@ namespace EUS
         Label^ PieLabel = gcnew Label();
         PieLabel->Text = L"Top Most Energy Consuming\n\tAppliances";
         PieLabel->Font = gcnew System::Drawing::Font("Arial", 18, FontStyle::Bold);
-        PieLabel->ForeColor = Color::FromArgb(69, 160, 227);
+        PieLabel->ForeColor = Color::FromArgb(83, 90, 125);
         PieLabel->AutoSize = true;
         PieLabel->Location = Point(x - 20, y + 330);
         PieLabel->TextAlign = ContentAlignment::MiddleCenter;
@@ -510,7 +556,7 @@ namespace EUS
 
         // Calculate colors for the lines
         cli::array<Color>^ colorArray = {
-            Color::FromArgb(46, 138, 205),   // Blue
+            Color::FromArgb(67, 24, 255),   // Blue
         };
 
         // Set up graphics
@@ -573,7 +619,7 @@ namespace EUS
         Label^ LLabel = gcnew Label();
         LLabel->Text = L"Energy Consumption in each Hour";
         LLabel->Font = gcnew System::Drawing::Font("Arial", 16, FontStyle::Bold);
-        LLabel->ForeColor = Color::FromArgb(69, 160, 227);
+        LLabel->ForeColor = Color::FromArgb(83, 90, 125);
         LLabel->AutoSize = true;
         LLabel->Location = Point(x+120, y-20);
         LLabel->TextAlign = ContentAlignment::MiddleCenter;

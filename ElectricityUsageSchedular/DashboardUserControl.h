@@ -59,6 +59,7 @@ namespace EUS {
 
         Label^ CreateLabel(String^ text, System::Drawing::Font^ font, Color color, int width, int height, Point location);
         Panel^ CreatePanel(PanelConfig config);
+        Panel^ CreatePanel2(PanelConfig config, Color textColor);
         void ApplyRoundedRectangleToPanel(Panel^ panel, int radius);
 
         // Section creation methods

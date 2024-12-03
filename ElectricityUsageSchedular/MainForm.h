@@ -16,10 +16,10 @@ namespace EUS {
     public ref class MainPageStyles {
     public:
         // Colors
-        static initonly Color BackgroundColor = Color::FromArgb(212, 237, 250);
-        static initonly Color SidebarColor = Color::FromArgb(69, 160, 227);
-        static initonly Color ButtonHoverColor = Color::FromArgb(115, 178, 243);
-        static initonly Color TextColor = Color::FromArgb(225, 240, 250);
+        static initonly Color BackgroundColor = Color::FromArgb(234, 237, 244);
+        static initonly Color SidebarColor = Color::FromArgb(255, 255, 255);
+        static initonly Color ButtonHoverColor = Color::FromArgb(67, 24, 255);
+        static initonly Color TextColor = Color::FromArgb(123, 130, 165);
 
         // Fonts
         static initonly System::Drawing::Font^ TitleFont = gcnew System::Drawing::Font("Segoe UI", 18, FontStyle::Bold);
