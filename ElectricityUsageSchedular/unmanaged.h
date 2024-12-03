@@ -11,6 +11,7 @@ class UnmanagedGlobals
 public:
     std::vector<std::string> appliances1;
     std::vector<schedule_appliance::Appliance> apl;
+    std::vector<std :: string> t1;
     int exiter;
     sqlite3* dbr;
     char* errmsgr;

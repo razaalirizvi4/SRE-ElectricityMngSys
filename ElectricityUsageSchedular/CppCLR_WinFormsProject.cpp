@@ -255,22 +255,30 @@ int aplcallback(void* data, int argc, char** argv, char** colNames) {
 }
 
 int callback(void* data, int argc, char** argv, char** azColName) {
-    // Extract the value of the first column (assuming one column is selected)
-    if (argv[0]) {
-        GlobalObjectsRaza::Globals::unmanagedGlobals->appliances1.push_back(argv[0]); // Add the value to the global vector
-    }
-    else {
-        GlobalObjectsRaza::Globals::unmanagedGlobals->appliances1.push_back("NULL"); // Handle NULL values
-    }
+    // Ensure we have at least 2 columns and the global object exists
+    if (argc >= 2 &&
+        GlobalObjectsRaza::Globals::unmanagedGlobals != nullptr) {
 
-    return 0; // Returning 0 tells SQLite to continue processing
+        if (argv[0] != nullptr) {
+            GlobalObjectsRaza::Globals::unmanagedGlobals->appliances1.push_back(
+                argv[0] ? argv[0] : "NULL"
+            );
+        }
+
+        if (argv[1] != nullptr) {
+            GlobalObjectsRaza::Globals::unmanagedGlobals->t1.push_back(
+                argv[1] ? argv[1] : "NULL"
+            );
+        }
+    }
+    return 0;
 }
 
 void retrive_appliance_names()
 {
     GlobalObjectsRaza::Globals::unmanagedGlobals->exiter = sqlite3_open("billmanagement.db", &GlobalObjectsRaza::Globals::unmanagedGlobals->dbr);
 
-    string sqlquery = "SELECT productname FROM USERS_APPLIANCE ";
+    string sqlquery = "SELECT productname,priority FROM USERS_APPLIANCE ";
     const char* q = sqlquery.c_str();
 
     if (sqlite3_exec(GlobalObjectsRaza::Globals::unmanagedGlobals->dbr, q, callback, nullptr, &GlobalObjectsRaza::Globals::unmanagedGlobals->errmsgr) != SQLITE_OK) {
@@ -306,7 +314,7 @@ void get_appliances()
         // Execute the query with the renamed callback
         rc = sqlite3_exec(GlobalObjectsRaza::Globals::unmanagedGlobals->dbr, q, aplcallback, nullptr, &GlobalObjectsRaza::Globals::unmanagedGlobals->errmsgr);
         if (rc != SQLITE_OK) {
-            std::cerr << "SQL error: " << GlobalObjectsRaza::Globals::unmanagedGlobals->errmsgr << std::endl;
+            //std::cerr << "SQL error: " << GlobalObjectsRaza::Globals::unmanagedGlobals->errmsgr << std::endl;
             sqlite3_free(GlobalObjectsRaza::Globals::unmanagedGlobals->errmsgr);
         }
         else {
