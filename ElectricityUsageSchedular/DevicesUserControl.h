@@ -13,7 +13,7 @@ namespace EUS {
     public:
         DevicesUserControl(void);
         Panel^ topLeftPanel;
-        ComboBox^ comboBox = gcnew ComboBox();
+        
     protected:
         ~DevicesUserControl();
 
@@ -35,11 +35,36 @@ namespace EUS {
         void OnButtonClick6(Object^ sender, EventArgs^ e);
         void AddButton7(int xpos, int ypos);
         void OnButtonClick7(Object^ sender, EventArgs^ e);
+        
+       
+    };
+    using namespace System;
+    using namespace System::Windows::Forms;
+
+    public ref class MyDialogForm : public Form
+    {
+    public:
+        ComboBox^ comboBox = gcnew ComboBox();
+        ComboBox^ prioritycombo = gcnew ComboBox();
+        MyDialogForm();
+
+    private:
+        void UpdateComboBox1();
+        
+        void comboBox_SelectedIndexChanged1(Object^ sender, EventArgs^ e);
+        void comboBox_SelectedIndexChanged2(Object^ sender, EventArgs^ e);
+        void OnOkButtonClick(Object^ sender, EventArgs^ e)
+        {
+            // Close the dialog when the button is clicked
+            this->Close();
+        }
         void Add_addbutton(int xpos, int ypos);
         void addbuttonclick(Object^ sender, EventArgs^ e);
         void Add_deletebutton(int xpos, int ypos);
         void delbuttonclick(Object^ sender, EventArgs^ e);
-        void UpdateComboBox();
-        void comboBox_SelectedIndexChanged(Object^ sender, EventArgs^ e);
+        void push_app();
+        
+       
     };
+
 }
