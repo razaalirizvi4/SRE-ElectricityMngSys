@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "GlobalFunctions.h"
 #include "DevicesUserControl.h"
-#include "sqlite3.h"
+#include <sqlite3.h>
 #include <vector>
 #include<cstring>
 #include<string>
