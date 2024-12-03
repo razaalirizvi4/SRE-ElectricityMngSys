@@ -96,7 +96,7 @@ int traverseCols(int row) {
 
 void makeTable(float& daily, float threshold, const vector<schedule_appliance::Appliance>& arr) {
     // If daily exceeds threshold, stop
-    if (daily >= threshold) {
+    if (daily >= threshold - 200) {
         return;
     }
 
@@ -116,10 +116,14 @@ void makeTable(float& daily, float threshold, const vector<schedule_appliance::A
                     }
                     else 
                     daily += arr[i].kwh * 41.6;  // Add kWh to daily usage
+                    GlobalObjectsRaza::Globals::unmanagedGlobals->dailyunits += arr[i].kwh;
                 }
             }
         }
         if (arr[i].priority == 2) {
+            if (daily >= threshold - 200) {
+                return;
+            }
             // Priority 2 appliances: fill two columns if possible
             empty = traverseCols(i);
             if (empty != -1) {
@@ -131,6 +135,7 @@ void makeTable(float& daily, float threshold, const vector<schedule_appliance::A
                 }
                 else
                     daily += arr[i].kwh * 41.6;  // Add kWh to daily usage
+                GlobalObjectsRaza::Globals::unmanagedGlobals->dailyunits += arr[i].kwh;
             }
 
             empty = traverseCols( i);  // Look for another empty spot
@@ -143,11 +148,15 @@ void makeTable(float& daily, float threshold, const vector<schedule_appliance::A
                 }
                 else
                     daily += arr[i].kwh * 41.6;  // Add kWh to daily usage
+                GlobalObjectsRaza::Globals::unmanagedGlobals->dailyunits += arr[i].kwh;
             }
         }
         if (arr[i].priority == 1) {
             // Priority 1 appliances: fill one column
             empty = traverseCols(i);
+            if (daily >= threshold - 200) {
+                return;
+            }
             if (empty != -1) {
                 GlobalObjects::Globals::Gtable->Rows[i]->Cells[empty]->Value = "+";
                 int ps = timetoInt(EUS::UserData::userpeakstart);
@@ -157,6 +166,7 @@ void makeTable(float& daily, float threshold, const vector<schedule_appliance::A
                 }
                 else
                     daily += arr[i].kwh * 41.6;  // Add kWh to daily usage
+                GlobalObjectsRaza::Globals::unmanagedGlobals->dailyunits += arr[i].kwh;
             }
         }
     }
@@ -225,7 +235,6 @@ void actuallyMake(vector<schedule_appliance::Appliance> arr, int rowIndex, float
     const float dailyThreshold = monthlyThreshold / 30.0f; // Calculate daily threshold
 
     makeTable(dailyBill, dailyThreshold, arr);
-   // RandomizeTable(GlobalObjects::Globals::Gtable);
 }
 
 int aplcallback(void* data, int argc, char** argv, char** colNames) {

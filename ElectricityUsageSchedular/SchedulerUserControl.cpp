@@ -32,9 +32,9 @@ namespace EUS {
         const float monthlyThreshold = 60000.0f;
 
         const float dailyThreshold = monthlyThreshold / 30.0f; // Calculate daily threshold
-        initializeTable();
-        makeTable(dailyBill, dailyThreshold, arr);
-        GlobalObjectsRaza::Globals::unmanagedGlobals->bill = dailyBill;
+        //initializeTable();
+        //makeTable(GlobalObjectsRaza::Globals::unmanagedGlobals->bill, dailyThreshold, arr);
+        //GlobalObjectsRaza::Globals::unmanagedGlobals->bill = dailyBill;
         sqlite3_close(GlobalObjectsRaza::Globals::unmanagedGlobals->dbr);
         updateBillLabel(GlobalObjectsRaza::Globals::unmanagedGlobals->bill * 30);
     }
@@ -127,7 +127,7 @@ namespace EUS {
         GlobalObjects::Globals::Gtable->Size = System::Drawing::Size(1450, 500);
         RandomizeTable(GlobalObjects::Globals::Gtable);
         this->Controls->Add(GlobalObjects::Globals::Gtable);
-        
+        OnColumnDropdownChanged(comboBox, EventArgs::Empty);
         
     }
 

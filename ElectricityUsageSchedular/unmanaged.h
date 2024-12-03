@@ -15,8 +15,11 @@ public:
     sqlite3* dbr;
     char* errmsgr;
     float bill;
+    float dailyunits;
     
     UnmanagedGlobals() {
         errmsgr = nullptr;
+        dailyunits = 0;
+        bill = 0;
     }
 };

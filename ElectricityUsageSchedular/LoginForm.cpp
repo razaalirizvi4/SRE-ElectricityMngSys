@@ -8,55 +8,76 @@
 #include "globals2.h"
 #include"RoundedRectangle.h"
 
-void InitializeTable1(System::Windows::Forms::DataGridView^ targetTable) {
-    // Clear the target table
-    targetTable->Rows->Clear();
-    targetTable->Columns->Clear();
-
-    targetTable->AutoSizeColumnsMode = System::Windows::Forms::DataGridViewAutoSizeColumnsMode::Fill;
-    targetTable->ColumnHeadersVisible = true;
-    targetTable->RowHeadersVisible = false;
-    targetTable->AllowUserToAddRows = false;
-
-    // Copy column structure from Gtable
-    for (int i = 0; i < GlobalObjects::Globals::Gtable->ColumnCount; ++i) {
-        auto newColumn = gcnew System::Windows::Forms::DataGridViewTextBoxColumn();
-        newColumn->HeaderText = GlobalObjects::Globals::Gtable->Columns[i]->HeaderText;
-        newColumn->Width = GlobalObjects::Globals::Gtable->Columns[i]->Width;
-        targetTable->Columns->Add(newColumn);
-    }
-
-    // Copy row data from Gtable
-    for (int i = 0; i < GlobalObjects::Globals::Gtable->RowCount; ++i) {
-        // Create a new row for the target table
-        System::Windows::Forms::DataGridViewRow^ newRow = gcnew System::Windows::Forms::DataGridViewRow();
-
-        // Copy each cell's value from Gtable to the new row
-        for (int j = 0; j < GlobalObjects::Globals::Gtable->ColumnCount; ++j) {
-            System::Windows::Forms::DataGridViewCell^ newCell = gcnew System::Windows::Forms::DataGridViewTextBoxCell();
-            newCell->Value = GlobalObjects::Globals::Gtable->Rows[i]->Cells[j]->Value;
-            newRow->Cells->Add(newCell);
-        }
-
-        // Add the newly created row to the target table
-        targetTable->Rows->Add(newRow);
-    }
-}
-
-int p4 = 0;//3 times a week
-int p5 = 0;//1 time a week
-
-void getWrongP() {
-    for (int i = 0; i < GlobalObjectsRaza::Globals::unmanagedGlobals->apl.size(); i++) {
-        if (GlobalObjectsRaza::Globals::unmanagedGlobals->apl[i].priority == 4) {
-            p4++;
-        }
-        else if (GlobalObjectsRaza::Globals::unmanagedGlobals->apl[i].priority == 5) {
-            p5++;
-        }
-    }
-}
-
+//void InitializeTable1(System::Windows::Forms::DataGridView^ targetTable) {
+//    // Clear the target table
+//    targetTable->Rows->Clear();
+//    targetTable->Columns->Clear();
+//
+//    targetTable->AutoSizeColumnsMode = System::Windows::Forms::DataGridViewAutoSizeColumnsMode::Fill;
+//    targetTable->ColumnHeadersVisible = true;
+//    targetTable->RowHeadersVisible = false;
+//    targetTable->AllowUserToAddRows = false;
+//
+//    // Copy column structure from Gtable
+//    for (int i = 0; i < GlobalObjects::Globals::Gtable->ColumnCount; ++i) {
+//        auto newColumn = gcnew System::Windows::Forms::DataGridViewTextBoxColumn();
+//        newColumn->HeaderText = GlobalObjects::Globals::Gtable->Columns[i]->HeaderText;
+//        newColumn->Width = GlobalObjects::Globals::Gtable->Columns[i]->Width;
+//        targetTable->Columns->Add(newColumn);
+//    }
+//
+//    // Copy row data from Gtable
+//    for (int i = 0; i < GlobalObjects::Globals::Gtable->RowCount; ++i) {
+//        // Create a new row for the target table
+//        System::Windows::Forms::DataGridViewRow^ newRow = gcnew System::Windows::Forms::DataGridViewRow();
+//
+//        // Copy each cell's value from Gtable to the new row
+//        for (int j = 0; j < GlobalObjects::Globals::Gtable->ColumnCount; ++j) {
+//            System::Windows::Forms::DataGridViewCell^ newCell = gcnew System::Windows::Forms::DataGridViewTextBoxCell();
+//            newCell->Value = GlobalObjects::Globals::Gtable->Rows[i]->Cells[j]->Value;
+//            newRow->Cells->Add(newCell);
+//        }
+//
+//        // Add the newly created row to the target table
+//        targetTable->Rows->Add(newRow);
+//    }
+//}
+//
+//int p4 = 0;//3 times a week
+//int p5 = 0;//1 time a week
+//
+//void getWrongP() {
+//    for (int i = 0; i < GlobalObjectsRaza::Globals::unmanagedGlobals->apl.size(); i++) {
+//        if (GlobalObjectsRaza::Globals::unmanagedGlobals->apl[i].priority == 4) {
+//            p4++;
+//        }
+//        else if (GlobalObjectsRaza::Globals::unmanagedGlobals->apl[i].priority == 5) {
+//            p5++;
+//        }
+//    }
+//}
+//
+//void populateP4(System::Windows::Forms::DataGridView^ targetTable) {
+//    vector<schedule_appliance::Appliance> arr = sortit(GlobalObjectsRaza::Globals::unmanagedGlobals->apl, 0);
+//    for (int i = 0; i < arr.size(); i++) {
+//        if (arr[i].priority == 4) {
+//            targetTable->Rows[i]->Cells[3]->Value = "+";
+//            GlobalObjectsRaza::Globals::unmanagedGlobals->bill += (41.6 * arr[i].kwh) / 3;
+//            GlobalObjectsRaza::Globals::unmanagedGlobals->dailyunits += arr[i].kwh / 3;
+//        }
+//    }
+//}
+//
+//void populateP5(System::Windows::Forms::DataGridView^ targetTable) {
+//    vector<schedule_appliance::Appliance> arr = sortit(GlobalObjectsRaza::Globals::unmanagedGlobals->apl, 0);
+//    for (int i = 0; i < arr.size(); i++) {
+//        if (arr[i].priority == 5) {
+//            targetTable->Rows[i]->Cells[3]->Value = "+";
+//            GlobalObjectsRaza::Globals::unmanagedGlobals->bill += (41.6 * arr[i].kwh) / 3;
+//            GlobalObjectsRaza::Globals::unmanagedGlobals->dailyunits += arr[i].kwh / 3;
+//        }
+//    }
+//}
 
 
 
@@ -226,71 +247,73 @@ namespace EUS
         mainForm->Show();
 
         //initialize table here so that evth can be called
-        retrive_appliance_names();
-        get_appliances();
-        
-        for (int i = 0; i < GlobalObjectsRaza::Globals::unmanagedGlobals->apl.size(); i++) {
-            int p = (i % 2) + 1;
-            if (i == 7)
-                p = 4;
-            GlobalObjectsRaza::Globals::unmanagedGlobals->apl[i].priority = p;
-        }
-        vector<schedule_appliance::Appliance> arr = sortit(GlobalObjectsRaza::Globals::unmanagedGlobals->apl, 0);
+        //retrive_appliance_names();
+        //get_appliances();
+        //
+        //for (int i = 0; i < GlobalObjectsRaza::Globals::unmanagedGlobals->apl.size(); i++) {
+        //    int p = (i % 2) + 1;
+        //    if (i == 7)
+        //        p = 4;
+        //    GlobalObjectsRaza::Globals::unmanagedGlobals->apl[i].priority = p;
+        //}
+        //vector<schedule_appliance::Appliance> arr = sortit(GlobalObjectsRaza::Globals::unmanagedGlobals->apl, 0);
 
-        float dailyBill = 0.0f;
-        const float monthlyThreshold = 60000.0f;
-        getWrongP();
-        const float dailyThreshold = monthlyThreshold / 30.0f; // Calculate daily threshold
-        initializeTable();
-        makeTable(dailyBill, dailyThreshold, arr);
-        GlobalObjectsRaza::Globals::unmanagedGlobals->bill = dailyBill;
-        
-        for (int i = 0; i < 4; i++) {
-            Week::Tables^ weekTables = gcnew Week::Tables(); // Create an instance of Tables for each week
+        //float dailyBill = 0.0f;
+        //const float monthlyThreshold = 60000.0f;
+        //getWrongP();
+        //const float dailyThreshold = monthlyThreshold / 30.0f; // Calculate daily threshold
+        //initializeTable();
+        //makeTable(GlobalObjectsRaza::Globals::unmanagedGlobals->bill, dailyThreshold, arr);
+        ////GlobalObjectsRaza::Globals::unmanagedGlobals->bill = dailyBill;
+        //
+        //for (int i = 0; i < 4; i++) {
+        //    Week::Tables^ weekTables = gcnew Week::Tables(); // Create an instance of Tables for each week
 
-            // Initialize and randomize each DataGridView
-            DataGridView^ day1 = gcnew DataGridView();
-            DataGridView^ day2 = gcnew DataGridView();
-            DataGridView^ day3 = gcnew DataGridView();
-            DataGridView^ day4 = gcnew DataGridView();
-            DataGridView^ day5 = gcnew DataGridView();
-            DataGridView^ day6 = gcnew DataGridView();
-            DataGridView^ day7 = gcnew DataGridView();
+        //    // Initialize and randomize each DataGridView
+        //    DataGridView^ day1 = gcnew DataGridView();
+        //    DataGridView^ day2 = gcnew DataGridView();
+        //    DataGridView^ day3 = gcnew DataGridView();
+        //    DataGridView^ day4 = gcnew DataGridView();
+        //    DataGridView^ day5 = gcnew DataGridView();
+        //    DataGridView^ day6 = gcnew DataGridView();
+        //    DataGridView^ day7 = gcnew DataGridView();
 
-            InitializeTable1(day1);
-            
-            RandomizeTable(day1);
-            day1->Rows[17]->Cells[5]->Value = "+";
-            GlobalObjectsRaza::Globals::unmanagedGlobals->bill += GlobalObjectsRaza::Globals::unmanagedGlobals->apl[i].kwh * 41.6;
-           // setP5(day1);
-            InitializeTable1(day2);
-            RandomizeTable(day2);
-            InitializeTable1(day3);
-            //setP4(day3);
-            RandomizeTable(day3);
-            InitializeTable1(day4);
-            RandomizeTable(day4);
-            InitializeTable1(day5);
-            RandomizeTable(day5);
-            InitializeTable1(day6);
-            //setP4(day6);
-            RandomizeTable(day6);
-            InitializeTable1(day7);
-            RandomizeTable(day7);
+        //    InitializeTable1(day1);
+        //    
+        //    RandomizeTable(day1);
+        //    populateP4(day1);
+        //    populateP5(day1);
+        //    InitializeTable1(day2);
+        //    RandomizeTable(day2);
+        //    InitializeTable1(day3);
+        //    //setP4(day3);
+        //    populateP4(day3);
+        //    RandomizeTable(day3);
+        //    InitializeTable1(day4);
+        //    RandomizeTable(day4);
+        //    InitializeTable1(day5);
+        //    RandomizeTable(day5);
+        //    InitializeTable1(day6);
+        //    //setP4(day6);
+        //    populateP4(day6);
+        //    RandomizeTable(day6);
+        //    InitializeTable1(day7);
+        //    RandomizeTable(day7);
 
-            // Assign to instance members of Tables
-            weekTables->Gtable1 = day1;
-            weekTables->Gtable2 = day2;
-            weekTables->Gtable3 = day3;
-            weekTables->Gtable4 = day4;
-            weekTables->Gtable5 = day5;
-            weekTables->Gtable6 = day6;
-            weekTables->GTable7 = day7;
+        //    // Assign to instance members of Tables
+        //    weekTables->Gtable1 = day1;
+        //    weekTables->Gtable2 = day2;
+        //    weekTables->Gtable3 = day3;
+        //    weekTables->Gtable4 = day4;
+        //    weekTables->Gtable5 = day5;
+        //    weekTables->Gtable6 = day6;
+        //    weekTables->GTable7 = day7;
 
-            GlobalObjects::Globals::monthlyTables->Add(weekTables);
-        }
+        //    GlobalObjects::Globals::monthlyTables->Add(weekTables);
+        //}
 
-        sqlite3_close(GlobalObjectsRaza::Globals::unmanagedGlobals->dbr);
+        //sqlite3_close(GlobalObjectsRaza::Globals::unmanagedGlobals->dbr);
+        //populateP4(GlobalObjects::Globals::monthlyTables[0]->Gtable1);
         
         //CustomMessageForm^ msg = gcnew CustomMessageForm("Login success!", "Login Status", true);
         // msg->Show();
