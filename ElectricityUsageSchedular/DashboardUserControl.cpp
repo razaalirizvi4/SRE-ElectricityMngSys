@@ -23,7 +23,7 @@ namespace EUS
         Button^ button = gcnew Button();
         button->Size = System::Drawing::Size(size, size);
         button->Location = location;
-        button->BackColor = DashboardStyles::PanelBackColor;
+        button->BackColor = Color::FromArgb(255,255,255);
         button->FlatStyle = FlatStyle::Flat;
         button->FlatAppearance->BorderSize = 0;
 

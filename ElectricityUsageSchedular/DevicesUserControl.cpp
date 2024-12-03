@@ -47,13 +47,13 @@ namespace EUS {
     {
         this->components = gcnew System::ComponentModel::Container();
         this->Size = System::Drawing::Size(600, 400);
-        this->BackColor = Color::FromArgb(212, 237, 250);
+        this->BackColor = Color::FromArgb(234, 237, 244);
 
         Label^ label = gcnew Label();
 
         label->Text = L"Devices Page";
         label->Font = gcnew System::Drawing::Font("Arial", 18, FontStyle::Bold);
-        label->ForeColor = Color::FromArgb(218, 165, 32);
+        label->ForeColor = Color::FromArgb(67, 24, 255);
         label->Dock = DockStyle::Top;
         label->TextAlign = ContentAlignment::MiddleCenter;
         this->Controls->Add(label);

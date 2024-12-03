@@ -20,7 +20,7 @@ namespace EUS {
     {
         this->components = gcnew System::ComponentModel::Container();
         this->Size = System::Drawing::Size(1200, 720);
-        this->BackColor = Color::FromArgb(212, 237, 250);
+        this->BackColor = Color::FromArgb(234, 237, 244);
 
         int labelWidth = 200;
         int inputOffsetX = 250;
@@ -34,7 +34,7 @@ namespace EUS {
         Label^ lblEmail = gcnew Label();
         lblEmail->Text = L"Email:";
         lblEmail->Font = regularFont;
-        lblEmail->ForeColor = Color::FromArgb(69, 160, 227);
+        lblEmail->ForeColor = Color::FromArgb(67, 24, 255);
         lblEmail->Location = Point(30, initialY);
         lblEmail->Size = System::Drawing::Size(labelWidth, 20);
         this->Controls->Add(lblEmail);
@@ -50,7 +50,7 @@ namespace EUS {
         Label^ lblPeakHours = gcnew Label();
         lblPeakHours->Text = L"Peak Hours:";
         lblPeakHours->Font = regularFont;
-        lblPeakHours->ForeColor = Color::FromArgb(69, 160, 227);
+        lblPeakHours->ForeColor = Color::FromArgb(67, 24, 255);
         lblPeakHours->Location = Point(30, initialY);
         lblPeakHours->Size = System::Drawing::Size(labelWidth, 20);
         this->Controls->Add(lblPeakHours);
@@ -58,7 +58,7 @@ namespace EUS {
         Label^ lblStart = gcnew Label();
         lblStart->Text = L"Start Time (HH:MM):";
         lblStart->Font = regularFont;
-        lblStart->ForeColor = Color::FromArgb(69, 160, 227);
+        lblStart->ForeColor = Color::FromArgb(67, 24, 255);
         lblStart->Location = Point(30 + aestheticOffset, initialY + spacingY);
         this->Controls->Add(lblStart);
 
@@ -71,7 +71,7 @@ namespace EUS {
         Label^ lblEnd = gcnew Label();
         lblEnd->Text = L"End Time (HH:MM):";
         lblEnd->Font = regularFont;
-        lblEnd->ForeColor = Color::FromArgb(69, 160, 227);
+        lblEnd->ForeColor = Color::FromArgb(67, 24, 255);
         lblEnd->Location = Point(30 + aestheticOffset, initialY + 2 * spacingY);
         this->Controls->Add(lblEnd);
 
@@ -87,7 +87,7 @@ namespace EUS {
         Label^ lblBudget = gcnew Label();
         lblBudget->Text = L"Budget (per month):";
         lblBudget->Font = regularFont;
-        lblBudget->ForeColor = Color::FromArgb(69, 160, 227);
+        lblBudget->ForeColor = Color::FromArgb(67, 24, 255);
         lblBudget->Location = Point(30, initialY);
         lblBudget->Size = System::Drawing::Size(labelWidth, 20);
         this->Controls->Add(lblBudget);
@@ -106,8 +106,8 @@ namespace EUS {
         btnSave->Font = boldFont;
         btnSave->Size = System::Drawing::Size(100, 40);
         btnSave->Location = Point((this->Width - btnSave->Width) / 2, initialY + spacingY + 20);
-        btnSave->BackColor = Color::FromArgb(69, 160, 227);
-        btnSave->ForeColor = Color::FromArgb(212, 237, 250);
+        btnSave->BackColor = Color::FromArgb(234, 237, 244);
+        btnSave->ForeColor = Color::FromArgb(255, 255, 255);
         btnSave->FlatStyle = FlatStyle::Flat;
         btnSave->FlatAppearance->BorderSize = 0;
         btnSave->TextAlign = ContentAlignment::MiddleCenter;
