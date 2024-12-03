@@ -14,27 +14,7 @@ namespace EUS {
         selectedweek = 0;
         GlobalObjects::Globals::Gtable->Location = System::Drawing::Point(00, 310);
         GlobalObjects::Globals::Gtable->Size = System::Drawing::Size(1450, 500);
-        
-        this->Controls->Add(GlobalObjects::Globals::Gtable);
         InitializeComponent();
-        //retrive_appliance_names();
-       // get_appliances();
-
-        for (int i = 0; i < GlobalObjectsRaza::Globals::unmanagedGlobals->apl.size(); i++) {
-            int p = (i % 2) + 1;
-            if (i == 7)
-                p = 3;
-            GlobalObjectsRaza::Globals::unmanagedGlobals->apl[i].priority = p;
-        }
-        vector<schedule_appliance::Appliance> arr = sortit(GlobalObjectsRaza::Globals::unmanagedGlobals->apl, 0);
-
-        float dailyBill = 0.0f;
-        const float monthlyThreshold = 60000.0f;
-
-        const float dailyThreshold = monthlyThreshold / 30.0f; // Calculate daily threshold
-        //initializeTable();
-        //makeTable(GlobalObjectsRaza::Globals::unmanagedGlobals->bill, dailyThreshold, arr);
-        //GlobalObjectsRaza::Globals::unmanagedGlobals->bill = dailyBill;
         sqlite3_close(GlobalObjectsRaza::Globals::unmanagedGlobals->dbr);
         updateBillLabel(GlobalObjectsRaza::Globals::unmanagedGlobals->bill * 30);
     }
@@ -97,19 +77,19 @@ namespace EUS {
         this->Controls->Add(l);
 
         // Add items to the ComboBox
-        comboBox->Items->Add("1");
-        comboBox->Items->Add("2");
-        comboBox->Items->Add("3");
-        comboBox->Items->Add("4");
-        comboBox->Items->Add("5");
-        comboBox->Items->Add("6");
-        comboBox->Items->Add("7");
+        comboBox->Items->Add("Sunday");
+        comboBox->Items->Add("Monday");
+        comboBox->Items->Add("Tuesday");
+        comboBox->Items->Add("Wednesday");
+        comboBox->Items->Add("Thursday");
+        comboBox->Items->Add("Friday");
+        comboBox->Items->Add("Saturday");
         //comboBox->Items->Add("Option 3");
 
-        comboBoxWeek->Items->Add("1");
-        comboBoxWeek->Items->Add("2");
-        comboBoxWeek->Items->Add("3");
-        comboBoxWeek->Items->Add("4");
+        comboBoxWeek->Items->Add("Week 1");
+        comboBoxWeek->Items->Add("Week 2");
+        comboBoxWeek->Items->Add("Week 3");
+        comboBoxWeek->Items->Add("Week 4");
 
         // Set default selected item
         comboBox->SelectedIndex = 0;
@@ -152,13 +132,13 @@ namespace EUS {
         // Determine which table to show and add it to the Controls
         DataGridView^ selectedTable = nullptr;
 
-        if (selectedValue == "1") selectedTable = GlobalObjects::Globals::monthlyTables[selectedweek]->Gtable1;
-        else if (selectedValue == "2") selectedTable = GlobalObjects::Globals::monthlyTables[selectedweek]->Gtable2;
-        else if (selectedValue == "3") selectedTable = GlobalObjects::Globals::monthlyTables[selectedweek]->Gtable3;
-        else if (selectedValue == "4") selectedTable = GlobalObjects::Globals::monthlyTables[selectedweek]->Gtable4;
-        else if (selectedValue == "5") selectedTable = GlobalObjects::Globals::monthlyTables[selectedweek]->Gtable5;
-        else if (selectedValue == "6") selectedTable = GlobalObjects::Globals::monthlyTables[selectedweek]->Gtable6;
-        else if (selectedValue == "7") selectedTable = GlobalObjects::Globals::monthlyTables[selectedweek]->GTable7;
+        if (selectedValue == "Sunday") selectedTable = GlobalObjects::Globals::monthlyTables[selectedweek]->Gtable1;
+        else if (selectedValue == "Monday") selectedTable = GlobalObjects::Globals::monthlyTables[selectedweek]->Gtable2;
+        else if (selectedValue == "Tuesday") selectedTable = GlobalObjects::Globals::monthlyTables[selectedweek]->Gtable3;
+        else if (selectedValue == "Wednesday") selectedTable = GlobalObjects::Globals::monthlyTables[selectedweek]->Gtable4;
+        else if (selectedValue == "Thursday") selectedTable = GlobalObjects::Globals::monthlyTables[selectedweek]->Gtable5;
+        else if (selectedValue == "Friday") selectedTable = GlobalObjects::Globals::monthlyTables[selectedweek]->Gtable6;
+        else if (selectedValue == "Saturday") selectedTable = GlobalObjects::Globals::monthlyTables[selectedweek]->GTable7;
 
         if (selectedTable != nullptr) {
             // Set table position and size
