@@ -1,6 +1,8 @@
 #pragma once
 #include "RoundedRectangle.h"
 #include "Userclass.h"
+#include "globals2.h"
+#include <msclr/marshal.h>
 
 namespace EUS {
     using namespace System;
@@ -45,7 +47,7 @@ namespace EUS {
         Button^ CreateRoundedButton(String^ iconPath, int size, Point location);
 
     private:
-        array<String^>^ energySavingTips;
+        cli::array<String^>^ energySavingTips;
         int currentTipIndex;
 
         System::ComponentModel::Container^ components;
@@ -65,5 +67,25 @@ namespace EUS {
         void ShowPreviousTip(Object^ sender, EventArgs^ e);
         void ShowNextTip(Object^ sender, EventArgs^ e);
         void UpdateTipContent();
+
+        int timetoInt(const std::string& time) 
+        {
+            // Split the time string into hours and minutes
+            int hours, minutes;
+            char colon;
+            std::stringstream ss(time);  // Use std::stringstream here
+            ss >> hours >> colon >> minutes;
+
+            // Round up if minutes >= 30, else round down
+            if (minutes >= 30) 
+            {
+                return hours + 1; // Round up to next hour
+            }
+            else 
+            {
+                return hours; // Round down to current hour
+            }
+        }
+
     };
 }

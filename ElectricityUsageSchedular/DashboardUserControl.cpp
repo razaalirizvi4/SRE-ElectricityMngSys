@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "DashboardUserControl.h"
-#include "RoundedRectangle.h"
 
 namespace EUS {
 
@@ -66,7 +65,7 @@ namespace EUS {
 
         // Content
         if (!String::IsNullOrEmpty(config.Content)) {
-            array<String^>^ contentLines = config.Content->Split('\n');
+            cli::array<String^>^ contentLines = config.Content->Split('\n');
             int yOffset = config.ContentYOffset;
 
             for each (String ^ line in contentLines) {
@@ -106,6 +105,20 @@ namespace EUS {
         int boxWidth = (topSectionPanel->Width - DashboardStyles::DefaultSpacing - 90) / 2;
         int boxHeight = topSectionPanel->Height - DashboardStyles::DefaultSpacing2 - 50;
 
+        // Determine current time and whether it's within peak hours
+        DateTime now = DateTime::Now;
+        int currentHour = now.Hour;
+        int startHour = timetoInt(UserData::userpeakstart);
+        int endHour = timetoInt(UserData::userpeakend);
+
+        double currentRate = (currentHour >= startHour && currentHour < endHour)
+            ? UserData::peakrate
+            : UserData::offpeakrate;
+
+        // vars
+        int bill = static_cast<int>(GlobalObjectsRaza::Globals::unmanagedGlobals->bill);
+        int units = bill / currentRate;
+
         // First Box Configuration
         PanelConfig box1Config;
         box1Config.Width = boxWidth;
@@ -116,18 +129,18 @@ namespace EUS {
         box1Config.ContentYOffset = 50;
         box1Config.Title = "Energy Consumption Overview";
         box1Config.Content = gcnew String(
-            ("Daily Usage: " + std::to_string(UserData::userid) + " kWh\n" +
-                "Current Power: " + UserData::username + "\n" +
+            ("Daily Usage: " + std::to_string(units) + " kWh\n" +
+                "Todays Units: " + std::to_string(units) + "\n" +
                 "Peak Today: " + UserData::userpeakstart + "\n").c_str());
 
         // Second Box Configuration
         PanelConfig box2Config = box1Config;
         box2Config.Location = Point(boxWidth + DashboardStyles::DefaultSpacing + 10, 0);
         box2Config.Title = "Current Rate Info";
-        box2Config.Content = gcnew String(
-            ("Current Rate: $0.14/kWh\nPeak Hours: " + UserData::userpeakstart + " - " + UserData::userpeakend + "\n" +
-             "Today's Est. Cost: $8.45").c_str());
 
+        box2Config.Content = gcnew String(
+            ("Current Rate: Pkr " + std::to_string(static_cast<int>(UserData::offpeakrate)) + "/kWh\nPeak Hours: " + UserData::userpeakstart + " - " + UserData::userpeakend + "\n" +
+                "Today's Est. Cost: Pkr " + std::to_string(bill)).c_str());
 
         topSectionPanel->Controls->Add(CreatePanel(box1Config));
         topSectionPanel->Controls->Add(CreatePanel(box2Config));
@@ -136,7 +149,7 @@ namespace EUS {
     }
 
     Panel^ DashboardUserControl::CreateBottomSection() {
-        energySavingTips = gcnew array<String^> {
+        energySavingTips = gcnew cli::array<String^> {
             "Schedule laundry for off-peak hours.",
                 "Turn off lights when not in use.",
                 "Unplug devices that are not being used.",
@@ -157,8 +170,8 @@ namespace EUS {
         ApplyRoundedRectangleToPanel(bottomSectionPanel, DashboardStyles::DefaultCornerRadius);
 
         // Add rounded buttons
-        Button^ prevButton = CreateRoundedButton("icon_settings.png", 75, Point(0, bottomSectionPanel->Height / 2 - 40));
-        Button^ nextButton = CreateRoundedButton("icon_settings.png", 75, Point(bottomSectionPanel->Width - 160, bottomSectionPanel->Height / 2 - 40));
+        Button^ prevButton = CreateRoundedButton("icon_left.png", 75, Point(0, bottomSectionPanel->Height / 2 - 40));
+        Button^ nextButton = CreateRoundedButton("icon_right.png", 75, Point(bottomSectionPanel->Width - 160, bottomSectionPanel->Height / 2 - 40));
 
         // Add central rounded box
         tipsPanelConfig;

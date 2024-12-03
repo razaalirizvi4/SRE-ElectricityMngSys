@@ -191,6 +191,8 @@
     <Image Include="..\..\EUS\EUS\icon_scheduler.png" />
     <Image Include="..\..\EUS\EUS\icon_settings.png" />
     <Image Include="app.ico" />
+    <Image Include="icon_left.png" />
+    <Image Include="icon_right.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

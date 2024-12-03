@@ -138,6 +138,12 @@
     <Image Include="..\..\EUS\EUS\icon_settings.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="icon_left.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icon_right.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
