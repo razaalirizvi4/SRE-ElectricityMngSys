@@ -41,22 +41,24 @@ namespace EUS {
     {
         this->components = gcnew System::ComponentModel::Container();
         this->Size = System::Drawing::Size(600, 400);
-        this->BackColor = Color::FromArgb(212, 237, 250); // Light greenish-white for easy readability
+        this->BackColor = Color::FromArgb(234, 237, 244); // Light greenish-white for easy readability
 
         Label^ label = gcnew Label();
         label->Text = L"Weekly Schedule";
         label->Font = gcnew System::Drawing::Font("Arial", 18, FontStyle::Bold);
-        label->ForeColor = Color::FromArgb(69, 160, 227); // Gold color for highlights
-        label->Dock = DockStyle::Top;
-        label->TextAlign = ContentAlignment::MiddleCenter;
+        label->ForeColor = Color::FromArgb(67, 24, 255); // Gold color for highlights
+        label->Location = Point(610, 20);
+        label->Height = 1;
+        label->AutoSize = true;
         this->Controls->Add(label);
 
         lable = gcnew Label();
         lable->Text = L"Bill";
         lable->Font = gcnew System::Drawing::Font("Arial", 18, FontStyle::Bold);
-        lable->ForeColor = Color::FromArgb(69, 160, 227); // Gold color for highlights
-        lable->Dock = DockStyle::Top;
-        lable->TextAlign = ContentAlignment::MiddleCenter;
+        lable->ForeColor = Color::FromArgb(106, 210, 255); // Gold color for highlights
+        lable->Location = Point(550, 50);
+        lable->Height = 1;
+        lable->AutoSize = true;
         this->Controls->Add(lable);
 
         comboBox = gcnew ComboBox();
@@ -71,7 +73,7 @@ namespace EUS {
         l = gcnew Label();
         l->Text = L"Day of the week";
         l->Font = gcnew System::Drawing::Font("Arial", 15, FontStyle::Bold);
-        l->ForeColor = Color::FromArgb(69, 160, 227); // Gold color for highlights
+        l->ForeColor = Color::FromArgb(106, 210, 255); // Gold color for highlights
         l->Location = System::Drawing::Point(47, 60); // Set position
         l->AutoSize = true;
         this->Controls->Add(l);
